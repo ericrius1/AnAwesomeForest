@@ -11,23 +11,23 @@ e.Game = new Class({
     this.renderer.setSize(window.innerWidth, window.innerHeight);
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
-    this.camera.position.z = 100;
-    this.scene.add(this.camera);
+    this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000);
+    this.camera.position.y = 100;
+    this.camera.position.z = 400;
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     this.player = new e.Player({
       game: this,
       camera: this.camera
     });
 
+    this.world = new e.World({
+      game: this
+    });
+
     document.body.appendChild(this.renderer.domElement);
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
-    for(var i = 0; i < 500; i ++){
-      var sphere = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial());
-      sphere.position.set(THREE.Math.randInt(-10, 10), THREE.Math.randInt(-10, 10), THREE.Math.randInt(100, -1000));
-      this.scene.add(sphere);
-    }
 
     this.clock = new THREE.Clock();
 
@@ -45,6 +45,7 @@ e.Game = new Class({
 
   render: function() {
     this.controls.update();
+    TWEEN.update();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.render);
   },
