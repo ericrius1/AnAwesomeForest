@@ -21,7 +21,7 @@ e.EventEmitter = new Class({
    *
    * @param {String} evt    Name of event to listen to
    * @param {Function} func Function to execute
-   *
+   *x
    * @returns {EventEmitter}  this, chainable
    */
   on: function(evt, func) {

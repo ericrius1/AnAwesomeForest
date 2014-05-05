@@ -10,17 +10,32 @@ e.Game = new Class({
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-    this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000);
-    this.camera.position.z = 20;
-
     this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
+    this.camera.position.z = 100;
+    this.scene.add(this.camera);
+
+    this.player = new e.Player({
+      game: this,
+      camera: this.camera
+    });
+
     document.body.appendChild(this.renderer.domElement);
+    window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
-    window.addEventListener('resize', this.onWindowResize, false);
+    for(var i = 0; i < 1000; i ++){
+      var sphere = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial());
+      sphere.position.set(THREE.Math.randInt(-10, 10), THREE.Math.randInt(-10, 10), THREE.Math.randInt(100, -1000));
+      this.scene.add(sphere);
+    }
 
-    this.scene.add(new THREE.Mesh(new THREE.SphereGeometry(10), new THREE.MeshBasicMaterial()));
+    this.clock = new THREE.Clock();
+
+    this.controls = new e.Controls({
+      camera: this.camera
+    });
+
     this.start();
-
   },
 
   start: function(){
@@ -28,6 +43,7 @@ e.Game = new Class({
   },
 
   render: function() {
+    this.controls.update();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.render);
   },
