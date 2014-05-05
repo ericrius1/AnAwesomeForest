@@ -7,6 +7,7 @@
 
 module.exports = function(grunt) {
     // Load dev dependencies
+    var includeOrder = require('./include.conf.js');
     require('load-grunt-tasks')(grunt);
 
     // Time how long tasks take for build time optimizations
@@ -69,6 +70,13 @@ module.exports = function(grunt) {
                     '**/*.html'
                 ]
             }
+        },
+
+        concat: {
+          dist:{
+            src: [includeOrder],
+            dest: './build/game.js'
+          }
         }
     });
 
@@ -79,5 +87,6 @@ module.exports = function(grunt) {
         ]);
     });
 
+    grunt.registerTask('build', ['newer:jsonlint', 'newer:jshint', 'concat']);
     grunt.registerTask('default', ['newer:jsonlint', 'newer:jshint', 'serve']);
 };
