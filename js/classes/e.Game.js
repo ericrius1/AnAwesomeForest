@@ -23,7 +23,7 @@ e.Game = new Class({
     document.body.appendChild(this.renderer.domElement);
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
-    for(var i = 0; i < 1000; i ++){
+    for(var i = 0; i < 500; i ++){
       var sphere = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial());
       sphere.position.set(THREE.Math.randInt(-10, 10), THREE.Math.randInt(-10, 10), THREE.Math.randInt(100, -1000));
       this.scene.add(sphere);
@@ -32,7 +32,8 @@ e.Game = new Class({
     this.clock = new THREE.Clock();
 
     this.controls = new e.Controls({
-      camera: this.camera
+      camera: this.camera,
+      player: this.player
     });
 
     this.start();
