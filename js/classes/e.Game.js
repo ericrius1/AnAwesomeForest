@@ -12,8 +12,8 @@ e.Game = new Class({
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000);
-    this.camera.position.y = 100;
-    this.camera.position.z = 400;
+    this.camera.position.y = 10;
+    this.camera.position.z = 100;
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     this.player = new e.Player({

@@ -1,21 +1,12 @@
 e.Flora = new Class({
   construct: function(options){
+    var self = this;
     this.game = options.game;
-    var geo = new THREE.CylinderGeometry(5, 5, 20);
-    var trunk = new THREE.Mesh(geo);
-    this.game.scene.add(trunk);
-
-    var curProps = {
-      scaleY: trunk.scale.y
-    }
-    var finalProps = {
-      scaleY: trunk.scale.y * 10
-    }
-    var growTween = new TWEEN.Tween(curProps).
-      to(finalProps, 2000).
-      easing(TWEEN.Easing.Cubic.InOut).
-      onUpdate(function(){
-        trunk.scale.y = curProps.scaleY;
-      }).start();
+    var extrudePath = new THREE.SplineCurve3([
+      new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 10, 0), new THREE.Vector3(10, 10, 0)
+    ]);
+    var geo = new THREE.TubeGeometry(extrudePath, 10);
+    var mesh = new THREE.Mesh(geo);
+    this.game.scene.add(mesh);
   }
 });
