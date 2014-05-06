@@ -16,6 +16,19 @@ e.Game = new Class({
     this.camera.position.z = 100;
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
+
+    var ambientLight = new THREE.AmbientLight(0x555555);
+    this.scene.add(ambientLight);
+    this.scene.fog = new THREE.Fog(0xffffff, 50, 10000);
+    this.scene.fog.color.setHSL(0.51, 0.6, 0.6);
+    this.renderer.setClearColor( this.scene.fog.color, 1 );
+
+    var spotLight = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 2, 1);
+    spotLight.position.set(0, 1800, 1500);
+    spotLight.target.position.set(0, 0, 0);
+    spotLight.castShadow = true;
+    this.scene.add(spotLight);
+
     this.player = new e.Player({
       game: this,
       camera: this.camera
@@ -39,12 +52,13 @@ e.Game = new Class({
     this.start();
   },
 
-  start: function(){
+  start: function() {
     requestAnimationFrame(this.render);
   },
 
   render: function() {
     this.controls.update();
+    this.world.update();
     TWEEN.update();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.render);

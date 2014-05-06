@@ -15,6 +15,7 @@
 
 
         <script src="js/vendor/three.min.js"></script>
+        <script src="js/vendor/BufferGeometryUtils.js"></script>
         <script src="assets/helvetiker_regular.typeface.js"></script>
         <script src="js/vendor/underscore.js"></script>
         <script src="js/vendor/tween.min.js"></script>
@@ -34,6 +35,53 @@
         <script src="js/classes/e.Game.js"></script>
 
         <!-- // <script src = "build/game.js"></script> -->
+
+
+      <script id="vertexShader" type="x-shader/x-vertex">
+
+        precision mediump float;
+        precision mediump int;
+
+        uniform mat4 modelViewMatrix; // optional
+        uniform mat4 projectionMatrix; // optional
+
+        attribute vec3 position;
+        attribute vec4 color;
+
+        varying vec3 vPosition;
+        varying vec4 vColor;
+
+        void main() {
+
+          vPosition = position;
+          vColor = color;
+
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+        }
+
+      </script>
+
+      <script id="fragmentShader" type="x-shader/x-fragment">
+
+        precision mediump float;
+        precision mediump int;
+
+        uniform float time;
+
+        varying vec3 vPosition;
+        varying vec4 vColor;
+
+        void main() {
+
+          vec4 color = vec4( vColor );
+          color.r += sin( vPosition.x + time ) * 0.5;
+
+          gl_FragColor = color;
+
+        }
+
+      </script>
        
 
         <script>

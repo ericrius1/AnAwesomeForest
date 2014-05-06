@@ -3,7 +3,7 @@ e.Controls = new Class({
     this.camera = options.camera;
     this.player = options.player;
     this.keyboard = new e.Keyboard();
-    this.controls = new THREE.TrackballControls(this.camera);
+    this.controls = new THREE.OrbitControls(this.camera);
 
   },
   update: function(){
