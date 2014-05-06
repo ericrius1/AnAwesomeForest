@@ -1,12 +1,13 @@
 e.Flora = new Class({
   randInt: THREE.Math.randInt,
   construct: function(options) {
-    var self = this;
     this.game = options.game;
-    this.numLevels = 3;
-    this.currentLevel = 0;
-    this.radius = 0.5;
-    this.branchPoint = new THREE.Vector3(0, 0, 0);
+    this.maxSteps = 4;
+    this.lengthMult = 0.88;
+    this.angleLeft = Math.PI / 2 ;
+    this.angleRight = Math.PI / 2;
+    var length = 100;
+    var angle = Math.PI / 2;
 
     var r = "assets/Park2/";
     var urls = [r + "posx.jpg", r + "negx.jpg",
@@ -29,43 +30,48 @@ e.Flora = new Class({
       combine: THREE.MixOperation,
       reflectivity: 0.1
     });
-    self.generateTrunk();
+    this.drawPart(angle, 0, 0, 0, 100, 0)
 
 
-    this.createBranches(this.currentLevel);
 
   },
 
-  createBranches: function(currentLevel) {
-    for (var i = 0; i < 3; i++) {
-      var extrudePath = new THREE.SplineCurve3([
-        this.branchPoint,
-        new THREE.Vector3(this.randInt(-5, 5), this.randInt(10, 20), this.randInt(-5, 5)),
-        new THREE.Vector3(this.randInt(-10, 10), this.randInt(15, 70), this.randInt(-10, 10))
+  drawPart: function(angle, x, y, z, length, count) {
+    var self = this;
+    if (count < this.maxSteps) {
+      var newLength = length * this.lengthMult;
+      var newX = x + Math.cos(angle) * length;
+      var newY = y + Math.sin(angle) * length;
+      var countSq = Math.min(3.2, count * count);
+      var newZ = z + (Math.random() * countSq - countSq / 2) * length;
+
+      var size = 30 - (count * 8);
+      if (size > 25) size = 25;
+      if (size < 10) size = 10;
+
+      var path = new THREE.SplineCurve3([
+        new THREE.Vector3(x, y, z),
+        new THREE.Vector3(newX, newY, newZ)
       ]);
-      // path, segments, radius, radialSegments, closed
-      var geo = new THREE.TubeGeometry(extrudePath, 5, this.radius, 1);
+      var geo = new THREE.TubeGeometry(path);
       var mesh = new THREE.Mesh(geo);
-      this.game.scene.add(mesh)
+      this.game.scene.add(mesh);
+      mesh.scale.multiplyScalar(.1);
+      var growTween = new TWEEN.Tween(mesh.scale).
+      to({
+        x: 1,
+        y: 1,
+        z: 1
+      }, 3000).
+      easing(TWEEN.Easing.Cubic.InOut).start();
+      growTween.onComplete(function(){
+        self.drawPart(angle - self.angleRight, newX, newY, newZ, newLength, count + 1);
+        self.drawPart(angle + self.angleLeft, newX, newY, newZ, newLength, count + 1);
+      });
     }
 
   },
 
-  generateTrunk: function() {
-    this.newBranchPoint = new THREE.Vector3(this.randInt(-5, 5), 200, 0);
-    var extrudePath = new THREE.SplineCurve3([
-      this.branchPoint, this.newBranchPoint
-    ]);
-    this.branchPoint = this.newBranchPoint;
-
-    var geo = new THREE.SphereGeometry(10, 30, 15);
-
-
-
-    var mesh = new THREE.Mesh(geo, this.material);
-    this.game.scene.add(mesh);
-
-  },
 
   update: function() {
     this.cubeCamera.updateCubeMap(this.game.renderer, this.game.scene);

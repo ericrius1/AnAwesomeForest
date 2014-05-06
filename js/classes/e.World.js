@@ -2,25 +2,22 @@ e.World = new Class({
 
   construct: function(options) {
     this.game = options.game;
+    var maxAnisotropy = this.game.renderer.getMaxAnisotropy();
+    var texture = THREE.ImageUtils.loadTexture("assets/grass.jpg");
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(512, 512);
+    texture.anistropy = maxAnisotropy;
 
-    var mat = new THREE.MeshBasicMaterial({side: THREE.DoubleSide});
+    var groundBasic = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      map: texture
+    });
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000), groundBasic);
+    ground.rotation.x = -Math.PI / 2;
+    this.game.scene.add(ground);
 
-    var groundGeo = new THREE.PlaneGeometry(100, 100);
-    var groundMesh = new THREE.Mesh(groundGeo);
-    groundMesh.rotation.x = -Math.PI / 2;
-    this.game.scene.add(groundMesh);
-
-    mat.color.setRGB(Math.random(), Math.random(), Math.random());
-    groundMesh = new THREE.Mesh(groundGeo, mat);
-    groundMesh.position.z = -50;
-    this.game.scene.add(groundMesh);
-
-    mat = new THREE.MeshBasicMaterial({side: THREE.DoubleSide});
-    mat.color.setRGB(Math.random(), Math.random(), Math.random());
-    groundMesh = new THREE.Mesh(groundGeo, mat);
-    groundMesh.position.x = 50;
-    groundMesh.rotation.y = Math.PI/2;
-    this.game.scene.add(groundMesh);
+    ground.castShadow = false;
+    ground.receiveShadow = true;
 
     this.flora = new e.Flora({
       game: this.game

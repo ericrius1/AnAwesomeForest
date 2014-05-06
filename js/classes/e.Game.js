@@ -11,17 +11,17 @@ e.Game = new Class({
     this.renderer.setSize(window.innerWidth, window.innerHeight);
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000);
-    this.camera.position.y = 10;
-    this.camera.position.z = 100;
-    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    this.camera = new THREE.PerspectiveCamera(45, 1, 1, 100000);
+    this.camera.position.set(0, 100, 500);
 
 
     var ambientLight = new THREE.AmbientLight(0x555555);
     this.scene.add(ambientLight);
-    this.scene.fog = new THREE.Fog(0xffffff, 50, 10000);
-    this.scene.fog.color.setHSL(0.51, 0.6, 0.6);
-    this.renderer.setClearColor( this.scene.fog.color, 1 );
+
+    //FOG
+    this.scene.fog = new THREE.Fog(0xffffff, 3000, 10000);
+    this.scene.fog.color.setHSL(0.5, 0.4, 0.4);
+    this.renderer.setClearColor(this.scene.fog.color, 1);
 
     var spotLight = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 2, 1);
     spotLight.position.set(0, 1800, 1500);
