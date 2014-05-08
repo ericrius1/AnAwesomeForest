@@ -1,11 +1,12 @@
 e.Flora = new Class({
   randInt: THREE.Math.randInt,
+  randFloat: THREE.Math.randFloat,
   construct: function(options) {
     this.game = options.game;
     this.maxSteps = 4;
     this.lengthMult = 0.88;
-    this.angleLeft = Math.PI / 2 ;
-    this.angleRight = Math.PI / 2;
+    this.angleLeft = Math.PI / 4;
+    this.angleRight = Math.PI / 4;
     var length = 100;
     var angle = Math.PI / 2;
 
@@ -21,18 +22,18 @@ e.Flora = new Class({
     this.cubeCamera = new THREE.CubeCamera(1, 1000, 128);
     this.cubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
     this.game.scene.add(this.cubeCamera);
-    self.material = new THREE.MeshLambertMaterial({
-      color: 0xffffff,
-      ambient: 0xffffff,
-      shininess: 5,
-      // envMap: self.cubeCamera.renderTarget,
-      envMap: textureCube,
-      combine: THREE.MixOperation,
-      reflectivity: 0.1
-    });
+
+    this.treeGeo = new THREE.Geometry();
     this.drawPart(angle, 0, 0, 0, 100, 0)
+    var tree = new THREE.Mesh(this.treeGeo);
+    this.game.scene.add(tree);
+    // this.tree();
 
 
+
+  },
+
+  tree: function() {
 
   },
 
@@ -43,7 +44,7 @@ e.Flora = new Class({
       var newX = x + Math.cos(angle) * length;
       var newY = y + Math.sin(angle) * length;
       var countSq = Math.min(3.2, count * count);
-      var newZ = z + (Math.random() * countSq - countSq / 2) * length;
+      var newZ = z + (Math.random() > 0.5 ? 20 : -20);
 
       var size = 30 - (count * 8);
       if (size > 25) size = 25;
@@ -54,20 +55,9 @@ e.Flora = new Class({
         new THREE.Vector3(newX, newY, newZ)
       ]);
       var geo = new THREE.TubeGeometry(path);
-      var mesh = new THREE.Mesh(geo);
-      this.game.scene.add(mesh);
-      mesh.scale.multiplyScalar(.1);
-      var growTween = new TWEEN.Tween(mesh.scale).
-      to({
-        x: 1,
-        y: 1,
-        z: 1
-      }, 3000).
-      easing(TWEEN.Easing.Cubic.InOut).start();
-      growTween.onComplete(function(){
-        self.drawPart(angle - self.angleRight, newX, newY, newZ, newLength, count + 1);
-        self.drawPart(angle + self.angleLeft, newX, newY, newZ, newLength, count + 1);
-      });
+      this.treeGeo.merge(geo);
+      self.drawPart(angle - self.angleRight, newX, newY, newZ, newLength, count + 1);
+      self.drawPart(angle + self.angleLeft, newX, newY, newZ, newLength, count + 1);
     }
 
   },
