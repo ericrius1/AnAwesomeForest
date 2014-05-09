@@ -50,8 +50,11 @@
       <script id="fragmentShader" type="x-shader/x-fragment">
       varying float y;
         void main() {
-          float r = mix(0.56, 0.09, y);
-          float g = mix(0.369, 0.56, y);
+          float y2 = pow(y, 3.0);
+          float r = mix(0.56, 0.09, y2);
+          float g = mix(0.369, 0.56, y2);
+          // float r = mix(0.56, 0.09, y);
+          // float g = mix(0.369, 0.56, y);
           gl_FragColor = vec4(r, g, 0.09, 1.0);
 
         }
