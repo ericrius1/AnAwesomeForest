@@ -53,23 +53,23 @@ e.Flora = new Class({
     this.game.scene.add(tree);
 
     this.light = new THREE.Mesh(this.lightGeo, this.lightMaterial);
-    this.light.position.y = 5;
+    this.light.position.y = 2;
     this.light.rotation.x = -Math.PI / 2;
     this.light.position.x = tree.position.x;
     this.light.position.z = tree.position.z;
     this.game.scene.add(this.light);
 
-
-    // var growTween = new TWEEN.Tween(tree.scale).
-    // to({
-    //   x: 1,
-    //   y: 1,
-    //   z: 1
-    // }, 10000).
-    // easing(TWEEN.Easing.Cubic.Out).start();
-    // growTween.onComplete(function() {
-    //   self.createForest();
-    // })
+    tree.scale.multiplyScalar(0.01);
+    var growTween = new TWEEN.Tween(tree.scale).
+    to({
+      x: 1,
+      y: 1,
+      z: 1
+    }, 5000).
+    easing(TWEEN.Easing.Cubic.Out).start();
+    growTween.onComplete(function() {
+      self.createForest();
+    })
 
   },
 
@@ -98,7 +98,6 @@ e.Flora = new Class({
       var geo = new THREE.TubeGeometry(path, 5, size, 5);
       treeGeo.merge(geo);
       self.createTree(tempAngle - self.angleRight, newX, newY, newZ, newLength, count + 1, treeGeo, size);
-      self.createTree(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, treeGeo, size);
       self.createTree(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, treeGeo, size);
     }
 

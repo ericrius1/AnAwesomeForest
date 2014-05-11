@@ -12,7 +12,7 @@ e.Game = new Class({
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000000);
-    // this.camera.position.set(0, 100, 500);
+    this.camera.position.set(0, 50, 0);
 
 
 
