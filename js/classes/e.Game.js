@@ -12,7 +12,7 @@ e.Game = new Class({
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000000);
-    this.camera.position.set(0, 100, 500);
+    // this.camera.position.set(0, 100, 500);
 
 
 
@@ -26,6 +26,12 @@ e.Game = new Class({
     spotLight.target.position.set(0, 0, 0);
     spotLight.castShadow = true;
     this.scene.add(spotLight);
+
+    var mesh = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10));
+    mesh.position.z = -20;
+
+    this.scene.add(mesh);
+
 
 
     var light = new THREE.PointLight(0xffffff);
@@ -49,7 +55,8 @@ e.Game = new Class({
 
     this.controls = new e.Controls({
       camera: this.camera,
-      player: this.player
+      player: this.player,
+      game: this
     });
 
     this.start();
@@ -60,11 +67,13 @@ e.Game = new Class({
   },
 
   render: function() {
+    requestAnimationFrame(this.render);
+
+
     this.controls.update();
     this.world.update();
     TWEEN.update();
     this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame(this.render);
   },
 
   onWindowResize: function() {

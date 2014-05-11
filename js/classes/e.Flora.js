@@ -20,7 +20,16 @@ e.Flora = new Class({
       vertexShader: document.getElementById('vertexShader').text,
       fragmentShader: document.getElementById('fragmentShader').text
     });
-    this.game.scene.add(this.cubeCamera);
+
+
+    this.lightGeo = new THREE.PlaneGeometry(400, 400);
+    this.lightMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff0000,
+      map: THREE.ImageUtils.loadTexture("assets/light.png"),
+      transparent: true
+    });
+
+
 
     this.treeGeo = new THREE.Geometry();
     this.createForest();
@@ -42,6 +51,13 @@ e.Flora = new Class({
     var height = tree.geometry.boundingBox.max.y;
     this.material.uniforms.height.value = height;
     this.game.scene.add(tree);
+
+    this.light = new THREE.Mesh(this.lightGeo, this.lightMaterial);
+    this.light.position.y = 5;
+    this.light.rotation.x = -Math.PI / 2;
+    this.light.position.x = tree.position.x;
+    this.light.position.z = tree.position.z;
+    this.game.scene.add(this.light);
 
 
     // var growTween = new TWEEN.Tween(tree.scale).
@@ -81,8 +97,9 @@ e.Flora = new Class({
       ]);
       var geo = new THREE.TubeGeometry(path, 5, size, 5);
       treeGeo.merge(geo);
-      self.createTree(angle - self.angleRight, newX, newY, newZ, newLength, count + 1, treeGeo, size);
-      self.createTree(angle + self.angleLeft, newX, newY, newZ, newLength, count + 1, treeGeo, size);
+      self.createTree(tempAngle - self.angleRight, newX, newY, newZ, newLength, count + 1, treeGeo, size);
+      self.createTree(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, treeGeo, size);
+      self.createTree(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, treeGeo, size);
     }
 
 

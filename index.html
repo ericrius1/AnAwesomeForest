@@ -22,6 +22,7 @@
         <script src="js/vendor/CurveExtras.js"></script>
         <script src="js/vendor/OrbitControls.js"></script>
         <script src="js/vendor/TrackballControls.js"></script>
+        <script src="js/vendor/PointerLockControls.js"></script>
         <script src="js/vendor/FlyControls.js"></script>
         <script src="js/vendor/Class.js"></script>
        
@@ -60,6 +61,14 @@
         }
 
       </script>
+
+      <script id = 'groundVertexShader' type="x-shader/x-vertex">
+
+      </script>
+
+      <script id = 'groundFragmentShader' type = 'x-shader/x-fragment'>
+
+      </script>
        
 
         <script>
@@ -69,6 +78,16 @@
         </script>
     </head>
     <body>
+      <div id="blocker">
+
+        <div id="instructions">
+          <span style="font-size:40px">Click to play</span>
+          <br />
+          (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+        </div>
+
+      </div>
+
   
 
     </body>
