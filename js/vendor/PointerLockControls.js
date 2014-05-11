@@ -26,7 +26,7 @@ THREE.PointerLockControls = function(camera) {
   var canJump = false;
 
 
-  var speedBoost = 100;
+  var speedBoost = 20;
   var speedSlow = .5;
 
   var prevTime = performance.now();
@@ -175,11 +175,11 @@ THREE.PointerLockControls = function(camera) {
     velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
 
-    if (moveForward) velocity.z -= 400.0 * delta * speedMultiplier;
-    if (moveBackward) velocity.z += 400.0 * delta * speedMultiplier;
+    if (moveForward) velocity.z -= 1600.0 * delta * speedMultiplier;
+    if (moveBackward) velocity.z += 1600.0 * delta * speedMultiplier;
 
-    if (moveLeft) velocity.x -= 400.0 * delta * speedMultiplier;
-    if (moveRight) velocity.x += 400.0 * delta * speedMultiplier;
+    if (moveLeft) velocity.x -= 1600.0 * delta * speedMultiplier;
+    if (moveRight) velocity.x += 1600.0 * delta * speedMultiplier;
 
     if (isOnObject === true) {
 

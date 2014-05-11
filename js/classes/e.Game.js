@@ -1,6 +1,8 @@
 e.Game = new Class({
   extend: e.EventEmitter,
 
+
+  //Come DOWN TO US REMIX
   construct: function() {
     // Bind render function permenantly
     this.render = this.render.bind(this);

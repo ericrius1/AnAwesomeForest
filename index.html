@@ -43,20 +43,31 @@
         uniform float height;
         void main() {
           y = position.y / height;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 2.0 );
         }
 
       </script>
 
       <script id="fragmentShader" type="x-shader/x-fragment">
-      varying float y;
+        varying float y;
+
+        const float seed = 0.1;
+
+
+        float rand(vec2 co){
+            // implementation found at: lumina.sourceforge.net/Tutorials/Noise.html
+            co.x += seed;
+            return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 434658.5453116487577816842168767168087910388737310);
+        }
+
+
         void main() {
-          float y2 = pow(y, 3.0);
-          float r = mix(0.56, 0.09, y2);
-          float g = mix(0.369, 0.56, y2);
+          float y2 = pow(y, 1.5);
+          float r = mix(0.23, 0.57, y2 );
+          float g = mix(0.09, 0.188, y2);
           // float r = mix(0.56, 0.09, y);
           // float g = mix(0.369, 0.56, y);
-          gl_FragColor = vec4(r, g, 0.09, 1.0);
+          gl_FragColor = vec4(r, g, 0.047, 1.0);
 
         }
 
