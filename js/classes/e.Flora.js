@@ -1,9 +1,8 @@
 e.Flora = new Class({
-  randInt: THREE.Math.randInt,
   randFloat: THREE.Math.randFloat,
   construct: function(options) {
     this.game = options.game;
-    this.maxSteps = 8;
+    this.maxSteps = 7;
     this.lengthMult = 0.63;
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
@@ -50,6 +49,7 @@ e.Flora = new Class({
 
   createForest: function() {
     var self = this;
+    var randInt = THREE.Math.randInt;
 
     var uniforms = {
       height: {
@@ -77,7 +77,7 @@ e.Flora = new Class({
 
     function createTree(angle, x, y, z, length, count, size) {
 
-      if (count < self.maxSteps - 1) {
+      if (count < self.maxSteps) {
 
         var lengthMultOffset = .1;
         var tempLengthMult = self.lengthMult + self.randFloat(-lengthMultOffset, lengthMultOffset);
@@ -106,24 +106,37 @@ e.Flora = new Class({
         treeGeo.merge(geo);
         createTree(tempAngle - self.angleRight, newX, newY, newZ, newLength, count + 1, size);
         createTree(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, size);
-      } else if (count === self.maxSteps - 1) {
-        //add tree here so we have correct leaf position
-        //add a leaf
+        if (count === self.maxSteps - 1) {
+          //add a leaf
 
-        var geo = new THREE.Geometry();
-        geo.vertices.push(new THREE.Vector3(x - 5, y -5, z));
-        geo.vertices.push(new THREE.Vector3(x+5, y-5, z));
-        geo.vertices.push(new THREE.Vector3(x +5, y + 5, z));
-        geo.vertices.push(new THREE.Vector3(x -5, y+5, z));
-        var face = new THREE.Face3(0, 1, 2);
-        var face2 = new THREE.Face3(0, 2, 3);
-        face.materialIndex = 1;
-        face2.materialIndex = 1;
-        geo.faces.push(face);
-        geo.faces.push(face2);
-        treeGeo.merge(geo);
+          var geo = new THREE.Geometry();
+          var width = randInt(3, 6);
+          var angle = self.randFloat(0, Math.PI);
+          // geo.vertices.push(new THREE.Vector3(newX - width, newY - 5, z));
+          // geo.vertices.push(new THREE.Vector3(newX + width, newY - 5, z));
+          // geo.vertices.push(new THREE.Vector3(newX + width, newY + 5, z));
+          // geo.vertices.push(new THREE.Vector3(newX - width, newY + 5, z));
+          geo.vertices.push(new THREE.Vector3(-width, -width, 0));
+          geo.vertices.push(new THREE.Vector3(width, -width, 0));
+          geo.vertices.push(new THREE.Vector3(width, width, 0));
+          geo.vertices.push(new THREE.Vector3(-width, width, 0));
+          geo.applyMatrix(new THREE.Matrix4().makeRotationY(angle));
+          for(var i = 0; i < geo.vertices.length; i++){
+            var vertex = geo.vertices[i];
+            vertex.x = vertex.x + newX;
+            vertex.y = vertex.y + newY;
+            vertex.z = vertex.z + newZ;
+          }
+          
+          var face = new THREE.Face3(0, 1, 2);
+          var face2 = new THREE.Face3(0, 2, 3);
+          face.materialIndex = 1;
+          face2.materialIndex = 1;
+          geo.faces.push(face);
+          geo.faces.push(face2);
+          treeGeo.merge(geo);
+        }
       }
-
     }
 
     var tree = new THREE.Mesh(treeGeo, multiMat);
@@ -137,12 +150,12 @@ e.Flora = new Class({
     var height = tree.geometry.boundingBox.max.y;
     var width = tree.geometry.boundingBox.max.x - tree.geometry.boundingBox.min.x;
     treeMaterial.uniforms.height.value = height;
-    this.leafMaterial.uniforms.width.value = width/2;
+    this.leafMaterial.uniforms.width.value = width / 2;
     this.game.scene.add(tree);
 
 
     this.light = new THREE.Mesh(this.lightGeo, this.lightMaterial);
-    this.light.position.y = this.randInt(2, 4);
+    this.light.position.y = randInt(2, 4);
     this.light.rotation.x = -Math.PI / 2;
     this.light.position.x = tree.position.x;
     this.light.position.z = tree.position.z;

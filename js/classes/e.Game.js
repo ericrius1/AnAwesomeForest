@@ -29,10 +29,6 @@ e.Game = new Class({
     spotLight.castShadow = true;
     this.scene.add(spotLight);
 
-    var mesh = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10));
-    mesh.position.z = -20;
-
-    this.scene.add(mesh);
 
 
 
