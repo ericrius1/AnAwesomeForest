@@ -41,6 +41,7 @@
       <script id="vertexShader" type="x-shader/x-vertex">
         varying float y;
         uniform float height;
+
         void main() {
           y = position.y / height;
           gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
@@ -50,6 +51,7 @@
 
       <script id="fragmentShader" type="x-shader/x-fragment">
         varying float y;
+
 
         const float seed = 0.1;
 
@@ -71,28 +73,24 @@
 
       </script>
 
-          <script id="leafVertexShader" type="x-shader/x-vertex">
+      <script id="leafVertexShader" type="x-shader/x-vertex">
 
-      precision mediump float;
-      precision mediump int;
+        precision mediump float;
+        precision mediump int;
 
-      uniform mat4 modelViewMatrix; // optional
-      uniform mat4 projectionMatrix; // optional
+        uniform float width;
 
-      attribute vec3 position;
-      attribute vec4 color;
 
-      varying vec3 vPosition;
-      varying vec4 vColor;
 
-      void main() {
+        varying float x;
 
-        vPosition = position;
-        vColor = color;
+        void main() {
+          x = abs(position.x/width);
 
-        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 
-      }
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+        }
 
     </script>
 
@@ -103,13 +101,13 @@
 
       uniform float time;
 
-      varying vec3 vPosition;
-      varying vec4 vColor;
+
+      varying float x;
 
       void main() {
-
-        vec4 color = vec4( vColor );
-        color.r += sin( vPosition.x * 10.0 + time ) * 0.5;
+        float r = mix(0., 1., x);
+        vec4 color = vec4(r, 0., 0., 0.2 );
+        color.g += sin( x + time * 0.05 );
 
         gl_FragColor = color;
 
@@ -117,13 +115,6 @@
 
     </script>
 
-      <script id = 'groundVertexShader' type="x-shader/x-vertex">
-
-      </script>
-
-      <script id = 'groundFragmentShader' type = 'x-shader/x-fragment'>
-
-      </script>
        
 
         <script>

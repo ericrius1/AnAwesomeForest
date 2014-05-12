@@ -19,18 +19,27 @@ e.Flora = new Class({
     });
 
 
-
-    this.leafMaterial = new THREE.RawShaderMaterial({
+    var attributes = {
+      color: {
+        type: 'c',
+        value: []
+      }
+    };
+    this.leafMaterial = new THREE.ShaderMaterial({
       uniforms: {
         time: {
           type: "f",
           value: 1.0
+        },
+        width: {
+          type: 'f',
+          value: 100
         }
       },
       vertexShader: document.getElementById('leafVertexShader').textContent,
       fragmentShader: document.getElementById('leafFragmentShader').textContent,
       side: THREE.DoubleSide,
-      transparent: true
+      transparent: true,
     });
     this.treeGeo = new THREE.Geometry();
     this.createForest();
@@ -56,8 +65,6 @@ e.Flora = new Class({
       side: THREE.DoubleSide
     });
 
-
-
     var materials = [
       treeMaterial,
       this.leafMaterial
@@ -66,6 +73,7 @@ e.Flora = new Class({
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
     createTree(angle, 0, 0, 0, 100, 0, 10);
+
 
     function createTree(angle, x, y, z, length, count, size) {
 
@@ -103,11 +111,16 @@ e.Flora = new Class({
         //add a leaf
 
         var geo = new THREE.Geometry();
-        geo.vertices.push(new THREE.Vector3(x, y, z));
-        geo.vertices.push(new THREE.Vector3(x + 10, y, z));
-        geo.vertices.push(new THREE.Vector3(x + 5, y + 10, z));
-        geo.faces.push(new THREE.Face3(0, 1, 2))
-        geo.faces[0].materialIndex = 1;
+        geo.vertices.push(new THREE.Vector3(x - 5, y -5, z));
+        geo.vertices.push(new THREE.Vector3(x+5, y-5, z));
+        geo.vertices.push(new THREE.Vector3(x +5, y + 5, z));
+        geo.vertices.push(new THREE.Vector3(x -5, y+5, z));
+        var face = new THREE.Face3(0, 1, 2);
+        var face2 = new THREE.Face3(0, 2, 3);
+        face.materialIndex = 1;
+        face2.materialIndex = 1;
+        geo.faces.push(face);
+        geo.faces.push(face2);
         treeGeo.merge(geo);
       }
 
@@ -119,10 +132,12 @@ e.Flora = new Class({
     // tree.scale.multiplyScalar(0.01);
     // tree.position.z = this.randInt(-2000, 2000);
 
-    tree.position.z = -200;
+    tree.position.z = -500;
     tree.geometry.computeBoundingBox();
     var height = tree.geometry.boundingBox.max.y;
+    var width = tree.geometry.boundingBox.max.x - tree.geometry.boundingBox.min.x;
     treeMaterial.uniforms.height.value = height;
+    this.leafMaterial.uniforms.width.value = width/2;
     this.game.scene.add(tree);
 
 
