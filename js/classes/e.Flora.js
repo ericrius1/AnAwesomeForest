@@ -44,11 +44,16 @@ e.Flora = new Class({
       side: THREE.DoubleSide
     });
 
+
+    var materials = [
+      // treeMaterial,
+      treeMaterial,
+      new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide})
+    ];
+    var multiMat = new THREE.MeshFaceMaterial(materials);
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
-    var leafGeo = new THREE.Geometry();
     createTree(angle, 0, 0, 0, 100, 0, 10);
-    var oldX, oldY, oldZ;
 
     function createTree(angle, x, y, z, length, count, size) {
 
@@ -75,10 +80,10 @@ e.Flora = new Class({
           new THREE.Vector3(newX, newY, newZ)
         ]);
         var geo = new THREE.TubeGeometry(path, 5, size, 5);
+        for(var i = 0; i < geo.faces.length; i++){
+          geo.faces[i].materialIndex = 0;
+        }
         treeGeo.merge(geo);
-        oldX = x;
-        oldY = y;
-        oldZ = z;
         createTree(tempAngle - self.angleRight, newX, newY, newZ, newLength, count + 1, size);
         createTree(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, size);
       } else if (count === self.maxSteps - 1) {
@@ -86,20 +91,23 @@ e.Flora = new Class({
         //add a leaf
 
         var geo = new THREE.Geometry();
-        geo.vertices.push(new THREE.Vector3(oldX, oldY, oldZ));
-        geo.vertices.push(new THREE.Vector3(oldX + 10, oldY, oldZ));
-        geo.vertices.push(new THREE.Vector3(oldX + 5, oldY+10, oldZ));
+        geo.vertices.push(new THREE.Vector3(x, y, z));
+        geo.vertices.push(new THREE.Vector3(x + 10, y, z));
+        geo.vertices.push(new THREE.Vector3(x + 5, y+10, z));
         geo.faces.push(new THREE.Face3(0, 1, 2))
+        geo.faces[0].materialIndex = 1;
         treeGeo.merge(geo);
       }
 
     }
 
-    var tree = new THREE.Mesh(treeGeo, treeMaterial);
+    var tree = new THREE.Mesh(treeGeo, multiMat);
     tree.side = THREE.DoubleSide;
-    tree.position.x = this.randInt(-2000, 2000);
-    tree.scale.multiplyScalar(0.01);
-    tree.position.z = this.randInt(-2000, 2000);
+    // tree.position.x = this.randInt(-2000, 2000);
+    // tree.scale.multiplyScalar(0.01);
+    // tree.position.z = this.randInt(-2000, 2000);
+
+    tree.position.z = -200;
     tree.geometry.computeBoundingBox();
     var height = tree.geometry.boundingBox.max.y;
     treeMaterial.uniforms.height.value = height;
@@ -113,16 +121,16 @@ e.Flora = new Class({
     this.light.position.z = tree.position.z;
     this.game.scene.add(this.light);
 
-    var growTween = new TWEEN.Tween(tree.scale).
-    to({
-      x: 1,
-      y: 1,
-      z: 1
-    }, 5000).
-    easing(TWEEN.Easing.Cubic.Out).start();
-    growTween.onComplete(function() {
-      self.createForest();
-    })
+    // var growTween = new TWEEN.Tween(tree.scale).
+    // to({
+    //   x: 1,
+    //   y: 1,
+    //   z: 1
+    // }, 5000).
+    // easing(TWEEN.Easing.Cubic.Out).start();
+    // growTween.onComplete(function() {
+    //   self.createForest();
+    // })
 
   },
 

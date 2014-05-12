@@ -43,7 +43,7 @@
         uniform float height;
         void main() {
           y = position.y / height;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 2.0 );
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         }
 
       </script>
@@ -62,8 +62,8 @@
 
 
         void main() {
-          float y2 = pow(y, 1.5);
-          float r = mix(0.23, 0.57, y2 );
+          float y2 = pow(y, 2.5);
+          float r = mix(0.23, 0.67, y2 );
           float g = mix(0.09, 0.188, y2);
           // float r = mix(0.56, 0.09, y);
           // float g = mix(0.369, 0.56, y);
