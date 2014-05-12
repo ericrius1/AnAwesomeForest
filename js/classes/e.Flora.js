@@ -46,9 +46,55 @@ e.Flora = new Class({
 
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
-    var leafGeo;
-    // function createTree()
-    this.createTree(angle, 0, 0, 0, 100, 0, treeGeo, 10, leafGeo);
+    var leafGeo = new THREE.Geometry();
+    createTree(angle, 0, 0, 0, 100, 0, 10);
+    var oldX, oldY, oldZ;
+
+    function createTree(angle, x, y, z, length, count, size) {
+
+      if (count < self.maxSteps - 1) {
+
+        var lengthMultOffset = .1;
+        var tempLengthMult = self.lengthMult + self.randFloat(-lengthMultOffset, lengthMultOffset);
+        var newLength = Math.max(1, length * tempLengthMult);
+
+        //We want greater angle randomness the deeper we get into the tree structure
+        var angleOffset = map(count, 0, self.maxSteps - 1, .1, 1);
+        var tempAngle = angle + self.randFloat(-angleOffset, angleOffset);
+        var newX = x + Math.cos(tempAngle) * length;
+        var newY = y + Math.sin(tempAngle) * length;
+
+
+        var dir = Math.random() > 0.5 ? 1 : -1;
+        var newZ = z + Math.cos(tempAngle) * length * dir;
+
+        var size = Math.max(1, size * 0.7);
+
+        var path = new THREE.SplineCurve3([
+          new THREE.Vector3(x, y, z),
+          new THREE.Vector3(newX, newY, newZ)
+        ]);
+        var geo = new THREE.TubeGeometry(path, 5, size, 5);
+        treeGeo.merge(geo);
+        oldX = x;
+        oldY = y;
+        oldZ = z;
+        createTree(tempAngle - self.angleRight, newX, newY, newZ, newLength, count + 1, size);
+        createTree(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, size);
+      } else if (count === self.maxSteps - 1) {
+        //add tree here so we have correct leaf position
+        //add a leaf
+
+        var geo = new THREE.Geometry();
+        geo.vertices.push(new THREE.Vector3(oldX, oldY, oldZ));
+        geo.vertices.push(new THREE.Vector3(oldX + 10, oldY, oldZ));
+        geo.vertices.push(new THREE.Vector3(oldX + 5, oldY+10, oldZ));
+        geo.faces.push(new THREE.Face3(0, 1, 2))
+        treeGeo.merge(geo);
+      }
+
+    }
+
     var tree = new THREE.Mesh(treeGeo, treeMaterial);
     tree.side = THREE.DoubleSide;
     tree.position.x = this.randInt(-2000, 2000);
@@ -58,6 +104,7 @@ e.Flora = new Class({
     var height = tree.geometry.boundingBox.max.y;
     treeMaterial.uniforms.height.value = height;
     this.game.scene.add(tree);
+
 
     this.light = new THREE.Mesh(this.lightGeo, this.lightMaterial);
     this.light.position.y = this.randInt(2, 4);
@@ -78,48 +125,6 @@ e.Flora = new Class({
     })
 
   },
-
-  createTree: function(angle, x, y, z, length, count, treeGeo, size, leafGeo) {
-    var self = this;
-    if (count < this.maxSteps-1) {
-
-      var lengthMultOffset = .1;
-      var tempLengthMult = this.lengthMult + this.randFloat(-lengthMultOffset, lengthMultOffset);
-      var newLength = Math.max(1, length * tempLengthMult);
-
-      //We want greater angle randomness the deeper we get into the tree structure
-      var angleOffset = map(count, 0, this.maxSteps - 1, .1, 1);
-      var tempAngle = angle + this.randFloat(-angleOffset, angleOffset);
-      var newX = x + Math.cos(tempAngle) * length;
-      var newY = y + Math.sin(tempAngle) * length;
-
-
-      var dir = Math.random() > 0.5 ? 1 : -1;
-      var newZ = z + Math.cos(tempAngle) * length * dir;
-
-      var size = Math.max(1, size * 0.7);
-
-      var path = new THREE.SplineCurve3([
-        new THREE.Vector3(x, y, z),
-        new THREE.Vector3(newX, newY, newZ)
-      ]);
-      var geo = new THREE.TubeGeometry(path, 5, size, 5);
-      treeGeo.merge(geo);
-      self.createTree(tempAngle - self.angleRight, newX, newY, newZ, newLength, count + 1, treeGeo, size);
-      self.createTree(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, treeGeo, size);
-    } else if (count === this.maxSteps - 1) {
-      //add a leaf
-      var geo = new THREE.Geometry();
-      geo.vertices.push(new THREE.Vector3(x, y, z));
-      geo.vertices.push(new THREE.Vector3(x, y, z));
-      geo.vertices.push(new THREE.Vector3(x+1, y + 20, z));
-      geo.faces.push(new THREE.Face3(0, 2, 1))
-      treeGeo.merge(geo);
-    }
-
-
-  },
-
 
   update: function() {}
 });
