@@ -20,6 +20,18 @@ e.Flora = new Class({
 
 
 
+    this.leafMaterial = new THREE.RawShaderMaterial({
+      uniforms: {
+        time: {
+          type: "f",
+          value: 1.0
+        }
+      },
+      vertexShader: document.getElementById('leafVertexShader').textContent,
+      fragmentShader: document.getElementById('leafFragmentShader').textContent,
+      side: THREE.DoubleSide,
+      transparent: true
+    });
     this.treeGeo = new THREE.Geometry();
     this.createForest();
 
@@ -45,10 +57,10 @@ e.Flora = new Class({
     });
 
 
+
     var materials = [
-      // treeMaterial,
       treeMaterial,
-      new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide})
+      this.leafMaterial
     ];
     var multiMat = new THREE.MeshFaceMaterial(materials);
     var angle = Math.PI / 2;
@@ -80,7 +92,7 @@ e.Flora = new Class({
           new THREE.Vector3(newX, newY, newZ)
         ]);
         var geo = new THREE.TubeGeometry(path, 5, size, 5);
-        for(var i = 0; i < geo.faces.length; i++){
+        for (var i = 0; i < geo.faces.length; i++) {
           geo.faces[i].materialIndex = 0;
         }
         treeGeo.merge(geo);
@@ -93,7 +105,7 @@ e.Flora = new Class({
         var geo = new THREE.Geometry();
         geo.vertices.push(new THREE.Vector3(x, y, z));
         geo.vertices.push(new THREE.Vector3(x + 10, y, z));
-        geo.vertices.push(new THREE.Vector3(x + 5, y+10, z));
+        geo.vertices.push(new THREE.Vector3(x + 5, y + 10, z));
         geo.faces.push(new THREE.Face3(0, 1, 2))
         geo.faces[0].materialIndex = 1;
         treeGeo.merge(geo);
@@ -134,5 +146,8 @@ e.Flora = new Class({
 
   },
 
-  update: function() {}
+  update: function() {
+    var time = performance.now();
+    this.leafMaterial.uniforms.time.value = time * 0.005;
+  }
 });
