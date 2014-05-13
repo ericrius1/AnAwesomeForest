@@ -10,7 +10,7 @@ e.Flora = new Class({
 
 
 
-    this.lightGeo = new THREE.PlaneGeometry(200, 200);
+    this.lightGeo = new THREE.CircleGeometry(50, 50);
     this.lightMaterial = new THREE.MeshBasicMaterial({
       color: 0xff0000,
       map: THREE.ImageUtils.loadTexture("assets/light.png"),
@@ -141,6 +141,7 @@ e.Flora = new Class({
     tree.position.x = Math.random() > 0.5 ? randInt(-500, -300): randInt(300, 500);
     tree.scale.multiplyScalar(0.01);
     tree.position.z = zPos
+    tree.castShadow = true;
 
     tree.geometry.computeBoundingBox();
     var height = tree.geometry.boundingBox.max.y;
@@ -150,12 +151,13 @@ e.Flora = new Class({
     this.game.scene.add(tree);
 
 
-    this.light = new THREE.Mesh(this.lightGeo, this.lightMaterial);
-    this.light.position.y = randInt(2, 4);
-    this.light.rotation.x = -Math.PI / 2;
-    this.light.position.x = tree.position.x;
-    this.light.position.z = tree.position.z;
-    this.game.scene.add(this.light);
+    var light = new THREE.Mesh(this.lightGeo,this.leafMaterial);
+    light.position.y = 1;
+    light.rotation.x = -Math.PI / 2;
+    light.position.x = tree.position.x;
+    light.position.z = tree.position.z;
+    light.scale.y = this.randFloat(1.3, 2.0  );
+    // this.game.scene.add(light);
 
     var growTween = new TWEEN.Tween(tree.scale).
     to({
@@ -165,7 +167,7 @@ e.Flora = new Class({
     }, 1000).
     easing(TWEEN.Easing.Cubic.Out).start();
     growTween.onComplete(function() {
-      self.createForest(zPos - 300);
+      // self.createForest(zPos - 300);
     })
 
   },
