@@ -24,15 +24,22 @@ e.Forest = new Class({
         value: []
       }
     };
+
     this.leafMaterial = new THREE.ShaderMaterial({
       uniforms: {
         time: {
           type: "f",
-          value: 1.0
+          value: []
         },
         width: {
           type: 'f',
           value: 100
+        }
+      },
+      attributes: {
+        pivotVertex: {
+          type: 'f',
+          value: 0.0
         }
       },
       vertexShader: document.getElementById('leafVertexShader').textContent,
@@ -76,7 +83,9 @@ e.Forest = new Class({
     var multiMat = new THREE.MeshFaceMaterial(materials);
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
+    var pivots = this.leafMaterial.attributes.pivotVertex.value;
     createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, 10);
+
     
 
 
@@ -132,15 +141,23 @@ e.Forest = new Class({
           
           var face = new THREE.Face3(0, 1, 2);
           var face2 = new THREE.Face3(0, 2, 3);
-          face.materialIndex = 1;
-          face2.materialIndex = 1;
+          // face.materialIndex = 1;
+          // face2.materialIndex = 1;
           geo.faces.push(face);
           geo.faces.push(face2);
           treeGeo.merge(geo);
         }
       }
     }
+    for(var i =0; i < treeGeo.vertices.length; i++){
 
+      if( (i % 4) === 0){
+        pivots[i] = 1.0
+      }
+      else{
+        pivots[i] = 0.0;
+      }
+    }
     var tree = new THREE.Mesh(treeGeo, multiMat);
     tree.side = THREE.DoubleSide;
     tree.position.x = Math.random() > 0.5 ? randInt(-100, -1000): randInt(100, 1000);
