@@ -79,14 +79,13 @@
         precision mediump int;
 
         uniform float width;
-
+        uniform float time;
 
 
         varying float x;
 
         void main() {
           x = abs(position.x/width);
-
 
           gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 
@@ -106,8 +105,9 @@
 
       void main() {
         float r = mix(0., 1., x);
-        vec4 color = vec4(r, 0., 0., 0.2 );
+        vec4 color = vec4(r, 0., 0., 0.5 );
         color.g += sin( x + time * 0.05 );
+        // color.a = clamp(sin( x + time * 0.1 ), 0.0, 0.5);
 
         gl_FragColor = color;
 

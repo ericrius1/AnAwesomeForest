@@ -2,7 +2,7 @@ e.Flora = new Class({
   randFloat: THREE.Math.randFloat,
   construct: function(options) {
     this.game = options.game;
-    this.maxSteps = 7;
+    this.maxSteps = 8;
     this.lengthMult = 0.63;
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
@@ -111,15 +111,12 @@ e.Flora = new Class({
 
           var geo = new THREE.Geometry();
           var width = randInt(3, 6);
+          var height = randInt(3, 6);
           var angle = self.randFloat(0, Math.PI);
-          // geo.vertices.push(new THREE.Vector3(newX - width, newY - 5, z));
-          // geo.vertices.push(new THREE.Vector3(newX + width, newY - 5, z));
-          // geo.vertices.push(new THREE.Vector3(newX + width, newY + 5, z));
-          // geo.vertices.push(new THREE.Vector3(newX - width, newY + 5, z));
-          geo.vertices.push(new THREE.Vector3(-width, -width, 0));
-          geo.vertices.push(new THREE.Vector3(width, -width, 0));
-          geo.vertices.push(new THREE.Vector3(width, width, 0));
-          geo.vertices.push(new THREE.Vector3(-width, width, 0));
+          geo.vertices.push(new THREE.Vector3(-width, -height, 0));
+          geo.vertices.push(new THREE.Vector3(width, -height, 0));
+          geo.vertices.push(new THREE.Vector3(width, height, 0));
+          geo.vertices.push(new THREE.Vector3(-width, height, 0));
           geo.applyMatrix(new THREE.Matrix4().makeRotationY(angle));
           for(var i = 0; i < geo.vertices.length; i++){
             var vertex = geo.vertices[i];
@@ -141,11 +138,10 @@ e.Flora = new Class({
 
     var tree = new THREE.Mesh(treeGeo, multiMat);
     tree.side = THREE.DoubleSide;
-    // tree.position.x = this.randInt(-2000, 2000);
-    // tree.scale.multiplyScalar(0.01);
-    // tree.position.z = this.randInt(-2000, 2000);
+    tree.position.x = randInt(-2000, 2000);
+    tree.scale.multiplyScalar(0.01);
+    tree.position.z = randInt(-2000, 2000);
 
-    tree.position.z = -500;
     tree.geometry.computeBoundingBox();
     var height = tree.geometry.boundingBox.max.y;
     var width = tree.geometry.boundingBox.max.x - tree.geometry.boundingBox.min.x;
@@ -161,16 +157,16 @@ e.Flora = new Class({
     this.light.position.z = tree.position.z;
     this.game.scene.add(this.light);
 
-    // var growTween = new TWEEN.Tween(tree.scale).
-    // to({
-    //   x: 1,
-    //   y: 1,
-    //   z: 1
-    // }, 5000).
-    // easing(TWEEN.Easing.Cubic.Out).start();
-    // growTween.onComplete(function() {
-    //   self.createForest();
-    // })
+    var growTween = new TWEEN.Tween(tree.scale).
+    to({
+      x: 1,
+      y: 1,
+      z: 1
+    }, 5000).
+    easing(TWEEN.Easing.Cubic.Out).start();
+    growTween.onComplete(function() {
+      self.createForest();
+    })
 
   },
 

@@ -4,7 +4,7 @@ e.World = new Class({
     this.game = options.game;
 
     var groundMat = new THREE.MeshBasicMaterial({color: 0xff00ff});
-    var ground = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000), groundMat);
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000), groundMat);
     ground.rotation.x = -Math.PI / 2;
     this.game.scene.add(ground);
 
