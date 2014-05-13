@@ -39,7 +39,7 @@ e.Forest = new Class({
       attributes: {
         pivotVertex: {
           type: 'f',
-          value: 0.0
+          value: []
         }
       },
       vertexShader: document.getElementById('leafVertexShader').textContent,
@@ -52,6 +52,26 @@ e.Forest = new Class({
       this.createTree();
       
     }
+
+    //TEST VERTEX SHADER
+    var pivots = this.leafMaterial.attributes.pivotVertex.value;
+    var planeGeo = new THREE.Geometry();
+    planeGeo.vertices.push(new THREE.Vector3(-10, 50, 0))
+    planeGeo.vertices.push(new THREE.Vector3(10, 50, 0))
+    planeGeo.vertices.push(new THREE.Vector3(10, 100, 0))
+    planeGeo.vertices.push(new THREE.Vector3(-10, 100, 0))
+    planeGeo.faces.push(new THREE.Face3(0,1,2));
+    planeGeo.faces.push(new THREE.Face3(0,2,3));
+    for(var i = 0; i < planeGeo.vertices.length; i++){
+      if(i === 0){
+        pivots[i] = 1.0;
+      }else{
+        pivots[i] = 0.0;
+      }
+    }
+    console.log(pivots);
+    var plane = new THREE.Mesh(planeGeo, this.leafMaterial);
+    this.game.scene.add(plane);
 
 
 
@@ -83,7 +103,6 @@ e.Forest = new Class({
     var multiMat = new THREE.MeshFaceMaterial(materials);
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
-    var pivots = this.leafMaterial.attributes.pivotVertex.value;
     createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, 10);
 
     
@@ -149,15 +168,7 @@ e.Forest = new Class({
         }
       }
     }
-    for(var i =0; i < treeGeo.vertices.length; i++){
 
-      if( (i % 4) === 0){
-        pivots[i] = 1.0
-      }
-      else{
-        pivots[i] = 0.0;
-      }
-    }
     var tree = new THREE.Mesh(treeGeo, multiMat);
     tree.side = THREE.DoubleSide;
     tree.position.x = Math.random() > 0.5 ? randInt(-100, -1000): randInt(100, 1000);
@@ -178,6 +189,7 @@ e.Forest = new Class({
     light.position.z = tree.position.z;
     light.scale.y = this.randFloat(1.3, 2.0  );
     this.game.scene.add(light);
+
 
     // tree.scale.multiplyScalar(0.01);
     // var growTween = new TWEEN.Tween(tree.scale).
