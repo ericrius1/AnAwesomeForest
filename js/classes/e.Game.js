@@ -14,7 +14,7 @@ e.Game = new Class({
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000000);
-    this.camera.position.set(0, 100, 0);
+
 
 
 
@@ -35,11 +35,6 @@ e.Game = new Class({
     var light = new THREE.PointLight(0xffffff);
     light.position = this.camera.position;
     this.scene.add(light);
-
-    this.player = new e.Player({
-      game: this,
-      camera: this.camera
-    });
 
     this.world = new e.World({
       game: this

@@ -41,13 +41,13 @@ e.Flora = new Class({
       transparent: true,
     });
     this.treeGeo = new THREE.Geometry();
-    this.createForest();
+    this.createForest(0);
 
 
 
   },
 
-  createForest: function() {
+  createForest: function(zPos) {
     var self = this;
     var randInt = THREE.Math.randInt;
 
@@ -138,9 +138,9 @@ e.Flora = new Class({
 
     var tree = new THREE.Mesh(treeGeo, multiMat);
     tree.side = THREE.DoubleSide;
-    tree.position.x = randInt(-2000, 2000);
+    tree.position.x = Math.random() > 0.5 ? randInt(-500, -300): randInt(300, 500);
     tree.scale.multiplyScalar(0.01);
-    tree.position.z = randInt(-2000, 2000);
+    tree.position.z = zPos
 
     tree.geometry.computeBoundingBox();
     var height = tree.geometry.boundingBox.max.y;
@@ -162,10 +162,10 @@ e.Flora = new Class({
       x: 1,
       y: 1,
       z: 1
-    }, 5000).
+    }, 1000).
     easing(TWEEN.Easing.Cubic.Out).start();
     growTween.onComplete(function() {
-      self.createForest();
+      self.createForest(zPos - 300);
     })
 
   },
