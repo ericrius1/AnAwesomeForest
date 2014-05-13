@@ -6,7 +6,7 @@ e.Forest = new Class({
     this.lengthMult = 0.63;
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
-    this.numTrees = 10;
+    this.numTrees = 1;
 
 
 
@@ -48,31 +48,11 @@ e.Forest = new Class({
       transparent: true,
     });
     this.treeGeo = new THREE.Geometry();
+    this.pivots = this.leafMaterial.attributes.pivotVertex.value;
     for(var i = 0; i < this.numTrees; i++){
       this.createTree();
       
     }
-
-    //TEST VERTEX SHADER
-    var pivots = this.leafMaterial.attributes.pivotVertex.value;
-    var planeGeo = new THREE.Geometry();
-    planeGeo.vertices.push(new THREE.Vector3(-10, 50, 0))
-    planeGeo.vertices.push(new THREE.Vector3(10, 50, 0))
-    planeGeo.vertices.push(new THREE.Vector3(10, 100, 0))
-    planeGeo.vertices.push(new THREE.Vector3(-10, 100, 0))
-    planeGeo.faces.push(new THREE.Face3(0,1,2));
-    planeGeo.faces.push(new THREE.Face3(0,2,3));
-    for(var i = 0; i < planeGeo.vertices.length; i++){
-      if(i === 0){
-        pivots[i] = 1.0;
-      }else{
-        pivots[i] = 0.0;
-      }
-    }
-    console.log(pivots);
-    var plane = new THREE.Mesh(planeGeo, this.leafMaterial);
-    this.game.scene.add(plane);
-
 
 
   },
@@ -80,7 +60,7 @@ e.Forest = new Class({
   createTree: function() {
     var self = this;
     var randInt = THREE.Math.randInt;
-    var maxSteps = randInt(6, 8);
+    var maxSteps = 6;
 
     var uniforms = {
       height: {
@@ -103,6 +83,8 @@ e.Forest = new Class({
     var multiMat = new THREE.MeshFaceMaterial(materials);
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
+    var leafGeo = new THREE.Geometry();
+
     createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, 10);
 
     
@@ -153,6 +135,13 @@ e.Forest = new Class({
           geo.applyMatrix(new THREE.Matrix4().makeRotationY(angle));
           for(var i = 0; i < geo.vertices.length; i++){
             var vertex = geo.vertices[i];
+            if(i === 0){
+              self.pivots.push(1.0);
+          
+            }else{
+              self.pivots.push(0.0);
+              
+            }
             vertex.x = vertex.x + newX;
             vertex.y = vertex.y + newY;
             vertex.z = vertex.z + newZ;
@@ -160,14 +149,15 @@ e.Forest = new Class({
           
           var face = new THREE.Face3(0, 1, 2);
           var face2 = new THREE.Face3(0, 2, 3);
-          // face.materialIndex = 1;
-          // face2.materialIndex = 1;
+          face.materialIndex = 1;
+          face2.materialIndex = 1;
           geo.faces.push(face);
           geo.faces.push(face2);
-          treeGeo.merge(geo);
+          leafGeo.merge(geo);
         }
       }
     }
+    console.log(self.pivots.length);
 
     var tree = new THREE.Mesh(treeGeo, multiMat);
     tree.side = THREE.DoubleSide;
@@ -180,6 +170,11 @@ e.Forest = new Class({
     treeMaterial.uniforms.height.value = height;
     this.leafMaterial.uniforms.width.value = width / 2;
     this.game.scene.add(tree);
+
+    var leaves = new THREE.Mesh(leafGeo, this.leafMaterial);
+    leaves.position.x = tree.position.x;
+    leaves.position.z = tree.position.z;
+    this.game.scene.add(leaves);
 
 
     var light = new THREE.Mesh(this.lightGeo,this.lightMaterial);
