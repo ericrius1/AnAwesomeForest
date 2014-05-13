@@ -6,12 +6,12 @@ e.World = new Class({
     var groundMat = new THREE.MeshLambertMaterial({
       color: 0x3a5938
     });
-    var pathLength = 10000;
-    var pathWidth = 10000;
-    var ground = new THREE.Mesh(new THREE.PlaneGeometry(pathWidth, pathLength, 50, 50), groundMat);
-    ground.rotation.x = -Math.PI / 2;
+    this.pathLength = 10000;
+    this.pathWidth = 10000;
+    this.ground = new THREE.Mesh(new THREE.PlaneGeometry(this.pathWidth, this.pathLength, 50, 50), groundMat);
+    this.ground.rotation.x = -Math.PI / 2;
     var heightMultiplier;
-    _.each(ground.geometry.vertices, function(vertex) {
+    _.each(this.ground.geometry.vertices, function(vertex) {
       if (Math.random() > 0.4 && Math.abs(vertex.x) > 1000) {
         heightMultiplier = 1;
         if (Math.abs(vertex.x) > 3000) {
@@ -20,18 +20,18 @@ e.World = new Class({
         vertex.z = THREE.Math.randInt(400, 600) * heightMultiplier;
       }
     })
-    this.game.scene.add(ground);
-    this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({color: 0xffffff}));
+    this.game.scene.add(this.ground);
+    this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({color: 0xf2f2f2}));
     this.moon.scale.multiplyScalar(500);
-    this.moon.position.set(-pathWidth * 10, 100000, -pathLength * 20)
-    this.moon.scale.x += 10;  
+    this.moon.position.set(-this.pathWidth * 10, 3000, -this.pathLength* 10)
+    this.moon.scale.x += 5;  
     this.moon.lookAt(this.game.scene.position);
     //color, intensity, distance, angle, exponent
-    this.light = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 2, 1);
-    this.light.position.set(-5000, 5000, -pathLength);
+    this.light = new THREE.SpotLight(0xf2f2f2, 1, 0, Math.PI / 2, 1);
+    this.light.position.set(-5000, 7000, -this.pathLength);
     this.light.target.position.set(0, 0, 0);
     this.game.scene.add(this.light);
-    var debugLight = new THREE.Mesh(new THREE.SphereGeometry(100));
+    var debugLight = new THREE.Mesh(new THREE.SphereGeometry(1000));
     this.light.add(debugLight);
 
     this.game.scene.add(this.moon);
@@ -40,11 +40,12 @@ e.World = new Class({
     this.player = new e.Player({
       game: this,
       camera: this.game.camera,
-      position: new THREE.Vector3(0, 100, 0)
+      position: new THREE.Vector3(0, 50, 0)
     });
 
-    this.flora = new e.Flora({
-      game: this.game
+    this.forest = new e.Forest({
+      game: this.game,
+      world: this
     });
 
     //WATER
@@ -70,7 +71,7 @@ e.World = new Class({
 
     mirrorMesh.add(this.water);
     mirrorMesh.rotation.x = -Math.PI * 0.5;
-    mirrorMesh.position.z = -pathLength/2;
+    mirrorMesh.position.z = -this.pathLength/2;
     mirrorMesh.position.y = -100;
     this.game.scene.add(mirrorMesh);
 
@@ -81,7 +82,7 @@ e.World = new Class({
     var time = performance.now()
     this.water.material.uniforms.time.value += 1.0 / 60.0;
     this.water.render();
-    this.flora.update();
+    this.forest.update();
   }
 
 });
