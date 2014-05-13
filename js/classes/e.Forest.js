@@ -30,12 +30,6 @@ e.Forest = new Class({
           value: 100
         }
       },
-      attributes: {
-        pivotVertex: {
-          type: 'f',
-          value: pivotPoints
-        }
-      },
       vertexShader: document.getElementById('leafVertexShader').textContent,
       fragmentShader: document.getElementById('leafFragmentShader').textContent,
       side: THREE.DoubleSide,
@@ -135,7 +129,7 @@ e.Forest = new Class({
       }
     }
 
-    var tree = new THREE.Mesh(treeGeo);
+    var tree = new THREE.Mesh(treeGeo, treeMaterial);
     tree.side = THREE.DoubleSide;
     tree.position.x = Math.random() > 0.5 ? randInt(-100, -1000) : randInt(100, 1000);
     tree.position.z = randInt(-this.world.pathLength / 2, this.world.pathLength / 2);
