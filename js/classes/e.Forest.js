@@ -7,6 +7,7 @@ e.Forest = new Class({
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
     this.numTrees = 1;
+    this.maxSteps = 6;
 
 
 
@@ -17,13 +18,6 @@ e.Forest = new Class({
       transparent: true
     });
 
-
-    var attributes = {
-      color: {
-        type: 'c',
-        value: []
-      }
-    };
 
     this.leafMaterial = new THREE.ShaderMaterial({
       uniforms: {
@@ -39,7 +33,7 @@ e.Forest = new Class({
       attributes: {
         pivotVertex: {
           type: 'f',
-          value: []
+          value: pivotPoints
         }
       },
       vertexShader: document.getElementById('leafVertexShader').textContent,
@@ -47,11 +41,8 @@ e.Forest = new Class({
       side: THREE.DoubleSide,
       transparent: true,
     });
-    this.treeGeo = new THREE.Geometry();
-    this.pivots = this.leafMaterial.attributes.pivotVertex.value;
-    for(var i = 0; i < this.numTrees; i++){
+    for (var i = 0; i < this.numTrees; i++) {
       this.createTree();
-      
     }
 
 
@@ -60,7 +51,7 @@ e.Forest = new Class({
   createTree: function() {
     var self = this;
     var randInt = THREE.Math.randInt;
-    var maxSteps = 6;
+    var maxSteps = this.maxSteps;
 
     var uniforms = {
       height: {
@@ -76,18 +67,13 @@ e.Forest = new Class({
       side: THREE.DoubleSide
     });
 
-    var materials = [
-      treeMaterial,
-      this.leafMaterial
-    ];
-    var multiMat = new THREE.MeshFaceMaterial(materials);
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
     var leafGeo = new THREE.Geometry();
 
+
     createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, 10);
 
-    
 
 
     function createTreeHelper(angle, x, y, z, length, count, size) {
@@ -133,36 +119,26 @@ e.Forest = new Class({
           geo.vertices.push(new THREE.Vector3(width, height, 0));
           geo.vertices.push(new THREE.Vector3(-width, height, 0));
           geo.applyMatrix(new THREE.Matrix4().makeRotationY(angle));
-          for(var i = 0; i < geo.vertices.length; i++){
+          for (var i = 0; i < geo.vertices.length; i++) {
             var vertex = geo.vertices[i];
-            if(i === 0){
-              self.pivots.push(1.0);
-          
-            }else{
-              self.pivots.push(0.0);
-              
-            }
             vertex.x = vertex.x + newX;
             vertex.y = vertex.y + newY;
             vertex.z = vertex.z + newZ;
           }
-          
+
           var face = new THREE.Face3(0, 1, 2);
           var face2 = new THREE.Face3(0, 2, 3);
-          face.materialIndex = 1;
-          face2.materialIndex = 1;
           geo.faces.push(face);
           geo.faces.push(face2);
           leafGeo.merge(geo);
         }
       }
     }
-    console.log(self.pivots.length);
 
-    var tree = new THREE.Mesh(treeGeo, multiMat);
+    var tree = new THREE.Mesh(treeGeo);
     tree.side = THREE.DoubleSide;
-    tree.position.x = Math.random() > 0.5 ? randInt(-100, -1000): randInt(100, 1000);
-    tree.position.z = randInt(-this.world.pathLength/2, this.world.pathLength/2);
+    tree.position.x = Math.random() > 0.5 ? randInt(-100, -1000) : randInt(100, 1000);
+    tree.position.z = randInt(-this.world.pathLength / 2, this.world.pathLength / 2);
 
     tree.geometry.computeBoundingBox();
     var height = tree.geometry.boundingBox.max.y;
@@ -177,12 +153,12 @@ e.Forest = new Class({
     this.game.scene.add(leaves);
 
 
-    var light = new THREE.Mesh(this.lightGeo,this.lightMaterial);
+    var light = new THREE.Mesh(this.lightGeo, this.lightMaterial);
     light.position.y = 1;
     light.rotation.x = -Math.PI / 2;
     light.position.x = tree.position.x;
     light.position.z = tree.position.z;
-    light.scale.y = this.randFloat(1.3, 2.0  );
+    light.scale.y = this.randFloat(1.3, 2.0);
     this.game.scene.add(light);
 
 
