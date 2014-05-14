@@ -6,6 +6,7 @@ e.Forest = new Class({
     this.lengthMult = 0.53;
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
+    this.trees = [];
     this.numTrees = 10;
     this.maxSteps = 7;
     this.timeMultiplier = 0.005;
@@ -177,6 +178,7 @@ e.Forest = new Class({
     treeMaterial.uniforms.height.value = height;
     this.leafMaterial.uniforms.width.value = width / 2;
     this.game.scene.add(tree);
+    this.trees.push(tree);
 
     var leaves = new THREE.Mesh(leafGeo, this.leafMaterial);
     leaves.position.x = tree.position.x;

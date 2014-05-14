@@ -5,6 +5,8 @@ e.Bird = new Class({
     this.game = options.game;
     this.geo = new THREE.Geometry();
     this.phase = Math.floor(Math.random() * 62.83);
+    this.trees = options.forest.trees;
+    this.currentTreeIndex = 0;
     v(5, 0, 0);
     v(-5, -2, 1);
     v(-5, 0, 0);
@@ -28,7 +30,11 @@ e.Bird = new Class({
     }));
     this.boids = [];
     this.boid = new Boid();
-    this.boid.setGoal(new THREE.Vector3(100, 100, -1000), 1);
+    this.boid.position = new THREE.Vector3(0, 100, -100);
+    var tree = this.trees[this.currentTreeIndex++];
+    this.target = tree.position.clone();
+    this.target.y = tree.geometry.boundingBox.max.y;
+    this.boid.setGoal(this.target);
     this.boid.setWorldSize(1000, 1000, 1000);
     this.boids.push(this.boid);
     this.bird.position = this.boid.position;
@@ -50,8 +56,21 @@ e.Bird = new Class({
     this.boid.run(this.boids);
     this.bird.geometry.verticesNeedUpdate = true;
 
-    this.bird.rotation.y = Math.atan2( - this.boid.velocity.z, this.boid.velocity.x );
-    this.bird.rotation.z = Math.asin( this.boid.velocity.y / this.boid.velocity.length() );
+    var distance = this.target.distanceTo(this.bird.position);
+    if (distance < 10) {
+      var tree = this.trees[this.currentTreeIndex++];
+      this.target = tree.position.clone();;
+      this.target.y = tree.geometry.boundingBox.max.y;
+      this.boid.setGoal(this.target);
+
+      if(this.currentTreeIndex === this.bird.length){
+        this.currentTreeIndex = 0;
+      }
+    }
+
+    this.bird.rotation.y = Math.atan2(-this.boid.velocity.z, this.boid.velocity.x);
+    this.bird.rotation.z = Math.asin(this.boid.velocity.y / this.boid.velocity.length());
+    // console.log(this.bird.rotation.y);
     this.bird.geometry.vertices[5].y = this.bird.geometry.vertices[4].y = Math.sin(this.phase) * 5;
   }
 
@@ -127,29 +146,20 @@ var Boid = function() {
       _acceleration.add(vector);
 
     }
-    /* else {
-
-            this.checkBounds();
-
-          }
-          */
 
     if (Math.random() > 0.5) {
 
       this.flock(boids);
 
     }
-
     this.move();
+
 
   }
 
   this.flock = function(boids) {
-
     if (_goal) {
-
       _acceleration.add(this.reach(_goal, 0.005));
-
     }
 
     _acceleration.add(this.alignment(boids));

@@ -48,7 +48,8 @@ e.World = new Class({
     });
 
     this.bird = new e.Bird({
-      game: this.game
+      game: this.game,
+      forest: this.forest
     });
 
     //WATER
