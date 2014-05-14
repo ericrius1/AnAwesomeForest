@@ -6,7 +6,7 @@ e.Forest = new Class({
     this.lengthMult = 0.63;
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
-    this.numTrees = 5;
+    this.numTrees = 1;
     this.maxSteps = 6;
 
 
@@ -30,11 +30,29 @@ e.Forest = new Class({
           value: 100
         }
       },
+      attributes: {
+        pivotPoint: {
+          type: 'f',
+          value: null
+        }
+      },
       vertexShader: document.getElementById('leafVertexShader').textContent,
       fragmentShader: document.getElementById('leafFragmentShader').textContent,
       side: THREE.DoubleSide,
       transparent: true,
     });
+
+    this.pivotPoint = new Float32Array(Math.pow(2, this.maxSteps-1) * 6);
+    for(var i = 0; i < this.pivotPoint.length; i++){
+      if(i % 6 === 0 || (i%3 && ! i%6) === 0){
+        this.pivotPoint[i] = 1.0;
+      }else{
+        this.pivotPoint[i] = 0.0
+      }
+    }
+
+
+
     for (var i = 0; i < this.numTrees; i++) {
       this.createTree();
     }
@@ -66,8 +84,7 @@ e.Forest = new Class({
     var treeGeo = new THREE.Geometry();
     var leafGeo = new THREE.BufferGeometry();
     var numLeaves = Math.pow(2, maxSteps-1);
-    console.log(numLeaves)
-    var leafVertices = new THREE.Float32Attribute( numLeaves * 6, 3 );
+    var leafVertices = new THREE.Float32Attribute(numLeaves * 6, 3);
 
 
     createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, 10);
@@ -126,7 +143,6 @@ e.Forest = new Class({
             vertex.y = vertex.y + newY;
             vertex.z = vertex.z + newZ;
             leafVertices.setXYZ(currentLeafIndex, vertex.x, vertex.y, vertex.z);
-            console.log(currentLeafIndex);
             currentLeafIndex++;
           }
         }
@@ -134,6 +150,8 @@ e.Forest = new Class({
     }
 
     leafGeo.addAttribute('position', leafVertices);
+    leafGeo.addAttribute('pivotPoint', this.pivotPoint, 1);
+
 
     var tree = new THREE.Mesh(treeGeo, treeMaterial);
     tree.side = THREE.DoubleSide;

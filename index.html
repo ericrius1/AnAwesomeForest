@@ -70,14 +70,14 @@
         uniform float width;
         uniform float time;
 
-        attribute float pivotVertex;
+        attribute float pivotPoint;
 
 
         varying float x;
 
         void main() {
           vec3 newPos = position;
-          if(pivotVertex < 0.5){
+          if(pivotPoint > 0.5){
             newPos.z = position.z + sin(time * 0.5) * 10.;
           }
           x = abs(position.x/width);
