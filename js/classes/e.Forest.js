@@ -6,7 +6,7 @@ e.Forest = new Class({
     this.lengthMult = 0.63;
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
-    this.numTrees = 1;
+    this.numTrees = 5;
     this.maxSteps = 6;
 
 
@@ -46,6 +46,7 @@ e.Forest = new Class({
     var self = this;
     var randInt = THREE.Math.randInt;
     var maxSteps = this.maxSteps;
+    var currentLeafIndex = 0;
 
     var uniforms = {
       height: {
@@ -63,7 +64,10 @@ e.Forest = new Class({
 
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
-    var leafGeo = new THREE.Geometry();
+    var leafGeo = new THREE.BufferGeometry();
+    var numLeaves = Math.pow(2, maxSteps-1);
+    console.log(numLeaves)
+    var leafVertices = new THREE.Float32Attribute( numLeaves * 6, 3 );
 
 
     createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, 10);
@@ -111,23 +115,25 @@ e.Forest = new Class({
           geo.vertices.push(new THREE.Vector3(-width, -height, 0));
           geo.vertices.push(new THREE.Vector3(width, -height, 0));
           geo.vertices.push(new THREE.Vector3(width, height, 0));
+          geo.vertices.push(new THREE.Vector3(-width, -height, 0));
+          geo.vertices.push(new THREE.Vector3(width, height, 0));
           geo.vertices.push(new THREE.Vector3(-width, height, 0));
+          
           geo.applyMatrix(new THREE.Matrix4().makeRotationY(angle));
           for (var i = 0; i < geo.vertices.length; i++) {
             var vertex = geo.vertices[i];
             vertex.x = vertex.x + newX;
             vertex.y = vertex.y + newY;
             vertex.z = vertex.z + newZ;
+            leafVertices.setXYZ(currentLeafIndex, vertex.x, vertex.y, vertex.z);
+            console.log(currentLeafIndex);
+            currentLeafIndex++;
           }
-
-          var face = new THREE.Face3(0, 1, 2);
-          var face2 = new THREE.Face3(0, 2, 3);
-          geo.faces.push(face);
-          geo.faces.push(face2);
-          leafGeo.merge(geo);
         }
       }
     }
+
+    leafGeo.addAttribute('position', leafVertices);
 
     var tree = new THREE.Mesh(treeGeo, treeMaterial);
     tree.side = THREE.DoubleSide;
