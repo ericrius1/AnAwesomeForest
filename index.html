@@ -69,8 +69,10 @@
 
         uniform float width;
         uniform float time;
+        uniform float startingTime;
 
         attribute float pivotPoint;
+        attribute float wind;
 
 
         varying float x;
@@ -78,7 +80,7 @@
         void main() {
           vec3 newPos = position;
           if(pivotPoint > 0.5){
-            newPos.z = position.z + noise(time* 10.) * 1.;
+            newPos.z = position.z + sin(time * (5. * wind)) * (2. * wind);
           }
           x = abs(position.x/width);
 
@@ -128,6 +130,7 @@
         </div>
 
       </div>
+      <div id = "pointer"></div>
 
   
 

@@ -6,7 +6,7 @@ e.World = new Class({
     var groundMat = new THREE.MeshLambertMaterial({
       color: 0x3a5938
     });
-    this.pathLength = 10000;
+    this.pathLength = 5000;
     this.pathWidth = 10000;
     this.ground = new THREE.Mesh(new THREE.PlaneGeometry(this.pathWidth, this.pathLength, 50, 50), groundMat);
     this.ground.rotation.x = -Math.PI / 2;
@@ -22,8 +22,8 @@ e.World = new Class({
     })
     this.game.scene.add(this.ground);
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({color: 0xf2f2f2}));
-    this.moon.scale.multiplyScalar(500);
-    this.moon.position.set(-this.pathWidth * 10, 3000, -this.pathLength* 10)
+    this.moon.scale.multiplyScalar(200);
+    this.moon.position.set(-this.pathWidth * 2, 20000, -this.pathLength* 10)
     this.moon.scale.x += 5;  
     this.moon.lookAt(this.game.scene.position);
     //color, intensity, distance, angle, exponent
@@ -31,8 +31,7 @@ e.World = new Class({
     this.light.position.set(-5000, 7000, -this.pathLength);
     this.light.target.position.set(0, 0, 0);
     this.game.scene.add(this.light);
-    var debugLight = new THREE.Mesh(new THREE.SphereGeometry(1000));
-    this.light.add(debugLight);
+
 
     this.game.scene.add(this.moon);
 

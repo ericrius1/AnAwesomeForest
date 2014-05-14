@@ -8,6 +8,7 @@ e.Controls = new Class({
     this.controls = new THREE.PointerLockControls(this.camera);
     this.game.scene.add( this.controls.getObject() );
     var blocker = document.getElementById('blocker');
+    var pointer = document.getElementById('pointer');
     var instructions = document.getElementById('instructions');
 
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
@@ -25,6 +26,7 @@ e.Controls = new Class({
           self.controls.enabled = true;
 
           blocker.style.display = 'none';
+          pointer.style.display = 'block';
 
         } else {
 

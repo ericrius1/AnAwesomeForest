@@ -8,7 +8,7 @@ e.Forest = new Class({
     this.angleRight = Math.PI / 5;
     this.numTrees = 10;
     this.maxSteps = 7;
-
+    this.timeMultiplier = 0.005;
 
 
     this.lightGeo = new THREE.CircleGeometry(50, 50);
@@ -23,7 +23,11 @@ e.Forest = new Class({
       uniforms: {
         time: {
           type: "f",
-          value: []
+          value: 0.0
+        },
+        startingTime: {
+          type: 'f',
+          value: performance.now() * this.timeMultiplier
         },
         width: {
           type: 'f',
@@ -34,6 +38,10 @@ e.Forest = new Class({
         pivotPoint: {
           type: 'f',
           value: null
+        },
+        wind: {
+          type: 'f',
+          value: null
         }
       },
       vertexShader: document.getElementById('leafVertexShader').textContent,
@@ -42,13 +50,20 @@ e.Forest = new Class({
       transparent: true,
     });
 
-    this.pivotPoint = new Float32Array(Math.pow(2, this.maxSteps-1) * 6);
-    for(var i = 0; i < this.pivotPoint.length; i++){
-      if(i % 6 === 0){
-        this.pivotPoint[i] = 1.0;
+    this.pivotPoint = new THREE.Float32Attribute(Math.pow(2, this.maxSteps-1) * 3, 1);
+    var numPoints = this.pivotPoint.array.length;
+    for(var i = 0; i < numPoints; i++){
+      if(i % 3 === 0){
+        this.pivotPoint.setX(i, 1.0);
       }else{
-        this.pivotPoint[i] = 0.0
+        this.pivotPoint.setX(i, 0.0);
       }
+    }
+
+    this.wind = new THREE.Float32Attribute(Math.pow(2, this.maxSteps-1) * 3, 1);
+    var numWinds = this.wind.array.length;
+    for(var i = 0; i < numWinds; i++){
+      this.wind.setX(i, Math.random());
     }
 
 
@@ -147,7 +162,8 @@ e.Forest = new Class({
     }
 
     leafGeo.addAttribute('position', leafVertices);
-    leafGeo.addAttribute('pivotPoint', this.pivotPoint, 1);
+    leafGeo.addAttribute('pivotPoint', this.pivotPoint);
+    leafGeo.addAttribute('wind', this.wind);
 
 
     var tree = new THREE.Mesh(treeGeo, treeMaterial);
@@ -181,7 +197,8 @@ e.Forest = new Class({
   },
 
   update: function() {
-    var time = performance.now();
-    this.leafMaterial.uniforms.time.value = time * 0.005;
+    var time = performance.now() * this.timeMultiplier;
+    this.leafMaterial.uniforms.time.value = time;
+    console.log(time - this.leafMaterial.uniforms.startingTime.value);
   }
 });
