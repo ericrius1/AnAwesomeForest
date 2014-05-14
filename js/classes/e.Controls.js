@@ -37,6 +37,7 @@ e.Controls = new Class({
           blocker.style.display = 'box';
 
           instructions.style.display = '';
+          pointer.style.display = '';
 
         }
 

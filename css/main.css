@@ -62,5 +62,6 @@ body {
   height: 15px;
   border:solid 4px;
   border-color: #00f;
+  display: none;
 
 }
