@@ -50,7 +50,7 @@ e.Bird = new Class({
       boid.velocity.y = Math.random() * 2 - 1;
       boid.velocity.z = Math.random() * 2 - 1;
       boid.setWorldSize(1000, 1000, 1000);
-      var color = new THREE.Color().setRGB(randFloat(0.7, 0.9), randFloat(0.01, 0.1), randFloat(0.7, 0.9));
+      var color = new THREE.Color().setRGB(0.078, randFloat(0.588, 0.82), randFloat(0.678, 0.87));
       bird = this.birds[i] = new THREE.Mesh(this.geo, new THREE.MeshBasicMaterial({side: THREE.DoubleSide, color: color})); 
       bird.position = boid.position;
       this.game.scene.add(bird);

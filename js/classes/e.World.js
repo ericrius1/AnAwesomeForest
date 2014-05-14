@@ -24,7 +24,7 @@ e.World = new Class({
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({color: 0xf2f2f2}));
     this.moon.scale.multiplyScalar(200);
     this.moon.position.set(-this.pathWidth * 2, 20000, -this.pathLength* 10)
-    this.moon.scale.x += 5;  
+    this.moon.scale.x += 2;  
     this.moon.lookAt(this.game.scene.position);
     //color, intensity, distance, angle, exponent
     this.light = new THREE.SpotLight(0xf2f2f2, 1, 0, Math.PI / 2, 1);
@@ -52,6 +52,7 @@ e.World = new Class({
       forest: this.forest
     });
 
+
     //WATER
     var waterNormals = new THREE.ImageUtils.loadTexture('assets/waternormals.jpg');
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
@@ -72,6 +73,10 @@ e.World = new Class({
       this.water.material
     );
 
+    this.pond = new e.Pond({
+      game: this.game,
+      water: this.water
+    });
 
     mirrorMesh.add(this.water);
     mirrorMesh.rotation.x = -Math.PI * 0.5;

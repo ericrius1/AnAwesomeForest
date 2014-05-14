@@ -7,7 +7,7 @@ e.Forest = new Class({
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
     this.trees = [];
-    this.numTrees = 20;
+    this.numTrees = 50;
     this.maxSteps = 7;
     this.timeMultiplier = 0.005;
 
@@ -131,7 +131,8 @@ e.Forest = new Class({
           new THREE.Vector3(x, y, z),
           new THREE.Vector3(newX, newY, newZ)
         ]);
-        var geo = new THREE.TubeGeometry(path, 5, size, 5);
+        // path, segments, radius, radialSegments, closed 
+        var geo = new THREE.TubeGeometry(path, 2, size, 3);
         for (var i = 0; i < geo.faces.length; i++) {
           geo.faces[i].materialIndex = 0;
         }
@@ -192,6 +193,7 @@ e.Forest = new Class({
     light.position.x = tree.position.x;
     light.position.z = tree.position.z;
     light.scale.y = this.randFloat(1.3, 2.0);
+    light.position.y = this.randFloat(1.0, 3.0);
     this.game.scene.add(light);
 
 

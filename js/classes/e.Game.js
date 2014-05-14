@@ -14,7 +14,7 @@ e.Game = new Class({
 
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 1, 1, 10000000);
+    this.camera = new THREE.PerspectiveCamera(50, 1, 1, 10000000);
 
 
     this.renderer.setClearColor(0x320a44 , 1);
