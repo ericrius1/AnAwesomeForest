@@ -199,6 +199,5 @@ e.Forest = new Class({
   update: function() {
     var time = performance.now() * this.timeMultiplier;
     this.leafMaterial.uniforms.time.value = time;
-    console.log(time - this.leafMaterial.uniforms.startingTime.value);
   }
 });

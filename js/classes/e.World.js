@@ -47,6 +47,10 @@ e.World = new Class({
       world: this
     });
 
+    this.bird = new e.Bird({
+      game: this.game
+    });
+
     //WATER
     var waterNormals = new THREE.ImageUtils.loadTexture('assets/waternormals.jpg');
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
@@ -82,6 +86,7 @@ e.World = new Class({
     this.water.material.uniforms.time.value += 1.0 / 60.0;
     this.water.render();
     this.forest.update();
+    this.bird.update();
   }
 
 });
