@@ -7,7 +7,7 @@ e.Forest = new Class({
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
     this.trees = [];
-    this.numTrees = 10;
+    this.numTrees = 20;
     this.maxSteps = 7;
     this.timeMultiplier = 0.005;
 

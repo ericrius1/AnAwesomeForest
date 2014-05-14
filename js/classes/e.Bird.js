@@ -6,7 +6,9 @@ e.Bird = new Class({
     this.geo = new THREE.Geometry();
     this.phase = Math.floor(Math.random() * 62.83);
     this.trees = options.forest.trees;
-    this.currentTreeIndex = 0;
+    this.numBirds = 100;
+    this.boids = [];
+    this.birds = [];
     v(5, 0, 0);
     v(-5, -2, 1);
     v(-5, 0, 0);
@@ -25,21 +27,6 @@ e.Bird = new Class({
     f(4, 7, 6);
     f(5, 6, 7);
 
-    this.bird = new THREE.Mesh(this.geo, new THREE.MeshBasicMaterial({
-      side: THREE.DoubleSide
-    }));
-    this.boids = [];
-    this.boid = new Boid();
-    this.boid.position = new THREE.Vector3(0, 100, -100);
-    var tree = this.trees[this.currentTreeIndex++];
-    this.target = tree.position.clone();
-    this.target.y = tree.geometry.boundingBox.max.y;
-    this.boid.setGoal(this.target);
-    this.boid.setWorldSize(1000, 1000, 1000);
-    this.boids.push(this.boid);
-    this.bird.position = this.boid.position;
-    this.game.scene.add(this.bird);
-
     function v(x, y, z) {
       self.geo.vertices.push(new THREE.Vector3(x, y, z));
 
@@ -48,30 +35,52 @@ e.Bird = new Class({
     function f(a, b, c) {
       self.geo.faces.push(new THREE.Face3(a, b, c));
     }
+
+    var bird, boid, target;
+    var randFloat = THREE.Math.randFloat;
+    for (var i = 0; i < this.numBirds; i++) {
+      boid = this.boids[i] = new Boid();
+      boid.position = new THREE.Vector3(0, 100, -100);
+      var tree = this.trees[_.random(0, this.trees.length - 1)];
+      target = tree.position.clone();
+      target.y = tree.geometry.boundingBox.max.y;
+      boid.setGoal(target);
+      boid.position.set(_.random(-500, 500), _.random(100, 500), _.random(-1000, 1000));
+      boid.velocity.x = Math.random() * 2 - 1;
+      boid.velocity.y = Math.random() * 2 - 1;
+      boid.velocity.z = Math.random() * 2 - 1;
+      boid.setWorldSize(1000, 1000, 1000);
+      var color = new THREE.Color().setRGB(randFloat(0.7, 0.9), randFloat(0.01, 0.1), randFloat(0.7, 0.9));
+      bird = this.birds[i] = new THREE.Mesh(this.geo, new THREE.MeshBasicMaterial({side: THREE.DoubleSide, color: color})); 
+      bird.position = boid.position;
+      this.game.scene.add(bird);
+    }
+    this.currentTreeIndex++;
+
   },
 
   update: function() {
     var time = performance.now();
     this.phase = (this.phase + 0.1);
-    this.boid.run(this.boids);
-    this.bird.geometry.verticesNeedUpdate = true;
+    var boid, bird, target;
+    for (var i = 0; i < this.boids.length; i++) {
+      boid = this.boids[i];
+      bird = this.birds[i];
+      boid.run(this.boids);
+      bird.geometry.verticesNeedUpdate = true;
+      bird.rotation.y = Math.atan2(-boid.velocity.z, boid.velocity.x);
+      bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
+      bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(this.phase) * 5;
 
-    var distance = this.target.distanceTo(this.bird.position);
-    if (distance < 20) {
-      var tree = this.trees[this.currentTreeIndex++];
-      this.target = tree.position.clone();;
-      this.target.y = tree.geometry.boundingBox.max.y;
-      this.boid.setGoal(this.target);
+      var distance = boid.goal.distanceTo(bird.position);
+      if (distance < 20) {
+        var tree = this.trees[_.random(0, this.trees.length - 1)];
+        target = tree.position.clone();
+        target.y = tree.geometry.boundingBox.max.y;
+        boid.setGoal(target);
 
-      if(this.currentTreeIndex === this.bird.length){
-        this.currentTreeIndex = 0;
       }
     }
-
-    this.bird.rotation.y = Math.atan2(-this.boid.velocity.z, this.boid.velocity.x);
-    this.bird.rotation.z = Math.asin(this.boid.velocity.y / this.boid.velocity.length());
-    // console.log(this.bird.rotation.y);
-    this.bird.geometry.vertices[5].y = this.bird.geometry.vertices[4].y = Math.sin(this.phase) * 5;
   }
 
 });
@@ -82,10 +91,12 @@ var Boid = function() {
     _acceleration, _width = 500,
     _height = 500,
     _depth = 200,
-    _goal, _neighborhoodRadius = 100,
+    _neighborhoodRadius = 100,
     _maxSpeed = 4,
     _maxSteerForce = 0.1,
     _avoidWalls = false;
+
+  this.goal = null;
 
   this.position = new THREE.Vector3();
   this.velocity = new THREE.Vector3();
@@ -93,7 +104,7 @@ var Boid = function() {
 
   this.setGoal = function(target) {
 
-    _goal = target;
+    this.goal = target;
 
   }
 
@@ -158,8 +169,8 @@ var Boid = function() {
   }
 
   this.flock = function(boids) {
-    if (_goal) {
-      _acceleration.add(this.reach(_goal, 0.005));
+    if (this.goal) {
+      _acceleration.add(this.reach(this.goal, 0.005));
     }
 
     _acceleration.add(this.alignment(boids));
