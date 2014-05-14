@@ -3,11 +3,11 @@ e.Forest = new Class({
   construct: function(options) {
     this.game = options.game;
     this.world = options.world;
-    this.lengthMult = 0.63;
+    this.lengthMult = 0.53;
     this.angleLeft = Math.PI / 5;
     this.angleRight = Math.PI / 5;
-    this.numTrees = 1;
-    this.maxSteps = 6;
+    this.numTrees = 10;
+    this.maxSteps = 7;
 
 
 
@@ -44,7 +44,7 @@ e.Forest = new Class({
 
     this.pivotPoint = new Float32Array(Math.pow(2, this.maxSteps-1) * 6);
     for(var i = 0; i < this.pivotPoint.length; i++){
-      if(i % 6 === 0 || (i%3 && ! i%6) === 0){
+      if(i % 6 === 0){
         this.pivotPoint[i] = 1.0;
       }else{
         this.pivotPoint[i] = 0.0
@@ -84,7 +84,7 @@ e.Forest = new Class({
     var treeGeo = new THREE.Geometry();
     var leafGeo = new THREE.BufferGeometry();
     var numLeaves = Math.pow(2, maxSteps-1);
-    var leafVertices = new THREE.Float32Attribute(numLeaves * 6, 3);
+    var leafVertices = new THREE.Float32Attribute(numLeaves * 3, 3);
 
 
     createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, 10);
@@ -132,9 +132,6 @@ e.Forest = new Class({
           geo.vertices.push(new THREE.Vector3(-width, -height, 0));
           geo.vertices.push(new THREE.Vector3(width, -height, 0));
           geo.vertices.push(new THREE.Vector3(width, height, 0));
-          geo.vertices.push(new THREE.Vector3(-width, -height, 0));
-          geo.vertices.push(new THREE.Vector3(width, height, 0));
-          geo.vertices.push(new THREE.Vector3(-width, height, 0));
           
           geo.applyMatrix(new THREE.Matrix4().makeRotationY(angle));
           for (var i = 0; i < geo.vertices.length; i++) {
@@ -180,17 +177,6 @@ e.Forest = new Class({
     this.game.scene.add(light);
 
 
-    // tree.scale.multiplyScalar(0.01);
-    // var growTween = new TWEEN.Tween(tree.scale).
-    // to({
-    //   x: 1,
-    //   y: 1,
-    //   z: 1
-    // }, 1000).
-    // easing(TWEEN.Easing.Cubic.Out).start();
-    // growTween.onComplete(function() {
-    //   // self.createForest(zPos - 300);
-    // })
 
   },
 

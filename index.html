@@ -78,7 +78,7 @@
         void main() {
           vec3 newPos = position;
           if(pivotPoint > 0.5){
-            newPos.z = position.z + sin(time * 0.5) * 10.;
+            newPos.z = position.z + noise(time* 10.) * 1.;
           }
           x = abs(position.x/width);
 
