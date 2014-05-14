@@ -57,7 +57,7 @@ e.Bird = new Class({
     this.bird.geometry.verticesNeedUpdate = true;
 
     var distance = this.target.distanceTo(this.bird.position);
-    if (distance < 10) {
+    if (distance < 20) {
       var tree = this.trees[this.currentTreeIndex++];
       this.target = tree.position.clone();;
       this.target.y = tree.geometry.boundingBox.max.y;
