@@ -39,7 +39,7 @@
         <script src="js/classes/e.Game.js"></script>
 
         <!-- // <script src = "build/game.js"></script> -->
-
+2
 
       <script id="vertexShader" type="x-shader/x-vertex">
         varying float y;
@@ -97,6 +97,7 @@
       precision mediump float;
       precision mediump int;
 
+
       uniform float time;
 
 
@@ -115,15 +116,23 @@
     </script>
 
     <script id =  "appalapasVertexShader" type = "x-shader/x-vertex">
+      uniform float height;
+      uniform float ballHeight;
+      varying float distance;
       void main(){
+        //Get distance of current yPos to where the ball is
+        distance = abs(ballHeight - position.y)/height;
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
       }
     </script>
 
 
     <script id =  "appalapasFragmentShader" type = "x-shader/x-fragment">
+      varying float distance;
       void main(){
-        vec3 color = vec3(1.0, 0.0, 1.0);
+
+        float r = mix(1.0, 0.0, distance);
+        vec3 color = vec3(r, 0.0, 0.0);
         gl_FragColor = vec4(color, 1.0);
       }
     </script>

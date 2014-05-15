@@ -18,12 +18,11 @@ e.Birds = new Class({
       boid = this.boids[i] = new Boid();
       boid.position = new THREE.Vector3(0, 100, -100);
       var tree = this.trees[_.random(0, this.trees.length - 1)];
-      if (i !== 1) {
-        target = tree.position.clone();
-        target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
-        boid.setGoal(target);
-      }
-      boid.position.set(_.random(-500, 500), _.random(100, 500), _.random(-this.pathLength * 5, -this.pathLength * 2));
+      target = tree.position.clone();
+      target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
+      boid.setGoal(target);
+
+      boid.position.set(_.random(-500, 500), _.random(300, 500), _.random(-this.pathLength * 5, -this.pathLength * 2));
       boid.velocity.x = Math.random() * 2 - 1;
       boid.velocity.y = Math.random() * 2 - 1;
       boid.velocity.z = Math.random() * 2 - 1;
@@ -41,7 +40,6 @@ e.Birds = new Class({
 
 
     }
-    this.currentTreeIndex++;
 
   },
 
@@ -58,6 +56,13 @@ e.Birds = new Class({
       bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
 
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
+    }
+    if (bird.position.distanceTo(boid.goal) < 10) {
+      var tree = this.trees[_.random(0, this.trees.length - 1)];
+      target = tree.position.clone();
+      target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
+      boid.setGoal(target);
+
     }
   },
 

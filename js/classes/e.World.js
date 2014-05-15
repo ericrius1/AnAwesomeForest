@@ -3,8 +3,8 @@ e.World = new Class({
   construct: function(options) {
     this.game = options.game;
 
-    var groundMat = new THREE.MeshLambertMaterial({
-      color: 0x3a5938
+    var groundMat = new THREE.MeshBasicMaterial({
+      color: 0x050505
     });
     this.pathLength = 5000;
     this.pathWidth = 10000;
@@ -28,11 +28,7 @@ e.World = new Class({
     this.moon.position.set(-this.pathWidth * 2, 0, -this.pathLength * 10)
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
-    //color, intensity, distance, angle, exponent
-    this.light = new THREE.SpotLight(0xf2f2f2, 1, 0, Math.PI / 2, 1);
-    this.light.position.set(-5000, 7000, -this.pathLength);
-    this.light.target.position.set(0, 0, 0);
-    this.game.scene.add(this.light);
+
 
 
     this.game.scene.add(this.moon);
@@ -95,6 +91,7 @@ e.World = new Class({
     this.water.material.uniforms.time.value += 1.0 / 90.0;
     this.water.render();
     this.ocean.update();
+    this.appalapas.update();
     this.forest.update();
     this.birds.update();
     this.moon.position.y+=1;
