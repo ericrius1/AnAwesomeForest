@@ -24,10 +24,13 @@ e.Appalapas = new Class({
     );
     var path = new THREE.Curves.AppapalasCurve();
     // path, extrusion segments, radius, radialSegments, closed 
-    var appaMat = new THREE.MeshBasicMaterial({side: THREE.DoubleSide})
+    var appaMat = new THREE.ShaderMaterial({
+      vertexShader: document.getElementById('appalapasVertexShader').text,
+      fragmentShader: document.getElementById('appalapasFragmentShader').text
+    });
     var geo = new THREE.TubeGeometry(path, 100,  2, 6, false);
     console.log(geo.vertices.length);
-    var appalapa = new THREE.Mesh(geo);
+    var appalapa = new THREE.Mesh(geo, appaMat);
     appalapa.rotation.x = Math.PI/2;
     appalapa.position.set(this.pond.center.x, this.pond.center.y+ 100, this.pond.center.z)
     this.game.scene.add(appalapa)
