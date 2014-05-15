@@ -3,6 +3,7 @@ e.Bird = new Class({
   construct: function(options) {
     var self = this;
     this.game = options.game;
+    this.birdCamera = this.game.birdCamera;
     this.geo = new THREE.Geometry();
     this.phase = Math.floor(Math.random() * 62.83);
     this.trees = options.forest.trees;
@@ -42,18 +43,25 @@ e.Bird = new Class({
       boid = this.boids[i] = new Boid();
       boid.position = new THREE.Vector3(0, 100, -100);
       var tree = this.trees[_.random(0, this.trees.length - 1)];
-      target = tree.position.clone();
-      target.y = tree.geometry.boundingBox.max.y;
-      boid.setGoal(target);
+      if(i !== 1){
+        target = tree.position.clone();
+        target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
+        boid.setGoal(target); 
+      }
       boid.position.set(_.random(-500, 500), _.random(100, 500), _.random(-1000, 1000));
       boid.velocity.x = Math.random() * 2 - 1;
       boid.velocity.y = Math.random() * 2 - 1;
       boid.velocity.z = Math.random() * 2 - 1;
       boid.setWorldSize(1000, 1000, 1000);
       var color = new THREE.Color().setRGB(0.078, randFloat(0.588, 0.82), randFloat(0.678, 0.87));
-      bird = this.birds[i] = new THREE.Mesh(this.geo, new THREE.MeshBasicMaterial({side: THREE.DoubleSide, color: color})); 
+      bird = this.birds[i] = new THREE.Mesh(this.geo, new THREE.MeshBasicMaterial({
+        side: THREE.DoubleSide,
+        color: color
+      }));
       bird.position = boid.position;
       this.game.scene.add(bird);
+
+
     }
     this.currentTreeIndex++;
 
@@ -72,13 +80,26 @@ e.Bird = new Class({
       bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(this.phase) * 5;
 
-      var distance = boid.goal.distanceTo(bird.position);
-      if (distance < 20) {
-        var tree = this.trees[_.random(0, this.trees.length - 1)];
-        target = tree.position.clone();
-        target.y = tree.geometry.boundingBox.max.y;
-        boid.setGoal(target);
+      if(i!==1){
 
+        var distance = boid.goal.distanceTo(bird.position);
+        if (distance < 20) {
+          var tree = this.trees[_.random(0, this.trees.length - 1)];
+          target = tree.position.clone();
+          target.y = tree.geometry.boundingBox.max.y;
+          boid.setGoal(target);
+        }
+      }
+
+      if (i === 0) {
+        //attach a chase camera to this bird
+        var relativeCameraOffset = new THREE.Vector3(-200, 50, 0);
+        var cameraOffset = relativeCameraOffset.applyMatrix4(bird.matrixWorld);
+
+        this.birdCamera.position.x = cameraOffset.x;
+        this.birdCamera.position.y = cameraOffset.y;
+        this.birdCamera.position.z = cameraOffset.z;
+        this.birdCamera.lookAt(bird.position);
       }
     }
   }

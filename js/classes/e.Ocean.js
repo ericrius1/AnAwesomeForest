@@ -11,7 +11,7 @@ e.Ocean = new Class({
 
     this.mirrorMesh.add(this.water);
     this.mirrorMesh.rotation.x = -Math.PI * 0.5;
-    this.mirrorMesh.position.y = 3;
+    this.mirrorMesh.position.y = 5;
     this.mirrorMesh.position.z = -this.world.pathLength + 500;
     this.game.scene.add(this.mirrorMesh);
     this.createWaveFront();

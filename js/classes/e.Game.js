@@ -12,9 +12,11 @@ e.Game = new Class({
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-
     this.scene = new THREE.Scene();
+
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, 10000000);
+    this.birdCamera = new THREE.PerspectiveCamera(50, 1, 1, 1000000);
+    this.activeCamera = this.birdCamera;
 
 
     this.renderer.setClearColor(0x053c3e);
@@ -53,7 +55,7 @@ e.Game = new Class({
     this.controls.update();
     this.world.update();
     TWEEN.update();
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this.scene, this.activeCamera);
   },
 
   onWindowResize: function() {
