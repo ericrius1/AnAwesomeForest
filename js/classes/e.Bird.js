@@ -1,15 +1,68 @@
+var birds = []
+
 e.Birds = new Class({
 
   construct: function(options) {
     var self = this;
     this.game = options.game;
     this.birdCamera = this.game.birdCamera;
-    this.geo = new THREE.Geometry();
     this.pathLength = options.world.pathLength;
     this.trees = options.forest.trees;
     this.numBirds = 50;
     this.boids = [];
-    this.birds = [];
+
+
+    var boid, target;
+    var randFloat = THREE.Math.randFloat;
+    for (var i = 0; i < this.numBirds; i++) {
+      boid = this.boids[i] = new Boid();
+      boid.position = new THREE.Vector3(0, 100, -100);
+      var tree = this.trees[_.random(0, this.trees.length - 1)];
+      if (i !== 1) {
+        target = tree.position.clone();
+        target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
+        boid.setGoal(target);
+      }
+      boid.position.set(_.random(-500, 500), _.random(100, 500), _.random(-this.pathLength * 5, -this.pathLength * 2));
+      boid.velocity.x = Math.random() * 2 - 1;
+      boid.velocity.y = Math.random() * 2 - 1;
+      boid.velocity.z = Math.random() * 2 - 1;
+      boid.setWorldSize(1000, 1000, 1000);
+      var color = new THREE.Color().setRGB(0.078, randFloat(0.588, 0.82), randFloat(0.678, 0.87));
+      var bird = new THREE.Mesh(this.createBirdGeo(), new THREE.MeshBasicMaterial({
+        side: THREE.DoubleSide,
+        color: color
+      }));
+      bird.position = boid.position;
+      bird.phase = Math.floor(Math.random() * 62.83);
+      bird.flapSpeedMultiplier = Math.random();
+      birds.push(bird);
+      this.game.scene.add(bird);
+
+
+    }
+    this.currentTreeIndex++;
+
+  },
+
+  update: function() {
+    var time = performance.now();
+    var boid, target;
+    for (var i = 0; i < this.boids.length; i++) {
+      boid = this.boids[i];
+      var bird = birds[i];
+      boid.run(this.boids);
+      bird.geometry.verticesNeedUpdate = true;
+      bird.rotation.y = Math.atan2(-boid.velocity.z, boid.velocity.x);
+      bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
+      bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
+
+      bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
+    }
+  },
+
+  createBirdGeo: function() {
+    var geo = new THREE.Geometry()
     v(5, 0, 0);
     v(-5, -2, 1);
     v(-5, 0, 0);
@@ -28,83 +81,17 @@ e.Birds = new Class({
     f(4, 7, 6);
     f(5, 6, 7);
 
+    return geo;
+
     function v(x, y, z) {
-      self.geo.vertices.push(new THREE.Vector3(x, y, z));
+      geo.vertices.push(new THREE.Vector3(x, y, z));
 
     }
 
     function f(a, b, c) {
-      self.geo.faces.push(new THREE.Face3(a, b, c));
+      geo.faces.push(new THREE.Face3(a, b, c));
     }
 
-    var bird, boid, target;
-    var randFloat = THREE.Math.randFloat;
-    for (var i = 0; i < this.numBirds; i++) {
-      boid = this.boids[i] = new Boid();
-      boid.position = new THREE.Vector3(0, 100, -100);
-      var tree = this.trees[_.random(0, this.trees.length - 1)];
-      if(i !== 1){
-        target = tree.position.clone();
-        target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
-        boid.setGoal(target); 
-      }
-      boid.position.set(_.random(-500, 500), _.random(100, 500), _.random(-this.pathLength * 5, - this.pathLength * 2));
-      boid.velocity.x = Math.random() * 2 - 1;
-      boid.velocity.y = Math.random() * 2 - 1;
-      boid.velocity.z = Math.random() * 2 - 1;
-      boid.setWorldSize(1000, 1000, 1000);
-      var color = new THREE.Color().setRGB(0.078, randFloat(0.588, 0.82), randFloat(0.678, 0.87));
-      bird = this.birds[i] = new THREE.Mesh(this.geo, new THREE.MeshBasicMaterial({
-        side: THREE.DoubleSide,
-        color: color
-      }));
-      this.birds[i].position = boid.position;
-      this.birds[i].phase = Math.floor(Math.random() * 62.83);
-      this.birds[i].flapSpeedMultiplier = Math.random()> 0.5 ? 1 : 0
-      this.game.scene.add(bird);
-
-
-    }
-    this.currentTreeIndex++;
-
-  },
-
-  update: function() {
-    var time = performance.now();
-    var boid, bird, target;
-    for (var i = 0; i < this.boids.length; i++) {
-      boid = this.boids[i];
-      bird = this.birds[i];
-      boid.run(this.boids);
-      bird.geometry.verticesNeedUpdate = true;
-      bird.rotation.y = Math.atan2(-boid.velocity.z, boid.velocity.x);
-      bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
-      bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
-      // console.log(bird.flapSpeedMultiplier);
-      bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
-
-      if(i!==1){
-
-        var distance = boid.goal.distanceTo(bird.position);
-        if (distance < 20) {
-          var tree = this.trees[_.random(0, this.trees.length - 1)];
-          target = tree.position.clone();
-          target.y = tree.geometry.boundingBox.max.y;
-          boid.setGoal(target);
-        }
-      }
-
-      if (i === 0 && this.game.activeCamera === this.birdCamera) {
-        //attach a chase camera to this bird
-        var relativeCameraOffset = new THREE.Vector3(-200, 50, 0);
-        var cameraOffset = relativeCameraOffset.applyMatrix4(bird.matrixWorld);
-
-        this.birdCamera.position.x = cameraOffset.x;
-        this.birdCamera.position.y = cameraOffset.y;
-        this.birdCamera.position.z = cameraOffset.z;
-        this.birdCamera.lookAt(bird.position);
-      }
-    }
   }
 
 });

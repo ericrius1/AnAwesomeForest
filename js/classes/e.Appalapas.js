@@ -30,7 +30,7 @@ e.Appalapas = new Class({
     });
     var geo = new THREE.TubeGeometry(path, 100,  2, 6, false);
     console.log(geo.vertices.length);
-    var appalapa = new THREE.Mesh(geo, appaMat);
+    var appalapa = new THREE.Mesh(geo);
     appalapa.rotation.x = Math.PI/2;
     appalapa.position.set(this.pond.center.x, this.pond.center.y+ 100, this.pond.center.z)
     this.game.scene.add(appalapa)
