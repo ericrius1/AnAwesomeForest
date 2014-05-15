@@ -177,7 +177,7 @@ e.Forest = new Class({
 
     var tree = new THREE.Mesh(treeGeo, treeMaterial);
     tree.side = THREE.DoubleSide;
-    tree.position.x = Math.random() > 0.5 ? randInt(-100, -1000) : randInt(100, 1000);
+    tree.position.x = Math.random() > 0.5 ? randInt(-2000, -1000) : randInt(1000, 2000);
     tree.position.z = randInt(-this.world.pathLength / 2, this.world.pathLength / 2);
 
     tree.geometry.computeBoundingBox();

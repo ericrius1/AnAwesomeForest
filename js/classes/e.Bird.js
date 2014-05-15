@@ -5,9 +5,9 @@ e.Bird = new Class({
     this.game = options.game;
     this.birdCamera = this.game.birdCamera;
     this.geo = new THREE.Geometry();
-    this.phase = Math.floor(Math.random() * 62.83);
+    this.pathLength = options.world.pathLength;
     this.trees = options.forest.trees;
-    this.numBirds = 50;
+    this.numBirds = 100;
     this.boids = [];
     this.birds = [];
     v(5, 0, 0);
@@ -48,7 +48,7 @@ e.Bird = new Class({
         target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
         boid.setGoal(target); 
       }
-      boid.position.set(_.random(-500, 500), _.random(100, 500), _.random(-1000, 1000));
+      boid.position.set(_.random(-500, 500), _.random(100, 500), _.random(-this.pathLength * 5, - this.pathLength * 2));
       boid.velocity.x = Math.random() * 2 - 1;
       boid.velocity.y = Math.random() * 2 - 1;
       boid.velocity.z = Math.random() * 2 - 1;
@@ -59,6 +59,9 @@ e.Bird = new Class({
         color: color
       }));
       bird.position = boid.position;
+      bird.phase = Math.floor(Math.random() * 62.83);
+      bird.flapSpeedMultiplier = Math.random()> 0.5 ? 1 : 0
+      console.log(bird.phase);
       this.game.scene.add(bird);
 
 
@@ -69,7 +72,6 @@ e.Bird = new Class({
 
   update: function() {
     var time = performance.now();
-    this.phase = (this.phase + 0.1);
     var boid, bird, target;
     for (var i = 0; i < this.boids.length; i++) {
       boid = this.boids[i];
@@ -78,7 +80,8 @@ e.Bird = new Class({
       bird.geometry.verticesNeedUpdate = true;
       bird.rotation.y = Math.atan2(-boid.velocity.z, boid.velocity.x);
       bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
-      bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(this.phase) * 5;
+      bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
+      bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
 
       if(i!==1){
 
@@ -91,7 +94,7 @@ e.Bird = new Class({
         }
       }
 
-      if (i === 0) {
+      if (i === 0 && this.game.activeCamera === this.birdCamera) {
         //attach a chase camera to this bird
         var relativeCameraOffset = new THREE.Vector3(-200, 50, 0);
         var cameraOffset = relativeCameraOffset.applyMatrix4(bird.matrixWorld);

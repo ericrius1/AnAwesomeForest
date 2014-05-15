@@ -11,15 +11,15 @@ e.World = new Class({
     this.ground = new THREE.Mesh(new THREE.PlaneGeometry(this.pathWidth, this.pathLength, 50, 50), groundMat);
     this.ground.rotation.x = -Math.PI / 2;
     var heightMultiplier;
-    _.each(this.ground.geometry.vertices, function(vertex) {
-      if (Math.random() > 0.4 && Math.abs(vertex.x) > 1000) {
-        heightMultiplier = 1;
-        if (Math.abs(vertex.x) > 3000) {
-          heightMultiplier = 4;
-        }
-        vertex.z = THREE.Math.randInt(400, 600) * heightMultiplier;
-      }
-    })
+    // _.each(this.ground.geometry.vertices, function(vertex) {
+    //   if (Math.random() > 0.4 && Math.abs(vertex.x) > 1000) {
+    //     heightMultiplier = 1;
+    //     if (Math.abs(vertex.x) > 3000) {
+    //       heightMultiplier = 4;
+    //     }
+    //     vertex.z = THREE.Math.randInt(400, 600) * heightMultiplier;
+    //   }
+    // })
     this.game.scene.add(this.ground);
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xf2f2f2
@@ -51,6 +51,7 @@ e.World = new Class({
 
     this.bird = new e.Bird({
       game: this.game,
+      world: this,
       forest: this.forest
     });
 

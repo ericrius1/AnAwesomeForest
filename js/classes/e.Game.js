@@ -16,7 +16,7 @@ e.Game = new Class({
 
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, 10000000);
     this.birdCamera = new THREE.PerspectiveCamera(50, 1, 1, 1000000);
-    this.activeCamera = this.birdCamera;
+    this.activeCamera = this.camera;
 
 
     this.renderer.setClearColor(0x053c3e);
