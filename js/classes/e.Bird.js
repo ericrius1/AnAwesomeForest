@@ -34,7 +34,7 @@ e.Birds = new Class({
       }));
       bird.position = boid.position;
       bird.phase = Math.floor(Math.random() * 62.83);
-      bird.flapSpeedMultiplier = Math.random();
+      bird.flapSpeedMultiplier = randFloat(0.0, 0.4);
       birds.push(bird);
       this.game.scene.add(bird);
 

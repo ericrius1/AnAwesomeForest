@@ -28,9 +28,9 @@ e.Ocean = new Class({
       velocity: new THREE.Vector3(0, 50, 0),
       velocitySpread: new THREE.Vector3(100,100, 100),
       acceleration: new THREE.Vector3(0, -100, 0),
-      sizeStart: 40,
+      sizeStart: 20,
       sizeEnd: 10,
-      particleCount: 40000
+      particleCount: 20000
     });
     this.particleGroup.addEmitter(this.emitter);
     this.particleGroup.mesh.renderDepth = -1; 
