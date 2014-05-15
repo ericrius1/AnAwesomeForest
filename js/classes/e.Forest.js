@@ -3,11 +3,9 @@ e.Forest = new Class({
   construct: function(options) {
     this.game = options.game;
     this.world = options.world;
-    this.lengthMult = 0.53;
-    this.angleLeft = Math.PI / 5;
-    this.angleRight = Math.PI / 5;
+    this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 50;
+    this.numTrees = 100;
     this.maxSteps = 7;
     this.timeMultiplier = 0.005;
 
@@ -51,19 +49,19 @@ e.Forest = new Class({
       transparent: true,
     });
 
-    this.pivotPoint = new THREE.Float32Attribute(Math.pow(2, this.maxSteps-1) * 3, 1);
+    this.pivotPoint = new THREE.Float32Attribute(Math.pow(2, this.maxSteps - 1) * 3, 1);
     var numPoints = this.pivotPoint.array.length;
-    for(var i = 0; i < numPoints; i++){
-      if(i % 3 === 0){
+    for (var i = 0; i < numPoints; i++) {
+      if (i % 3 === 0) {
         this.pivotPoint.setX(i, 1.0);
-      }else{
+      } else {
         this.pivotPoint.setX(i, 0.0);
       }
     }
 
-    this.wind = new THREE.Float32Attribute(Math.pow(2, this.maxSteps-1) * 3, 1);
+    this.wind = new THREE.Float32Attribute(Math.pow(2, this.maxSteps - 1) * 3, 1);
     var numWinds = this.wind.array.length;
-    for(var i = 0; i < numWinds; i++){
+    for (var i = 0; i < numWinds; i++) {
       this.wind.setX(i, Math.random());
     }
 
@@ -99,7 +97,7 @@ e.Forest = new Class({
     var angle = Math.PI / 2;
     var treeGeo = new THREE.Geometry();
     var leafGeo = new THREE.BufferGeometry();
-    var numLeaves = Math.pow(2, maxSteps-1);
+    var numLeaves = Math.pow(2, maxSteps - 1);
     var leafVertices = new THREE.Float32Attribute(numLeaves * 3, 3);
 
 
@@ -112,8 +110,15 @@ e.Forest = new Class({
       if (count < maxSteps) {
 
         var lengthMultOffset = .1;
-        var tempLengthMult = self.lengthMult + self.randFloat(-lengthMultOffset, lengthMultOffset);
-        var newLength = Math.max(1, length * tempLengthMult);
+        var tempLengthMult1 = self.lengthMult + self.randFloat(-lengthMultOffset, lengthMultOffset);
+        var tempLengthMult2 = self.lengthMult + self.randFloat(-lengthMultOffset, lengthMultOffset);
+        var tempLengthMult3 = self.lengthMult + self.randFloat(-lengthMultOffset, lengthMultOffset);
+        var newLength1 = Math.max(1, length * tempLengthMult1);
+        var newLength2 = Math.max(1, length * tempLengthMult2);
+        var newLength3 = Math.max(1, length * tempLengthMult2);
+        var angle1 = self.randFloat(0.52, 0.78);
+        var angle2 = -self.randFloat(0.52, 0.78);
+        var angle3 = -self.randFloat(0.52, 0.78);
 
         //We want greater angle randomness the deeper we get into the tree structure
         var angleOffset = map(count, 0, maxSteps - 1, .1, 1);
@@ -137,8 +142,10 @@ e.Forest = new Class({
           geo.faces[i].materialIndex = 0;
         }
         treeGeo.merge(geo);
-        createTreeHelper(tempAngle - self.angleRight, newX, newY, newZ, newLength, count + 1, size);
-        createTreeHelper(tempAngle + self.angleLeft, newX, newY, newZ, newLength, count + 1, size);
+        createTreeHelper(tempAngle + angle1, newX, newY, newZ, newLength1, count + 1, size);
+        createTreeHelper(tempAngle + angle2, newX, newY, newZ, newLength2, count + 1, size);
+     
+
         if (count === maxSteps - 1) {
           //add a leaf
 
@@ -149,7 +156,7 @@ e.Forest = new Class({
           geo.vertices.push(new THREE.Vector3(-width, -height, 0));
           geo.vertices.push(new THREE.Vector3(width, -height, 0));
           geo.vertices.push(new THREE.Vector3(width, height, 0));
-          
+
           geo.applyMatrix(new THREE.Matrix4().makeRotationY(angle));
           for (var i = 0; i < geo.vertices.length; i++) {
             var vertex = geo.vertices[i];

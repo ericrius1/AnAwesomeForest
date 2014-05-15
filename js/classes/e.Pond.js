@@ -15,11 +15,12 @@ e.Pond = new Class({
     //Extrude Geometry
     var extrudeSettings = { amount: 1 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5
     var pondGeo = new THREE.ExtrudeGeometry(pondShape, extrudeSettings);
-    var pondMaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide});
+    var pondMaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, wireframe: true});
     var pond = new THREE.Mesh(pondGeo, this.water.material);
-    // pond.scale.x =5; 
-    // pond.scale.y =5; 
-    pond.position.y = 5;
+    // var pond = new THREE.Mesh(pondGeo, pondMaterial);
+    pond.scale.x =10; 
+    pond.scale.y =10; 
+    pond.position.y = 1;
     pond.rotation.x = -Math.PI/2;
     pond.rotation.z = Math.PI;
     this.game.scene.add(pond);

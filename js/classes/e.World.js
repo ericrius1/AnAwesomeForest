@@ -21,10 +21,12 @@ e.World = new Class({
       }
     })
     this.game.scene.add(this.ground);
-    this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({color: 0xf2f2f2}));
+    this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
+      color: 0xf2f2f2
+    }));
     this.moon.scale.multiplyScalar(200);
-    this.moon.position.set(-this.pathWidth * 2, 20000, -this.pathLength* 10)
-    this.moon.scale.x += 2;  
+    this.moon.position.set(-this.pathWidth * 2, 20000, -this.pathLength * 10)
+    this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
     //color, intensity, distance, angle, exponent
     this.light = new THREE.SpotLight(0xf2f2f2, 1, 0, Math.PI / 2, 1);
@@ -39,7 +41,7 @@ e.World = new Class({
     this.player = new e.Player({
       game: this,
       camera: this.game.camera,
-      position: new THREE.Vector3(0, 50, 0)
+      position: new THREE.Vector3(0, 70, 0)
     });
 
     this.forest = new e.Forest({
@@ -65,32 +67,28 @@ e.World = new Class({
       sunDirection: this.moon.position.clone().normalize(),
       sunColor: 0xffffff,
       waterColor: 0x000000,
-      distortionScale: 50.0,
+      distortionScale: 20.0,
     });
 
-    var mirrorMesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(50000, 50000, 500, 50, 50),
-      this.water.material
-    );
+    this.ocean = new e.Ocean({
+      game: this.game,
+      world: this
+    });
 
     this.pond = new e.Pond({
       game: this.game,
       water: this.water
     });
 
-    mirrorMesh.add(this.water);
-    mirrorMesh.rotation.x = -Math.PI * 0.5;
-    mirrorMesh.position.z = -this.pathLength/2;
-    mirrorMesh.position.y = -100;
-    this.game.scene.add(mirrorMesh);
 
 
   },
 
   update: function() {
     var time = performance.now()
-    this.water.material.uniforms.time.value += 1.0 / 60.0;
+    this.water.material.uniforms.time.value += 1.0 / 90.0;
     this.water.render();
+    this.ocean.update();
     this.forest.update();
     this.bird.update();
   }
