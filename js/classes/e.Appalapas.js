@@ -52,13 +52,14 @@ e.Appalapas = new Class({
     this.sphere.position = this.points[this.currentPoint++];
 
     this.game.scene.add(this.sphere);
-    var appalapa = new THREE.Mesh(geo, appaMat);
-    this.game.scene.add(appalapa)
+    this.appalapa = new THREE.Mesh(geo, appaMat);
+    this.game.scene.add(this.appalapa)
 
   },
 
   update: function() {
     this.sphere.position = this.points[this.currentPoint]
+    this.appalapa.material.uniforms.ballHeight.value = this.sphere.position.y;
     this.currentPoint += this.direction;
     if(this.currentPoint === this.points.length-1 || this.currentPoint === 0){
       this.direction *= -1;

@@ -39,7 +39,6 @@
         <script src="js/classes/e.Game.js"></script>
 
         <!-- // <script src = "build/game.js"></script> -->
-2
 
       <script id="vertexShader" type="x-shader/x-vertex">
         varying float y;
@@ -107,7 +106,6 @@
         float r = mix(0., 1., x);
         vec4 color = vec4(r, 0., 0., 0.5 );
         color.g += sin( x + time * 0.05 );
-        // color.a = clamp(sin( x + time * 0.1 ), 0.0, 0.5);
 
         gl_FragColor = color;
 
@@ -121,7 +119,8 @@
       varying float distance;
       void main(){
         //Get distance of current yPos to where the ball is
-        distance = abs(ballHeight - position.y)/height;
+        distance = abs(ballHeight - position.y);
+        distance = pow(distance, 2.5)/height;
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
       }
     </script>
