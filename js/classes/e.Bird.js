@@ -1,4 +1,4 @@
-e.Bird = new Class({
+e.Birds = new Class({
 
   construct: function(options) {
     var self = this;
@@ -7,7 +7,7 @@ e.Bird = new Class({
     this.geo = new THREE.Geometry();
     this.pathLength = options.world.pathLength;
     this.trees = options.forest.trees;
-    this.numBirds = 100;
+    this.numBirds = 50;
     this.boids = [];
     this.birds = [];
     v(5, 0, 0);
@@ -58,10 +58,9 @@ e.Bird = new Class({
         side: THREE.DoubleSide,
         color: color
       }));
-      bird.position = boid.position;
-      bird.phase = Math.floor(Math.random() * 62.83);
-      bird.flapSpeedMultiplier = Math.random()> 0.5 ? 1 : 0
-      console.log(bird.phase);
+      this.birds[i].position = boid.position;
+      this.birds[i].phase = Math.floor(Math.random() * 62.83);
+      this.birds[i].flapSpeedMultiplier = Math.random()> 0.5 ? 1 : 0
       this.game.scene.add(bird);
 
 
@@ -81,6 +80,7 @@ e.Bird = new Class({
       bird.rotation.y = Math.atan2(-boid.velocity.z, boid.velocity.x);
       bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
       bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
+      // console.log(bird.flapSpeedMultiplier);
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
 
       if(i!==1){

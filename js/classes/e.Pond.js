@@ -3,7 +3,8 @@ e.Pond = new Class({
     this.game = options.game;
     this.water = options.water;
     var pondShape = new THREE.Shape();
-    var x=0, y=0;
+    var x = 0,
+      y = 0;
     pondShape.moveTo(x + 25, y + 25);
     pondShape.bezierCurveTo(x + 25, y + 25, x + 20, y, x, y);
     pondShape.bezierCurveTo(x - 30, y, x - 30, y + 35, x - 30, y + 35);
@@ -13,16 +14,31 @@ e.Pond = new Class({
     pondShape.bezierCurveTo(x + 35, y, x + 25, y + 25, x + 25, y + 25);
 
     //Extrude Geometry
-    var extrudeSettings = { amount: 1 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5
-    var pondGeo = new THREE.ExtrudeGeometry(pondShape, extrudeSettings);
-    var pondMaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, wireframe: true});
+    var extrudeSettings = {
+      amount: 1
+    }; 
+
+    var pondGeo = new THREE.CircleGeometry(50, 100);
+    console.log(pondGeo.vertices.length);
+    var pondMaterial = new THREE.MeshBasicMaterial({
+      side: THREE.DoubleSide,
+      wireframe: true
+    });
     var pond = new THREE.Mesh(pondGeo, this.water.material);
-    // var pond = new THREE.Mesh(pondGeo, pondMaterial);
     pond.scale.x =10; 
     pond.scale.y =10; 
     pond.position.y = 1;
     pond.rotation.x = -Math.PI/2;
-    pond.rotation.z = Math.PI;
+    pondGeo.computeBoundingBox();
+
+    var boundingBox = pond.geometry.boundingBox;
+
+    var position = new THREE.Vector3();
+    position.subVectors(boundingBox.max, boundingBox.min);
+    position.multiplyScalar(0.5);
+    position.add(boundingBox.min);
+    position.applyMatrix4(pond.matrixWorld);
+    this.center = position;
     this.game.scene.add(pond);
 
   }

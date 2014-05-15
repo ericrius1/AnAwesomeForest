@@ -44,18 +44,6 @@ e.World = new Class({
       position: new THREE.Vector3(0, 70, 0)
     });
 
-    this.forest = new e.Forest({
-      game: this.game,
-      world: this
-    });
-
-    this.bird = new e.Bird({
-      game: this.game,
-      world: this,
-      forest: this.forest
-    });
-
-
     //WATER
     var waterNormals = new THREE.ImageUtils.loadTexture('assets/waternormals.jpg');
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
@@ -80,6 +68,23 @@ e.World = new Class({
       game: this.game,
       water: this.water
     });
+    this.forest = new e.Forest({
+      game: this.game,
+      world: this
+    });
+
+    this.birds = new e.Birds({
+      game: this.game,
+      world: this,
+      forest: this.forest
+    });
+
+    this.appalapas = new e.Appalapas({
+      game: this.game,
+      pond: this.pond
+    });
+
+
 
 
 
@@ -91,7 +96,7 @@ e.World = new Class({
     this.water.render();
     this.ocean.update();
     this.forest.update();
-    this.bird.update();
+    this.birds.update();
     this.moon.position.y+=1;
   }
 
