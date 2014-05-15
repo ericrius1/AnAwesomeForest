@@ -6,7 +6,7 @@ e.Bird = new Class({
     this.geo = new THREE.Geometry();
     this.phase = Math.floor(Math.random() * 62.83);
     this.trees = options.forest.trees;
-    this.numBirds = 100;
+    this.numBirds = 50;
     this.boids = [];
     this.birds = [];
     v(5, 0, 0);

@@ -25,7 +25,7 @@ e.World = new Class({
       color: 0xf2f2f2
     }));
     this.moon.scale.multiplyScalar(200);
-    this.moon.position.set(-this.pathWidth * 2, 20000, -this.pathLength * 10)
+    this.moon.position.set(-this.pathWidth * 2, 0, -this.pathLength * 10)
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
     //color, intensity, distance, angle, exponent
@@ -91,6 +91,7 @@ e.World = new Class({
     this.ocean.update();
     this.forest.update();
     this.bird.update();
+    this.moon.position.y+=1;
   }
 
 });

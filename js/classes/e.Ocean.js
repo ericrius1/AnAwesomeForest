@@ -12,7 +12,7 @@ e.Ocean = new Class({
     this.mirrorMesh.add(this.water);
     this.mirrorMesh.rotation.x = -Math.PI * 0.5;
     this.mirrorMesh.position.y = 3;
-    this.mirrorMesh.position.z = -this.world.pathLength;
+    this.mirrorMesh.position.z = -this.world.pathLength + 500;
     this.game.scene.add(this.mirrorMesh);
     this.createWaveFront();
   },
@@ -25,10 +25,12 @@ e.Ocean = new Class({
     this.emitter = new SPE.Emitter({
       position: new THREE.Vector3(0, this.mirrorMesh.y, 0),
       positionSpread: new THREE.Vector3(2000, 20, 100),
+      velocity: new THREE.Vector3(0, 50, 0),
       velocitySpread: new THREE.Vector3(100,100, 100),
       acceleration: new THREE.Vector3(0, -100, 0),
-      sizeStart: 30,
-      particleCount: 20000
+      sizeStart: 40,
+      sizeEnd: 10,
+      particleCount: 40000
     });
     this.particleGroup.addEmitter(this.emitter);
     this.particleGroup.mesh.renderDepth = -1; 
@@ -40,8 +42,9 @@ e.Ocean = new Class({
   update: function(){
     var time = performance.now() * 0.0005;
     this.mirrorMesh.position.z += Math.sin(time) * 2;
-    this.emitter.position.z = this.mirrorMesh.position.z + 2400;
+    this.emitter.position.z = this.mirrorMesh.position.z + 2450;
     this.particleGroup.tick();
+
   }
 
 });
