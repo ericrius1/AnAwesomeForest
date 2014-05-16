@@ -186,11 +186,15 @@ e.Forest = new Class({
     treeMaterial.uniforms.height.value = height;
     this.leafMaterial.uniforms.width.value = width / 2;
     this.game.scene.add(tree);
+    tree.matrixAutoUpdate = false;
+    tree.updateMatrix();
     this.trees.push(tree);
 
     var leaves = new THREE.Mesh(leafGeo, this.leafMaterial);
     leaves.position.x = tree.position.x;
     leaves.position.z = tree.position.z;
+    leaves.matrixAutoUpdate = false;
+    leaves.updateMatrix();
     this.game.scene.add(leaves);
 
 

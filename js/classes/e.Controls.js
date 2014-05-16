@@ -1,13 +1,15 @@
 e.Controls = new Class({
   construct: function(options) {
-    var blocker = document.getElementById('blocker');
-    var fpsControls = false;
+    var fpsControls = true;
+    // this.controls = new THREE.OrbitControls(this.camera);
     var self = this;
     this.camera = options.camera;
     this.player = options.player;
     this.game = options.game;
-    this.controls = new THREE.OrbitControls(this.camera);
     // this.keyboard = new e.Keyboard();
+    
+    var blocker = document.getElementById('blocker');
+    blocker.style.display = 'block'
     if(fpsControls){
       this.controls = new THREE.PointerLockControls(this.camera);
       this.game.scene.add( this.controls.getObject() );

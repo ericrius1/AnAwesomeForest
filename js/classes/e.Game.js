@@ -17,7 +17,6 @@ e.Game = new Class({
     this.scene = new THREE.Scene();
 
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, 10000000);
-    this.birdCamera = new THREE.PerspectiveCamera(50, 1, 1, 1000000);
     this.activeCamera = this.camera;
 
 
@@ -43,7 +42,7 @@ e.Game = new Class({
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
     var light = new THREE.PointLight(0xff00ff);
-    light.position.y = 100;
+    light.position.y = 1000;
     this.scene.add(light);
     this.clock = new THREE.Clock();
 
@@ -68,8 +67,8 @@ e.Game = new Class({
     this.world.update();
     TWEEN.update();
     this.renderer.clear();
-    // this.renderer.render(this.scene, this.activeCamera);
-    this.composer.render();
+    this.renderer.render(this.scene, this.activeCamera);
+    // this.composer.render();
 
   },
 

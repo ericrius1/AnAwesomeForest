@@ -1,5 +1,3 @@
-var birds = []
-
 e.Birds = new Class({
 
   construct: function(options) {
@@ -10,6 +8,7 @@ e.Birds = new Class({
     this.trees = options.forest.trees;
     this.numBirds = 40;
     this.boids = [];
+    this.birds = [];
 
 
     var boid
@@ -22,7 +21,7 @@ e.Birds = new Class({
       target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
       boid.setGoal(target);
 
-      boid.position.set(_.random(-500, 500), _.random(300, 500), _.random(-this.pathLength, this.pathLength ));
+      boid.position.set(_.random(-500, 500), _.random(300, 500), _.random(-this.pathLength, this.pathLength));
       boid.velocity.x = Math.random() * 2 - 1;
       boid.velocity.y = Math.random() * 2 - 1;
       boid.velocity.z = Math.random() * 2 - 1;
@@ -35,11 +34,18 @@ e.Birds = new Class({
       bird.position = boid.position;
       bird.phase = Math.floor(Math.random() * 62.83);
       bird.flapSpeedMultiplier = randFloat(0.0, 0.4);
-      birds.push(bird);
+      this.birds.push(bird);
       this.game.scene.add(bird);
-
-
+      this.birdCamera = new THREE.PerspectiveCamera(50, 1, 1, 1000000);
+      this.birds[0].add(this.birdCamera)
+      // this.birdCamera.position.x = 100;
+      // this.birdCamera.rotation.x  = Math.PI/2;
+      // this.game.activeCamera = this.birdCamera;
     }
+
+
+    //camera.updateMatrix();
+    //camera.updateProjectionMatrix();
 
   },
 
@@ -48,7 +54,7 @@ e.Birds = new Class({
     var boid;
     for (var i = 0; i < this.boids.length; i++) {
       boid = this.boids[i];
-      var bird = birds[i];
+      var bird = this.birds[i];
       boid.run(this.boids);
       bird.geometry.verticesNeedUpdate = true;
       bird.rotation.y = Math.atan2(-boid.velocity.z, boid.velocity.x);
@@ -65,6 +71,16 @@ e.Birds = new Class({
 
       }
     }
+
+
+    // var relativeCameraOffset = new THREE.Vector3(-200, 50, 0);
+
+    // var cameraOffset = relativeCameraOffset.applyMatrix4(this.birds[1].matrixWorld);
+
+    // this.birdCamera.position.x = cameraOffset.x;
+    // this.birdCamera.position.y = cameraOffset.y;
+    // this.birdCamera.position.z = cameraOffset.z;
+    // this.birdCamera.lookAt(this.birds[1].position);
   },
 
   createBirdGeo: function() {
@@ -187,7 +203,7 @@ var Boid = function() {
 
   this.flock = function(boids) {
     if (this.goal) {
-      _acceleration.add(this.reach(this.goal, 0.005));
+      _acceleration.add(this.reach(this.goal, 0.00005));
     }
 
     // _acceleration.add(this.alignment(boids));

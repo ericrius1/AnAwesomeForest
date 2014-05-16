@@ -3,10 +3,10 @@ e.Cliff = new Class({
     this.game = options.game;
     this.world = options.world
     var pathWidth = this.world.pathWidth;
-    var stepHeight = 1000;
-    var stepDepth = 1000;
+    var stepHeight = 100;
+    var stepDepth = 100;
     var geo = new THREE.Geometry();
-    var numSteps = 10;
+    var numSteps = 2;
 
     for (var i = 0; i < numSteps; i++) {
 
@@ -28,7 +28,7 @@ e.Cliff = new Class({
     geo.computeFaceNormals();
 
 
-    var cliffMat = new THREE.MeshNormalMaterial({
+    var cliffMat = new THREE.MeshPhongMaterial({
       side: THREE.DoubleSide,
       color: 0xff00ff,
     });
