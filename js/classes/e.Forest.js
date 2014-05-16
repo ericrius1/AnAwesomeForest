@@ -5,7 +5,7 @@ e.Forest = new Class({
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 100;
+    this.numTrees = 50;
     this.maxSteps = 7;
     this.timeMultiplier = 0.005;
 

@@ -48,13 +48,13 @@ e.Appalapas = new Class({
 
     var geo = new THREE.TubeGeometry(path, 100,  2, 6, false);
     this.points = geo.parameters.path.getSpacedPoints(500);
-    this.sphere = new THREE.Mesh(new THREE.SphereGeometry(5));
-    this.sphere.position = this.points[this.currentPoint++];
-
-    this.game.scene.add(this.sphere);
     this.appalapa = new THREE.Mesh(geo, appaMat);
+    this.appalapa.position.z = this.pond.pond.position.z;
     this.game.scene.add(this.appalapa)
 
+    this.sphere = new THREE.Mesh(new THREE.SphereGeometry(5));
+    this.sphere.position = this.points[this.currentPoint++];
+    this.appalapa.add(this.sphere);
   },
 
   update: function() {

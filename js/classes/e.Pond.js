@@ -24,22 +24,23 @@ e.Pond = new Class({
       side: THREE.DoubleSide,
       wireframe: true
     });
-    var pond = new THREE.Mesh(pondGeo, this.water.material);
-    pond.scale.x =10; 
-    pond.scale.y =10; 
-    pond.position.y = 1;
-    pond.rotation.x = -Math.PI/2;
+    this.pond = new THREE.Mesh(pondGeo, this.water.material);
+    this.pond.scale.x =10; 
+    this.pond.scale.y =10; 
+    this.pond.position.y = 1;
+    this.pond.position.z += 1000;
+    this.pond.rotation.x = -Math.PI/2;
     pondGeo.computeBoundingBox();
 
-    var boundingBox = pond.geometry.boundingBox;
+    var boundingBox = this.pond.geometry.boundingBox;
 
     var position = new THREE.Vector3();
     position.subVectors(boundingBox.max, boundingBox.min);
     position.multiplyScalar(0.5);
     position.add(boundingBox.min);
-    position.applyMatrix4(pond.matrixWorld);
+    position.applyMatrix4(this.pond.matrixWorld);
     this.center = position;
-    this.game.scene.add(pond);
+    this.game.scene.add(this.pond);
 
   }
 });
