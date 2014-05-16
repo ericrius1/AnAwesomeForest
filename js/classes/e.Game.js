@@ -28,7 +28,7 @@ e.Game = new Class({
     var effectBloom = new THREE.BloomPass(0.2);
     var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
     this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
-    this.effectFXAA.uniforms['resolution'].value.set(1/window.innerWidth, 1/window.innerHeight);
+    this.effectFXAA.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
     effectCopy.renderToScreen = true;
     this.composer = new THREE.EffectComposer(this.renderer);
     this.composer.addPass(renderModel);
@@ -42,7 +42,9 @@ e.Game = new Class({
     document.body.appendChild(this.renderer.domElement);
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
-
+    var light = new THREE.PointLight(0xff00ff);
+    light.position.y = 100;
+    this.scene.add(light);
     this.clock = new THREE.Clock();
 
     this.controls = new e.Controls({
@@ -75,7 +77,7 @@ e.Game = new Class({
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
-    this.effectFXAA.uniforms['resolution'].value.set(1/window.innerWidth, 1/window.innerHeight)
+    this.effectFXAA.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight)
     this.composer.reset();
   }
 
