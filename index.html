@@ -42,6 +42,7 @@
         <script src="js/classes/e.Ocean.js"></script>
         <script src="js/classes/e.Bird.js"></script>
         <script src="js/classes/e.Appalapas.js"></script>
+        <script src="js/classes/e.Cliff.js"></script>
         <script src="js/classes/e.Pond.js"></script>
         <script src="js/classes/e.Forest.js"></script>
         <script src="js/classes/e.Controls.js"></script>
@@ -129,7 +130,6 @@
       void main(){
         //Get distance of current yPos to where the ball is
         distance = abs(ballHeight - position.y);
-        distance = pow(distance, 2.5)/height;
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
       }
     </script>
@@ -137,11 +137,14 @@
 
     <script id =  "appalapasFragmentShader" type = "x-shader/x-fragment">
       varying float distance;
+      uniform float height;
       void main(){
-
-        float r = mix(1.0, 0.0, distance);
+        float distance1 = pow(distance, 1.5)/height;
+        float distance2 = pow(distance, 2.5)/height;
+        float a = mix(1.0, 0.0, distance1);
+        float r = mix(1.0, 0.0, distance2);
         vec3 color = vec3(r, 0.0, 0.0);
-        gl_FragColor = vec4(color, 1.0);
+        gl_FragColor = vec4(color, a);
       }
     </script>
        

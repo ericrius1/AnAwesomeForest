@@ -41,7 +41,9 @@ e.Appalapas = new Class({
     var appaMat = new THREE.ShaderMaterial({
       uniforms: uniforms,
       vertexShader: document.getElementById('appalapasVertexShader').text,
-      fragmentShader: document.getElementById('appalapasFragmentShader').text
+      fragmentShader: document.getElementById('appalapasFragmentShader').text,
+      transparent: true,
+      side: THREE.DoubleSide
     });
 
 
