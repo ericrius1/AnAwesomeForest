@@ -4,7 +4,7 @@ e.World = new Class({
     this.game = options.game;
 
     var groundMat = new THREE.MeshBasicMaterial({
-      color: 0x050505
+      color: 0x00ff00
     });
     this.pathLength = 5000;
     this.pathWidth = 5000;
@@ -63,6 +63,11 @@ e.World = new Class({
     this.pond = new e.Pond({
       game: this.game,
       water: this.water
+    });
+
+    this.cliff = new e.Cliff({
+      game: this.game,
+      world: this
     });
     this.forest = new e.Forest({
       game: this.game,

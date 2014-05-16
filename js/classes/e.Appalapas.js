@@ -51,6 +51,7 @@ e.Appalapas = new Class({
     var geo = new THREE.TubeGeometry(path, 100,  2, 6, false);
     this.points = geo.parameters.path.getSpacedPoints(500);
     this.appalapa = new THREE.Mesh(geo, appaMat);
+    this.appalapa.renderDepth = -1;
     this.appalapa.position.z = this.pond.pond.position.z;
     this.game.scene.add(this.appalapa)
 

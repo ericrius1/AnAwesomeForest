@@ -40,7 +40,7 @@ e.Pond = new Class({
     position.add(boundingBox.min);
     position.applyMatrix4(this.pond.matrixWorld);
     this.center = position;
-    this.game.scene.add(this.pond);
+    this.game.scene.add(this.pond);  
 
   }
 });
