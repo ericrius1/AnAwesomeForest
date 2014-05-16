@@ -25,7 +25,7 @@ e.Game = new Class({
 
     //POST PROCESSING
     var renderModel = new THREE.RenderPass(this.scene, this.camera);
-    var effectBloom = new THREE.BloomPass(1.0);
+    var effectBloom = new THREE.BloomPass(0.2);
     var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
     this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
     this.effectFXAA.uniforms['resolution'].value.set(1/window.innerWidth, 1/window.innerHeight);

@@ -8,21 +8,21 @@ e.Birds = new Class({
     this.birdCamera = this.game.birdCamera;
     this.pathLength = options.world.pathLength;
     this.trees = options.forest.trees;
-    this.numBirds = 50;
+    this.numBirds = 40;
     this.boids = [];
 
 
-    var boid, target;
+    var boid
     var randFloat = THREE.Math.randFloat;
     for (var i = 0; i < this.numBirds; i++) {
       boid = this.boids[i] = new Boid();
-      boid.position = new THREE.Vector3(0, 100, -100);
+      boid.position = new THREE.Vector3(0, 100, -10);
       var tree = this.trees[_.random(0, this.trees.length - 1)];
-      target = tree.position.clone();
+      var target = tree.position.clone();
       target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
       boid.setGoal(target);
 
-      boid.position.set(_.random(-500, 500), _.random(300, 500), _.random(-this.pathLength * 5, -this.pathLength * 2));
+      boid.position.set(_.random(-500, 500), _.random(300, 500), _.random(-this.pathLength, this.pathLength ));
       boid.velocity.x = Math.random() * 2 - 1;
       boid.velocity.y = Math.random() * 2 - 1;
       boid.velocity.z = Math.random() * 2 - 1;
@@ -45,7 +45,7 @@ e.Birds = new Class({
 
   update: function() {
     var time = performance.now();
-    var boid, target;
+    var boid;
     for (var i = 0; i < this.boids.length; i++) {
       boid = this.boids[i];
       var bird = birds[i];
@@ -56,13 +56,14 @@ e.Birds = new Class({
       bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
 
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
-    }
-    if (bird.position.distanceTo(boid.goal) < 10) {
-      var tree = this.trees[_.random(0, this.trees.length - 1)];
-      target = tree.position.clone();
-      target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
-      boid.setGoal(target);
+      var distance = bird.position.distanceTo(boid.goal);
+      if (distance < 100) {
+        var tree = this.trees[_.random(0, this.trees.length - 1)];
+        var target = tree.position.clone();
+        target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
+        boid.setGoal(target);
 
+      }
     }
   },
 
@@ -189,9 +190,9 @@ var Boid = function() {
       _acceleration.add(this.reach(this.goal, 0.005));
     }
 
-    _acceleration.add(this.alignment(boids));
-    _acceleration.add(this.cohesion(boids));
-    _acceleration.add(this.separation(boids));
+    // _acceleration.add(this.alignment(boids));
+    // _acceleration.add(this.cohesion(boids));
+    // _acceleration.add(this.separation(boids));
 
   }
 

@@ -24,13 +24,13 @@ e.Ocean = new Class({
     });
     this.emitter = new SPE.Emitter({
       position: new THREE.Vector3(0, this.mirrorMesh.y, 0),
-      positionSpread: new THREE.Vector3(2000, 20, 100),
+      positionSpread: new THREE.Vector3(5000, 20, 100),
       velocity: new THREE.Vector3(0, 50, 0),
       velocitySpread: new THREE.Vector3(100,100, 100),
       acceleration: new THREE.Vector3(0, -100, 0),
       sizeStart: 20,
       sizeEnd: 10,
-      particleCount: 20000
+      particleCount: 50000
     });
     this.particleGroup.addEmitter(this.emitter);
     this.particleGroup.mesh.renderDepth = -1; 

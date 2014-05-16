@@ -7,7 +7,7 @@ e.World = new Class({
       color: 0x050505
     });
     this.pathLength = 5000;
-    this.pathWidth = 10000;
+    this.pathWidth = 5000;
     this.ground = new THREE.Mesh(new THREE.PlaneGeometry(this.pathWidth, this.pathLength, 50, 50), groundMat);
     this.ground.rotation.x = -Math.PI / 2;
     var heightMultiplier;
