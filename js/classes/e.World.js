@@ -1,7 +1,13 @@
 e.World = new Class({
 
+  extend: e.EventEmitter,
+
   construct: function(options) {
+    this.on('winter', function(){
+      this.beginWinter();
+    });
     this.game = options.game;
+    this.cyclePoint = this.game.cyclePoint;
 
     var groundMat = new THREE.MeshBasicMaterial({
       color: 0x0a0a0a
@@ -21,12 +27,6 @@ e.World = new Class({
     this.moon.lookAt(this.game.scene.position);
     this.game.scene.add(this.moon);
 
-
-    this.player = new e.Player({
-      game: this,
-      camera: this.game.camera,
-      position: new THREE.Vector3(0, 70, 0)
-    });
 
     //WATER
     var waterNormals = new THREE.ImageUtils.loadTexture('assets/waternormals.jpg');
@@ -78,10 +78,6 @@ e.World = new Class({
       pond: this.pond
     });
 
-
-
-
-
   },
 
   update: function() {
@@ -94,6 +90,10 @@ e.World = new Class({
     this.forest.update();
     this.birds.update();
     this.moon.position.y+=1;
+  },
+
+  beginWinter: function(){
+    console.log('Its wintertime!!');
   }
 
 });
