@@ -5,6 +5,7 @@ e.Waterfall = new Class({
     var position = new THREE.Vector3(0, 1000, 1000);
 
     this.createWaterfall(position);
+    this.tickRate = 0.016;
 
 
   },
@@ -22,9 +23,10 @@ e.Waterfall = new Class({
       velocity: new THREE.Vector3(0, -500, 0),
       velocitySpread: new THREE.Vector3(100, 100, 100),
       acceleration: new THREE.Vector3(-10, -500, 10),
-      sizeStart: 200,
-      sizeEnd: 700,
-      particleCount: 1000
+      sizeStart: 400,
+      sizeEnd: 1300,
+      sizeEndSpread: 200,
+      particleCount: 3000
     });
 
 
@@ -39,7 +41,7 @@ e.Waterfall = new Class({
       colorStart: new THREE.Color(0x6dbb63),
       colorEnd: new THREE.Color().setRGB(1.0, 1.0, 1.0),
       sizeStart: 100,
-      sizeEnd: 300,
+      sizeEnd: 500,
       sizeEndSpread: 400,
       particleCount: 1000
 
@@ -53,7 +55,10 @@ e.Waterfall = new Class({
   },
 
   update: function(){
-    this.particleGroup.tick();
+    this.particleGroup.tick(this.tickRate);
+    if(this.tickRate > 0.0001) {
+      this.tickRate-= 0.0001; 
+    }
   }
 
 });

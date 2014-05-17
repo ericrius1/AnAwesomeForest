@@ -45,7 +45,6 @@ e.Ocean = new Class({
     var time = performance.now() * 0.0005;
     this.mirrorMesh.position.z += Math.sin(time) * 2;
     this.emitter.position.y = Math.max(-20, Math.sin(time) * 20);
-    console.log(this.emitter.position.y)
     this.emitter.position.z = this.mirrorMesh.position.z + 2500;
     this.particleGroup.tick();
 

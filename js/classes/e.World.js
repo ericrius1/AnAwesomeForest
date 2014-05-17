@@ -19,9 +19,6 @@ e.World = new Class({
     this.moon.position.set(-this.pathWidth * 2, 0, -this.pathLength * 10)
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
-
-
-
     this.game.scene.add(this.moon);
 
 
@@ -36,14 +33,14 @@ e.World = new Class({
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 
     this.water = new THREE.Water(this.game.renderer, this.game.camera, this.game.scene, {
-      textureWidth: 1025,
+      textureWidth: 512,
       textureHeight: 512,
       waterNormals: waterNormals,
       alpha: 1.0,
       sunDirection: this.moon.position.clone().normalize(),
       sunColor: 0xffffff,
       waterColor: 0x000000,
-      distortionScale: 20.0,
+      distortionScale: 50.0,
     });
 
     this.ocean = new e.Ocean({
@@ -89,7 +86,7 @@ e.World = new Class({
 
   update: function() {
     var time = performance.now()
-    this.water.material.uniforms.time.value += 1.0 / 90.0;
+    this.water.material.uniforms.time.value += 1.0 / 60.0;
     this.water.render();
     this.ocean.update();
     this.waterfall.update();

@@ -3,10 +3,10 @@ e.Cliff = new Class({
     this.game = options.game;
     this.world = options.world
     var pathWidth = this.world.pathWidth;
-    var stepHeight = 100;
-    var stepDepth = 100;
+    var stepHeight = 200;
+    var stepDepth = 1000;
     var geo = new THREE.Geometry();
-    var numSteps = 2;
+    var numSteps = 5;
 
     for (var i = 0; i < numSteps; i++) {
 
@@ -16,6 +16,9 @@ e.Cliff = new Class({
       v(-pathWidth / 2, (i + 1) * stepHeight, i * stepDepth);
       f(i * 8, i * 8 + 1, i * 8 + 2);
       f(i * 8, i * 8 + 2, i * 8 + 3);
+      var r = map(i, 0, numSteps, 0, 1);
+      var color = new THREE.Color().setRGB(r, 0, 0.5);
+
 
       v(-pathWidth / 2, (i+1) * stepHeight, i * stepDepth);
       v(pathWidth / 2, (i+1) * stepHeight, i * stepDepth);
@@ -23,14 +26,23 @@ e.Cliff = new Class({
       v(-pathWidth/2, (i+1) * stepHeight, (i+1) * stepDepth);
       f( i * 8 + 4, i * 8 + 5, i*8 + 6);
       f( i * 8 + 4, i * 8 + 6, i*8+7); 
+
+      
+      //set color of the 4 faces we just created
+      for(var j = geo.faces.length-1; j > geo.faces.length-5; j--){
+        for(var w = 0; w < 3; w++){
+          geo.faces[j].vertexColors[w] = color;
+          
+        }
+      }
     }
 
-    geo.computeFaceNormals();
+    // geo.computeFaceNormals();
 
-
-    var cliffMat = new THREE.MeshPhongMaterial({
+    var cliffMat = new THREE.MeshBasicMaterial({
       side: THREE.DoubleSide,
-      color: 0xff00ff,
+      vertexColors: THREE.VertexColors,
+      shading: THREE.FlatShading
     });
     var cliff = new THREE.Mesh(geo, cliffMat);
     cliff.position.z = pathWidth / 2;
