@@ -80,6 +80,7 @@ e.Game = new Class({
   },
 
   start: function() {
+    this.clock.start()
     requestAnimationFrame(this.render);
   },
 
@@ -107,7 +108,7 @@ e.Game = new Class({
 
   checkForNewSeason: function() {
     var self = this;
-    var time = performance.now()
+    var time = this.clock.getElapsedTime() * 1000;
     var cycleTime = time % this.yearTime;
     this.cyclePoint = cycleTime / this.yearTime;
 

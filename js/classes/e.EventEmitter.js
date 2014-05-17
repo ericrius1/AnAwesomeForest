@@ -3,17 +3,19 @@
  *
  * @class 
  */
+ var events = {
+
+ }
 e.EventEmitter = new Class({
   /** @constructs */
   construct: function() {
-    this._events = {};
   },
   
   /**
    * Destroy references to events and listeners.
    */
   destruct: function() {
-    delete this._events;
+    delete events;
   },
   
   /**
@@ -21,11 +23,11 @@ e.EventEmitter = new Class({
    *
    * @param {String} evt    Name of event to listen to
    * @param {Function} func Function to execute
-   *x
+   *
    * @returns {EventEmitter}  this, chainable
    */
   on: function(evt, func) {
-    var listeners = this._events[evt] = this._events[evt] || [];
+    var listeners = events[evt] = events[evt] || [];
     listeners.push(func);
     
     return this;
@@ -56,7 +58,7 @@ e.EventEmitter = new Class({
    * @returns {EventEmitter}  this, chainable
    */
   trigger: function(evt) {
-    var listeners = this._events[evt];
+    var listeners = events[evt];
     if (listeners !== undefined) {
       for (var i = 0, n = listeners.length; i < n; i++) {
         listeners[i].apply(this, Array.prototype.slice.call(arguments, 1));

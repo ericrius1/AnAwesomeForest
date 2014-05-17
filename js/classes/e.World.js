@@ -1,20 +1,24 @@
 e.World = new Class({
-
   extend: e.EventEmitter,
 
   construct: function(options) {
-    this.on('winter', function(){
-      this.beginWinter();
+    var self = this;
+    this.on('winter', function() {
+      self.beginWinter();
+    });
+    this.on('summer', function() {
+      self.beginSummer();
     });
     this.game = options.game;
-    this.cyclePoint = this.game.cyclePoint;
 
+    this.summerGroundColor = new THREE.Color(0x136e1e);
+    this.winterGroundColor = new THREE.Color(0xf0f0f0);
     var groundMat = new THREE.MeshBasicMaterial({
       color: 0x0a0a0a
     });
     this.pathLength = 5000;
     this.pathWidth = 5000;
-    this.ground = new THREE.Mesh(new THREE.PlaneGeometry(this.pathWidth, this.pathLength, 50, 50), groundMat);
+    this.ground = new THREE.Mesh(new THREE.PlaneGeometry(this.pathWidth, this.pathLength, 1, 1), groundMat);
     this.ground.rotation.x = -Math.PI / 2;
     var heightMultiplier;
     this.game.scene.add(this.ground);
@@ -67,6 +71,11 @@ e.World = new Class({
       world: this
     });
 
+    this.snow = new e.Snow({
+      game: this.game,
+      world: this
+    });
+
     this.birds = new e.Birds({
       game: this.game,
       world: this,
@@ -89,11 +98,31 @@ e.World = new Class({
     this.appalapas.update();
     this.forest.update();
     this.birds.update();
-    this.moon.position.y+=1;
+    this.moon.position.y += 1;
+    this.snow.update();
   },
 
-  beginWinter: function(){
+  beginWinter: function() {
+    var self = this;
     console.log('Its wintertime!!');
+    var curColor = this.ground.material.color;
+    var grountTween = new TWEEN.Tween(curColor).
+    to(this.winterGroundColor, this.game.yearTime * .1).
+    onUpdate(function() {
+      self.ground.material.color.setRGB(curColor.r, curColor.g, curColor.b);
+    }).start();
+  },
+  beginSummer: function() {
+    console.log('Its summertime!');
+    var self = this;
+    var curColor = this.ground.material.color;
+    var grountTween = new TWEEN.Tween(curColor).
+    to(this.summerGroundColor, this.game.yearTime * .1).
+    onUpdate(function() {
+      self.ground.material.color.setRGB(curColor.r, curColor.g, curColor.b);
+    }).start();
   }
+
+
 
 });
