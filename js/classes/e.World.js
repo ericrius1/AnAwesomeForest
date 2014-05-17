@@ -4,22 +4,13 @@ e.World = new Class({
     this.game = options.game;
 
     var groundMat = new THREE.MeshBasicMaterial({
-      color: 0x00ff00
+      color: 0x0a0a0a
     });
     this.pathLength = 5000;
     this.pathWidth = 5000;
     this.ground = new THREE.Mesh(new THREE.PlaneGeometry(this.pathWidth, this.pathLength, 50, 50), groundMat);
     this.ground.rotation.x = -Math.PI / 2;
     var heightMultiplier;
-    // _.each(this.ground.geometry.vertices, function(vertex) {
-    //   if (Math.random() > 0.4 && Math.abs(vertex.x) > 1000) {
-    //     heightMultiplier = 1;
-    //     if (Math.abs(vertex.x) > 3000) {
-    //       heightMultiplier = 4;
-    //     }
-    //     vertex.z = THREE.Math.randInt(400, 600) * heightMultiplier;
-    //   }
-    // })
     this.game.scene.add(this.ground);
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xf2f2f2
@@ -69,6 +60,10 @@ e.World = new Class({
       game: this.game,
       world: this
     });
+    this.waterfall = new e.Waterfall({
+      game: this.game,
+      cliff: this.cliff
+    })
     this.forest = new e.Forest({
       game: this.game,
       world: this
@@ -96,6 +91,7 @@ e.World = new Class({
     this.water.material.uniforms.time.value += 1.0 / 90.0;
     this.water.render();
     this.ocean.update();
+    this.waterfall.update();
     this.appalapas.update();
     this.forest.update();
     this.birds.update();

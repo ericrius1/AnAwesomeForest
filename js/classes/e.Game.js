@@ -1,3 +1,7 @@
+//CAVERN WITH WATER FALL
+//STEPS UP TO TOP. YOU JUMP OUT AND THERE IS MESSAGE
+
+
 e.Game = new Class({
   extend: e.EventEmitter,
 
@@ -20,7 +24,7 @@ e.Game = new Class({
     this.activeCamera = this.camera;
 
 
-    this.renderer.setClearColor(0x053c3e);
+    this.renderer.setClearColor(0x53c3e);
 
     //POST PROCESSING
     var renderModel = new THREE.RenderPass(this.scene, this.camera);
@@ -67,8 +71,8 @@ e.Game = new Class({
     this.world.update();
     TWEEN.update();
     this.renderer.clear();
-    this.renderer.render(this.scene, this.activeCamera);
-    // this.composer.render();
+    // this.renderer.render(this.scene, this.activeCamera);
+    this.composer.render();
 
   },
 
