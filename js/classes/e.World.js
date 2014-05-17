@@ -36,7 +36,7 @@ e.World = new Class({
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 
     this.water = new THREE.Water(this.game.renderer, this.game.camera, this.game.scene, {
-      textureWidth: 512,
+      textureWidth: 1025,
       textureHeight: 512,
       waterNormals: waterNormals,
       alpha: 1.0,
@@ -53,7 +53,8 @@ e.World = new Class({
 
     this.pond = new e.Pond({
       game: this.game,
-      water: this.water
+      water: this.water,
+      world: this
     });
 
     this.cliff = new e.Cliff({

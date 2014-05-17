@@ -19,12 +19,12 @@ e.Waterfall = new Class({
     var topEmitter = new SPE.Emitter({
       position: position,
       positionSpread: new THREE.Vector3(50, 20, 200),
-      velocity: new THREE.Vector3(0, -1000, 0),
-      velocitySpread: new THREE.Vector3(100, 0, 100),
+      velocity: new THREE.Vector3(0, -500, 0),
+      velocitySpread: new THREE.Vector3(100, 100, 100),
       acceleration: new THREE.Vector3(-10, -500, 10),
       sizeStart: 200,
       sizeEnd: 700,
-      particleCount: 2000
+      particleCount: 1000
     });
 
 
@@ -41,7 +41,7 @@ e.Waterfall = new Class({
       sizeStart: 100,
       sizeEnd: 300,
       sizeEndSpread: 400,
-      particleCount: 500
+      particleCount: 1000
 
     }); 
 

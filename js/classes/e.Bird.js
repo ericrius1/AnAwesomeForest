@@ -38,8 +38,8 @@ e.Birds = new Class({
       this.game.scene.add(bird);
       this.birdCamera = new THREE.PerspectiveCamera(50, 1, 1, 1000000);
       this.birds[0].add(this.birdCamera)
-      // this.birdCamera.position.x = 100;
-      // this.birdCamera.rotation.x  = Math.PI/2;
+      this.birdCamera.position.x = 100;
+      this.birdCamera.rotation.x  = Math.PI/2;
       // this.game.activeCamera = this.birdCamera;
     }
 
@@ -73,14 +73,6 @@ e.Birds = new Class({
     }
 
 
-    // var relativeCameraOffset = new THREE.Vector3(-200, 50, 0);
-
-    // var cameraOffset = relativeCameraOffset.applyMatrix4(this.birds[1].matrixWorld);
-
-    // this.birdCamera.position.x = cameraOffset.x;
-    // this.birdCamera.position.y = cameraOffset.y;
-    // this.birdCamera.position.z = cameraOffset.z;
-    // this.birdCamera.lookAt(this.birds[1].position);
   },
 
   createBirdGeo: function() {

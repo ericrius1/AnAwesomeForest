@@ -2,6 +2,8 @@ e.Pond = new Class({
   construct: function(options) {
     this.game = options.game;
     this.water = options.water;
+    this.world = options.world;
+    this.pondRadius = 500;
     var pondShape = new THREE.Shape();
     var x = 0,
       y = 0;
@@ -18,17 +20,15 @@ e.Pond = new Class({
       amount: 1
     }; 
 
-    var pondGeo = new THREE.CircleGeometry(50, 100);
+    var pondGeo = new THREE.CircleGeometry(this.pondRadius, 50);
     console.log(pondGeo.vertices.length);
     var pondMaterial = new THREE.MeshBasicMaterial({
       side: THREE.DoubleSide,
       wireframe: true
     });
     this.pond = new THREE.Mesh(pondGeo, this.water.material);
-    this.pond.scale.x =10; 
-    this.pond.scale.y =10; 
     this.pond.position.y = 1;
-    this.pond.position.z += 1000;
+    this.pond.position.z  = this.world.pathLength/2 - this.pondRadius;
     this.pond.rotation.x = -Math.PI/2;
     pondGeo.computeBoundingBox();
 
