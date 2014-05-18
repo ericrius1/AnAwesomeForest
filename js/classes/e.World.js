@@ -3,6 +3,9 @@ e.World = new Class({
 
   construct: function(options) {
     var self = this;
+    this.on('fall', function(){
+      self.beginFall();
+    });
     this.on('winter', function() {
       self.beginWinter();
     });
@@ -102,6 +105,10 @@ e.World = new Class({
     this.snow.update();
   },
 
+  beginFall: function(){
+    this.forest.changeLeafColors();
+  },
+
   beginWinter: function() {
     var self = this;
     console.log('Its wintertime!!');
@@ -109,6 +116,7 @@ e.World = new Class({
     var grountTween = new TWEEN.Tween(curColor).
     to(this.winterGroundColor, this.game.yearTime * .1).start();
     this.snow.beginSnowing();
+    this.forest.beginLeavesFall();
   },
   beginSummer: function() {
     // console.log('Its summertime!');

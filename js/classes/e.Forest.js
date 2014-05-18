@@ -31,7 +31,19 @@ e.Forest = new Class({
         width: {
           type: 'f',
           value: 100
-        }
+        },
+        green: {
+          type: 'f',
+          value: 1.0
+        },
+        fallTime: {
+          type: 'f',
+          value: 0
+        },
+        velocity: {
+          type: 'v3',
+          value: new THREE.Vector3(0, 0, 0)
+        },
       },
       attributes: {
         pivotPoint: {
@@ -207,12 +219,28 @@ e.Forest = new Class({
     light.position.y = this.randFloat(1.0, 3.0);
     this.game.scene.add(light);
 
-
-
   },
+
+  changeLeafColors: function(){
+    var self = this;
+    var curCol = {g: 1.0}
+    var finalCol = {g: 0.0}
+    var colorChangeTween = new TWEEN.Tween(curCol).
+      to(finalCol,this.game.yearTime * .1).
+      onUpdate(function(){
+        self.leafMaterial.uniforms.green.value = curCol.g;
+      }).start();
+  },
+
+  beginLeavesFall: function(){
+    this.leafMaterial.uniforms.fallTime.value = 0;
+    this.leafMaterial.uniforms.velocity.value.set(0, -100, 0);
+  },
+
 
   update: function() {
     var time = performance.now() * this.timeMultiplier;
     this.leafMaterial.uniforms.time.value = time;
+    this.leafMaterial.uniforms.fallTime.value += this.game.clock.getDelta();
   }
 });

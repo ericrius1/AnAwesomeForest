@@ -88,6 +88,9 @@
         attribute float pivotPoint;
         attribute float wind;
 
+        uniform vec3 velocity;
+        uniform float fallTime;
+
 
         varying float x;
 
@@ -95,6 +98,9 @@
           vec3 newPos = position;
           if(pivotPoint > 0.5){
             newPos.z = position.z + sin(time * (5. * wind)) * (2. * wind);
+          }
+          if(length(velocity) > 0.0){
+            newPos.y = newPos.y + velocity.y * fallTime;
           }
           x = abs(position.x/width);
 
@@ -110,16 +116,14 @@
       precision mediump int;
 
 
-      uniform float time;
+      uniform float green;
 
 
       varying float x;
 
       void main() {
         float r = mix(0., 1., x);
-        vec4 color = vec4(r, 0., 0., 0.5 );
-        color.g += sin( x + time * 0.05 );
-
+        vec4 color = vec4(r, green, 0., 0.5 );
         gl_FragColor = color;
 
       }
