@@ -195,7 +195,7 @@ var Boid = function() {
 
   this.flock = function(boids) {
     if (this.goal) {
-      _acceleration.add(this.reach(this.goal, 0.00005));
+      _acceleration.add(this.reach(this.goal, 0.0005));
     }
 
     // _acceleration.add(this.alignment(boids));

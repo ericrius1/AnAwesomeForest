@@ -8,25 +8,7 @@ e.Game = new Class({
 
   //Come DOWN TO US REMIX
   construct: function() {
-    // Bind render function permenantly
-    this.render = this.render.bind(this);
-    var self = this;
-
-    this.renderer = new THREE.WebGLRenderer({
-      antialias: false
-    });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.autoClear = false;
-
-    this.scene = new THREE.Scene();
-
-    this.camera = new THREE.PerspectiveCamera(50, 1, 1, 10000000);
-    this.activeCamera = this.camera;
-
-
-    this.renderer.setClearColor(0x53c3e);
-
-    this.yearTime = 10000;
+    this.yearTime = 60000;
     this.summerPoint = 0.0;
     this.fallPoint = 0.25;
     this.winterPoint = 0.5;
@@ -36,6 +18,24 @@ e.Game = new Class({
     this.checkWinter = true;
     this.checkSpring = true;
     this.seasonCheckTimeout = this.yearTime/4 - 100;
+    // Bind render function permenantly
+    this.render = this.render.bind(this);
+    var self = this;
+
+    this.renderer = new THREE.WebGLRenderer({
+      antialias: false
+    });
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // this.renderer.autoClear = false;
+
+    this.scene = new THREE.Scene();
+
+    this.camera = new THREE.PerspectiveCamera(50, 1, 1, 10000000);
+    this.activeCamera = this.camera;
+
+
+    this.renderer.setClearColor(0x53c3e);
+
 
     //year PROCESSING
     var renderModel = new THREE.RenderPass(this.scene, this.camera);
@@ -90,9 +90,9 @@ e.Game = new Class({
     this.controls.update();
     this.world.update();
     TWEEN.update();
-    this.renderer.clear();
-    // this.renderer.render(this.scene, this.activeCamera);
-    this.composer.render();
+    // this.renderer.clear();
+    this.renderer.render(this.scene, this.activeCamera);
+    // this.composer.render();
     this.checkForNewSeason();
 
 
