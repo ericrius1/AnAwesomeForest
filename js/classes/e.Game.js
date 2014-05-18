@@ -8,7 +8,7 @@ e.Game = new Class({
 
   //Come DOWN TO US REMIX
   construct: function() {
-    this.yearTime = 10000;
+    this.yearTime = 60000;
     this.summerPoint = 0.0;
     this.fallPoint = 0.25;
     this.winterPoint = 0.5;

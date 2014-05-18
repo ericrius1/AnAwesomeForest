@@ -114,16 +114,18 @@ e.World = new Class({
     console.log('Its wintertime!!');
     var curColor = this.ground.material.color;
     var grountTween = new TWEEN.Tween(curColor).
-    to(this.winterGroundColor, this.game.yearTime * .1).start();
+    to(this.winterGroundColor, this.game.yearTime * .1).
+    delay(2000).
+    start();
     this.snow.beginSnowing();
     this.forest.beginLeavesFall();
   },
   beginSummer: function() {
-    // console.log('Its summertime!');
-    // var self = this;
-    // var curColor = this.ground.material.color;
-    // var grountTween = new TWEEN.Tween(curColor).
-    // to(this.summerGroundColor, this.game.yearTime * .1).start();
+    console.log('Its summertime!');
+    var self = this;
+    var curColor = this.ground.material.color;
+    var grountTween = new TWEEN.Tween(curColor).
+    to(this.summerGroundColor, this.game.yearTime * .1).start();
     this.snow.endSnowing();
   }
 
