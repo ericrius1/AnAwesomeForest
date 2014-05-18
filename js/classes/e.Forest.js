@@ -234,7 +234,7 @@ e.Forest = new Class({
 
   beginLeavesFall: function(){
     this.leafMaterial.uniforms.fallTime.value = 0;
-    this.leafMaterial.uniforms.velocity.value.set(0, -100, 0);
+    this.leafMaterial.uniforms.velocity.value.set(0, -200, 1000);
   },
 
 

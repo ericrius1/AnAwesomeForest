@@ -100,7 +100,7 @@
             newPos.z = position.z + sin(time * (5. * wind)) * (2. * wind);
           }
           if(length(velocity) > 0.0){
-            newPos.y = newPos.y + velocity.y * fallTime;
+            newPos = newPos + velocity * fallTime;
           }
           x = abs(position.x/width);
 
