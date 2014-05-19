@@ -9,6 +9,9 @@ e.World = new Class({
     this.on('winter', function() {
       self.beginWinter();
     });
+    this.on('spring', function(){
+      self.beginSpring();
+    });
     this.on('summer', function() {
       self.beginSummer();
     });
@@ -90,6 +93,10 @@ e.World = new Class({
       pond: this.pond
     });
 
+    this.hut = new e.Hut({
+      game: this.game
+    });
+
   },
 
   update: function() {
@@ -103,10 +110,12 @@ e.World = new Class({
     this.birds.update();
     this.moon.position.y += 1;
     this.snow.update();
+    this.hut.update();
   },
 
   beginFall: function(){
     this.forest.changeLeafColors();
+    this.birds.headSouth();
   },
 
   beginWinter: function() {
@@ -119,6 +128,11 @@ e.World = new Class({
     start();
     this.snow.beginSnowing();
     this.forest.beginLeavesFall();
+  },
+  beginSpring: function(){
+    this.birds.headNorth();
+    this.snow.endSnowing();
+    this.forest.leavesGrowBack();
   },
   beginSummer: function() {
     console.log('Its summertime!');

@@ -5,7 +5,7 @@ e.Forest = new Class({
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 50;
+    this.numTrees = 20;
     this.maxSteps = 7;
     this.timeMultiplier = 0.005;
 
@@ -219,6 +219,10 @@ e.Forest = new Class({
     light.position.y = this.randFloat(1.0, 3.0);
     this.game.scene.add(light);
 
+  },
+
+  leavesGrowBack: function(){
+    console.log("LEAVES GROW BACK BECAUSE ITS SPRING!");
   },
 
   changeLeafColors: function(){

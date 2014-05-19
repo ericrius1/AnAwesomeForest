@@ -2,13 +2,17 @@
 //STEPS UP TO TOP. YOU JUMP OUT AND THERE IS MESSAGE
 //Control time from here
 
+//Underground cavern with heart statue \/
+//Extend helix doen into it. Under pond
+//Sky writing particles
+
 e.Game = new Class({
   extend: e.EventEmitter,
 
 
   //Come DOWN TO US REMIX
   construct: function() {
-    this.yearTime = 60000;
+    this.yearTime = 10000;
     this.summerPoint = 0.0;
     this.fallPoint = 0.25;
     this.winterPoint = 0.5;
@@ -63,17 +67,18 @@ e.Game = new Class({
     this.clock = new THREE.Clock();
 
 
-    this.player = new e.Player({
-      game: this,
-      camera: this.camera,
-      position: new THREE.Vector3(0, 70, 0)
-    });
-
 
     this.controls = new e.Controls({
       camera: this.camera,
-      player: this.player,
       game: this
+    });
+
+    this.player = new e.Player({
+      game: this,
+      controls: this.controls,
+      camera: this.camera,
+      position: new THREE.Vector3(0, 70, 0),
+      world: this.world
     });
 
     this.start();

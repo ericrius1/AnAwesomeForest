@@ -4,7 +4,6 @@ e.Controls = new Class({
     // this.controls = new THREE.OrbitControls(this.camera);
     var self = this;
     this.camera = options.camera;
-    this.player = options.player;
     this.game = options.game;
     // this.keyboard = new e.Keyboard();
     

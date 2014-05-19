@@ -16,10 +16,7 @@ e.Birds = new Class({
     for (var i = 0; i < this.numBirds; i++) {
       boid = this.boids[i] = new Boid();
       boid.position = new THREE.Vector3(0, 100, -10);
-      var tree = this.trees[_.random(0, this.trees.length - 1)];
-      var target = tree.position.clone();
-      target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
-      boid.setGoal(target);
+      boid.setGoal(this.pickTree());
 
       boid.position.set(_.random(-500, 500), _.random(300, 500), _.random(-this.pathLength, this.pathLength));
       boid.velocity.x = Math.random() * 2 - 1;
@@ -39,14 +36,32 @@ e.Birds = new Class({
       this.birdCamera = new THREE.PerspectiveCamera(50, 1, 1, 1000000);
       this.birds[0].add(this.birdCamera)
       this.birdCamera.position.x = 100;
-      this.birdCamera.rotation.x  = Math.PI/2;
+      this.birdCamera.rotation.x = Math.PI / 2;
       // this.game.activeCamera = this.birdCamera;
     }
 
+  },
+  headSouth: function() {
+    //send all birds south
+    var target = new THREE.Vector3(0, 3000, -10000);
+    _.each(this.boids, function(boid) {
+      boid.setGoal(target);
+    });
+  },
 
-    //camera.updateMatrix();
-    //camera.updateProjectionMatrix();
+  //Send birds back to the trees
+  headNorth: function() {
+    var self = this;
+    _.each(this.boids, function(boid) {
+      boid.setGoal(self.pickTree());
+    });
+  },
 
+  pickTree: function() {
+    var tree = this.trees[_.random(0, this.trees.length - 1)];
+    var target = tree.position.clone();
+    target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
+    return target;
   },
 
   update: function() {
@@ -64,10 +79,7 @@ e.Birds = new Class({
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
       var distance = bird.position.distanceTo(boid.goal);
       if (distance < 100) {
-        var tree = this.trees[_.random(0, this.trees.length - 1)];
-        var target = tree.position.clone();
-        target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
-        boid.setGoal(target);
+        boid.setGoal(this.pickTree());
 
       }
     }
