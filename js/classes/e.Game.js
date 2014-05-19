@@ -12,12 +12,18 @@ e.Game = new Class({
 
   //Come DOWN TO US REMIX
   construct: function() {
-    this.yearTime = 40000;
+    this.yearTime = 1200000;
     this.seasonTime = this.yearTime * 0.25;
-    this.summerPoint = 0.0;
-    this.fallPoint = 0.25;
-    this.winterPoint = 0.5;
-    this.springPoint = 0.75;
+    // this.summerPoint = 0.5;
+    // this.fallPoint = 0.75;
+    // this.winterPoint = 0.0;
+    // this.springPoint = 0.25;
+    this.fallPoint = 0.0;
+    this.winterPoint = 0.25;
+    this.springPoint = 0.5;
+    this.summerPoint = 0.75;
+
+
     this.checkSummer = true;
     this.checkFall = true;
     this.checkWinter = true;
@@ -89,8 +95,9 @@ e.Game = new Class({
   //cyclePoint is a num from 0 to 1 which represents where in season we are currently
   render: function() {
     requestAnimationFrame(this.render);
-    this.controls.update();
     this.world.update();
+    this.player.update();
+    this.controls.update();
     TWEEN.update();
     // this.renderer.clear();
     this.renderer.render(this.scene, this.activeCamera);

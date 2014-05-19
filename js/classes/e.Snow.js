@@ -2,7 +2,6 @@ e.Snow = new Class({
   construct: function(options){
     this.game = options.game;
     this.world = options.world;
-    this.pathLength = this.world.pathLength;
     this.createSnow();
   },
 
@@ -10,19 +9,19 @@ e.Snow = new Class({
     var self = this;
     this.snowGroup = new SPE.Group({
       texture: THREE.ImageUtils.loadTexture('assets/waterparticle.png'),
-      maxAge: 5
+      maxAge: 10
     });
 
     var texture = THREE.ImageUtils.loadTexture('assets/clouds.png');
     this.cloudGroup = new SPE.Group({
       texture: texture,
-      maxAge: 10
+      maxAge: 20
     });
 
     this.cloudEmitter = new SPE.Emitter({
-      position: new THREE.Vector3(0, 1000, -this.pathLength),
+      position: new THREE.Vector3(0, 1000, -this.world.islandRadius * 2),
       velocity: new THREE.Vector3(0, 0, 700),
-      positionSpread: new THREE.Vector3(this.pathLength * 2, 100, this.pathLength * 2),
+      positionSpread: new THREE.Vector3(this.world.islandRadius * 2, 100, this.world.islandRadius * 2),
       sizeStart: 5000,
       sizeStartSpread: 2000,
       sizeEndSpread: 1000,
@@ -34,11 +33,11 @@ e.Snow = new Class({
     })
 
     this.snowEmitter = new SPE.Emitter({
-      position: self.cloudEmitter.position,
-      velocity: self.cloudEmitter.velocity,
-      positionSpread: new THREE.Vector3(this.pathLength*2, 100, this.pathLength*2),
+      position: new THREE.Vector3(0, 1000, -this.world.islandRadius),
+      velocity: new THREE.Vector3(0, 0, 300),
+      positionSpread: new THREE.Vector3(this.world.islandRadius * 2, 100, this.world.islandRadius * 2),
       velocitySpread: new THREE.Vector3(100, 10, 100),
-      acceleration: new THREE.Vector3(0, -50, 0),
+      acceleration: new THREE.Vector3(0, -10, 0),
       accelerationSpread: new THREE.Vector3(30, 5, 30),
       sizeStart: 50,
       sizeStartSpread: 20,
@@ -63,7 +62,6 @@ e.Snow = new Class({
     this.cloudEmitter.disable();
   },
   update: function(){
-    this.snowEmitter.position = this.cloudEmitter.position;
     this.snowGroup.tick();
     this.cloudGroup.tick();
   }

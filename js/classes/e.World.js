@@ -17,14 +17,13 @@ e.World = new Class({
     });
     this.game = options.game;
 
-    this.pathLength = 5000;
-    this.pathWidth = 5000;
-    this.landscape = new e.Landscape(this.pathWidth, this.pathLength, {game: this.game});
+    this.islandRadius = 3000;
+    this.landscape = new e.Landscape(this.islandRadius, {game: this.game});
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xf2f2f2
     }));
     this.moon.scale.multiplyScalar(200);
-    this.moon.position.set(-this.pathWidth * 2, 0, -this.pathLength * 10)
+    this.moon.position.set(-this.islandRadius * 2, 0, -this.islandRadius * 10)
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
     this.game.scene.add(this.moon);
@@ -56,10 +55,6 @@ e.World = new Class({
       world: this
     });
 
-    // this.waterfall = new e.Waterfall({
-    //   game: this.game,
-    //   cliff: this.cliff
-    // })
     this.forest = new e.Forest({
       game: this.game,
       world: this
@@ -91,7 +86,6 @@ e.World = new Class({
     var time = performance.now()
     this.water.material.uniforms.time.value += 1.0 / 60.0;
     this.water.render();
-    this.ocean.update();
     // this.waterfall.update();
     this.appalapas.update();
     this.forest.update();
@@ -101,20 +95,28 @@ e.World = new Class({
   },
 
   beginFall: function(){
+    var self = this;
+    console.log('fall')
     this.forest.changeLeafColors();
-    this.birds.headSouth();
+    setTimeout(function(){
+      self.birds.headSouth();
+    }, 10000)
   },
 
   beginWinter: function() {
+    console.log('winter');
     this.snow.beginSnowing();
+    this.landscape.snowCover();
   },
   beginSpring: function(){
+    console.log('spring')
     this.birds.headNorth();
     this.snow.endSnowing();
     this.landscape.snowMelt();
     this.forest.leavesGrowBack();
   },
   beginSummer: function() {
+    console.log('summer')
     this.snow.endSnowing();
   }
 

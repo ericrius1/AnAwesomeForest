@@ -28,8 +28,8 @@ e.Pond = new Class({
     });
     this.pond = new THREE.Mesh(pondGeo, this.water.material);
     this.pond.position.y = 1;
-    this.pond.position.z  = this.world.pathLength/2 - this.pondRadius;
     this.pond.rotation.x = -Math.PI/2;
+    this.pond.position.z = 1000;
     pondGeo.computeBoundingBox();
 
     var boundingBox = this.pond.geometry.boundingBox;

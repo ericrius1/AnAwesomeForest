@@ -144,8 +144,8 @@ THREE.PointerLockControls = function(camera) {
 
   };
 
-  this.teleport = function(x){
-    yawObject.position.x = x;
+  this.teleport = function(point){
+    yawObject.position.set(point.x, point.y, point.z);
   }
 
   this.getDirection = function() {

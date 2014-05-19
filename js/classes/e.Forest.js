@@ -193,8 +193,8 @@ e.Forest = new Class({
 
     var tree = new THREE.Mesh(treeGeo, treeMaterial);
     tree.side = THREE.DoubleSide;
-    tree.position.x = Math.random() > 0.5 ? randInt(-2000, -1000) : randInt(1000, 2000);
-    tree.position.z = randInt(-this.world.pathLength / 2, this.world.pathLength / 2);
+    tree.position.x = randInt(-this.world.islandRadius / 2, this.world.islandRadius / 2);
+    tree.position.z = randInt(-this.world.islandRadius / 2, this.world.islandRadius / 2);
 
     tree.geometry.computeBoundingBox();
     var height = tree.geometry.boundingBox.max.y;

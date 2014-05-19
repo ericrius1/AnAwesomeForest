@@ -3,10 +3,10 @@ e.Birds = new Class({
   construct: function(options) {
     var self = this;
     this.game = options.game;
+    this.world = options.world;
     this.birdCamera = this.game.birdCamera;
-    this.pathLength = options.world.pathLength;
     this.trees = options.forest.trees;
-    this.numBirds = 40;
+    this.numBirds = 100;
     this.boids = [];
     this.birds = [];
 
@@ -15,13 +15,7 @@ e.Birds = new Class({
     var randFloat = THREE.Math.randFloat;
     for (var i = 0; i < this.numBirds; i++) {
       boid = this.boids[i] = new Boid();
-      boid.position = new THREE.Vector3(0, 100, -10);
-      boid.setGoal(this.pickTree());
-
-      boid.position.set(_.random(-500, 500), _.random(300, 500), _.random(-this.pathLength, this.pathLength));
-      boid.velocity.x = Math.random() * 2 - 1;
-      boid.velocity.y = Math.random() * 2 - 1;
-      boid.velocity.z = Math.random() * 2 - 1;
+      boid.position.set(_.random(-this.world.islandRadius, this.world.islandRadius), _.random(300, 500), _.random(-this.world.islandRadius, this.world.islandRadius));
       boid.setWorldSize(1000, 1000, 1000);
       var color = new THREE.Color().setRGB(0.078, randFloat(0.588, 0.82), randFloat(0.678, 0.87));
       var bird = new THREE.Mesh(this.createBirdGeo(), new THREE.MeshBasicMaterial({
@@ -39,6 +33,7 @@ e.Birds = new Class({
       this.birdCamera.rotation.x = Math.PI / 2;
       // this.game.activeCamera = this.birdCamera;
     }
+    this.headNorth();
 
   },
   headSouth: function() {
