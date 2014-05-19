@@ -44,10 +44,10 @@ e.World = new Class({
       distortionScale: 50.0,
     });
 
-    this.ocean = new e.Ocean({
-      game: this.game,
-      world: this
-    });
+    // this.ocean = new e.Ocean({
+    //   game: this.game,
+    //   world: this
+    // });
 
     this.pond = new e.Pond({
       game: this.game,
@@ -76,6 +76,10 @@ e.World = new Class({
       pond: this.pond
     });
 
+    this.skywriting = new e.SkyWriting({
+      game: this.game
+    });
+
     // this.hut = new e.Hut({
     //   game: this.game
     // });
@@ -92,6 +96,7 @@ e.World = new Class({
     this.birds.update();
     this.moon.position.y += 1;
     this.snow.update();
+    this.skywriting.update();
   },
 
   beginFall: function(){
@@ -116,7 +121,8 @@ e.World = new Class({
     this.forest.leavesGrowBack();
   },
   beginSummer: function() {
-    console.log('summer')
+    console.log('summer');
+    this.skywriting.reveal();
     this.snow.endSnowing();
   }
 

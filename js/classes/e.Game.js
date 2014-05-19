@@ -12,23 +12,32 @@ e.Game = new Class({
 
   //Come DOWN TO US REMIX
   construct: function() {
-    this.yearTime = 120000;
+    this.yearTime = 1200000;
     this.seasonTime = this.yearTime * 0.25;
     this.summerPoint = 0.5;
     this.fallPoint = 0.75;
     this.winterPoint = 0.0;
     this.springPoint = 0.25;
+
+    //FALL START
     // this.fallPoint = 0.0;
     // this.winterPoint = 0.25;
     // this.springPoint = 0.5;
     // this.summerPoint = 0.75;
 
 
+    //SUMMER START
+    this.summerPoint = 0.0;
+    this.fallPoint = 0.25;
+    this.winterPoint = 0.75;
+    this.springPoint = 1.0;
+
+
     this.checkSummer = true;
     this.checkFall = true;
     this.checkWinter = true;
     this.checkSpring = true;
-    this.seasonCheckTimeout = this.yearTime/4 - 100;
+    this.seasonCheckTimeout = this.yearTime / 4 - 100;
     // Bind render function permenantly
     this.render = this.render.bind(this);
     var self = this;
@@ -121,28 +130,28 @@ e.Game = new Class({
     var cycleTime = time % this.yearTime;
     this.cyclePoint = cycleTime / this.yearTime;
 
-    if ( self.checkSummer && Math.abs(this.cyclePoint - this.summerPoint) < 0.1 ) {
+    if (self.checkSummer && Math.abs(this.cyclePoint - this.summerPoint) < 0.1) {
       self.checkSummer = false;
       this.trigger('summer');
       setTimeout(function() {
         self.checkSummer = true
       }, this.seasonCheckTimeout)
     }
-    if ( self.checkFall && Math.abs(this.cyclePoint - this.fallPoint) < 0.1 ) {
+    if (self.checkFall && Math.abs(this.cyclePoint - this.fallPoint) < 0.1) {
       this.trigger('fall');
       self.checkFall = false;
       setTimeout(function() {
         self.checkFall = true
       }, this.seasonCheckTimeout)
     }
-    if (self.checkWinter && Math.abs(this.cyclePoint - this.winterPoint) < 0.1  ) {
+    if (self.checkWinter && Math.abs(this.cyclePoint - this.winterPoint) < 0.1) {
       this.trigger('winter');
       self.checkWinter = false;
       setTimeout(function() {
         self.checkWinter = true
       }, this.seasonCheckTimeout)
     }
-    if (self.checkSpring && Math.abs(this.cyclePoint - this.springPoint) < 0.1  ) {
+    if (self.checkSpring && Math.abs(this.cyclePoint - this.springPoint) < 0.1) {
       self.checkSpring = false;
       this.trigger('spring');
       setTimeout(function() {
