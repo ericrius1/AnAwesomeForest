@@ -20,9 +20,9 @@ e.World = new Class({
     this.islandRadius = 3000;
     this.landscape = new e.Landscape(this.islandRadius, {game: this.game});
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
-      color: 0xf2f2f2
+      color: 0xe3e3e3
     }));
-    this.moon.scale.multiplyScalar(200);
+    this.moon.scale.multiplyScalar(130);
     this.moon.position.set(-this.islandRadius * 2, 0, -this.islandRadius * 10)
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
@@ -100,7 +100,7 @@ e.World = new Class({
     this.forest.changeLeafColors();
     setTimeout(function(){
       self.birds.headSouth();
-    }, 10000)
+    }, 20000)
   },
 
   beginWinter: function() {

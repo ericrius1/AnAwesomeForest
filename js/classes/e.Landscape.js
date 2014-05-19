@@ -2,7 +2,7 @@ e.Landscape = new Class({
   construct: function(islandRadius, options) {
     this.game = options.game;
 
-    this.summerGroundColor = new THREE.Color(0x0b5407);
+    this.summerGroundColor = new THREE.Color(0x3f3f17);
     this.winterGroundColor = new THREE.Color(0x9c9c9c);
     var groundMat = new THREE.MeshBasicMaterial({
       color: this.summerGroundColor,
@@ -22,7 +22,10 @@ e.Landscape = new Class({
   snowCover: function() {
     var curColor = this.ground.material.color;
     var grountTween = new TWEEN.Tween(curColor).
-    to(this.winterGroundColor, 10000).start();
+    to(this.winterGroundColor, 10000).
+    easing(TWEEN.Easing.Cubic.InOut).
+    delay(10000).
+    start();
   },
 
   snowMelt: function() {

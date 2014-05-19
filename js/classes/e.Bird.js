@@ -118,6 +118,7 @@ e.Birds = new Class({
 });
 
 var Boid = function() {
+  var goalSpeed = THREE.Math.randFloat(0.000007, 0.00004);
 
   var vector = new THREE.Vector3(),
     _acceleration, _width = 500,
@@ -202,7 +203,7 @@ var Boid = function() {
 
   this.flock = function(boids) {
     if (this.goal) {
-      _acceleration.add(this.reach(this.goal, 0.0005));
+      _acceleration.add(this.reach(this.goal, goalSpeed));
     }
 
     // _acceleration.add(this.alignment(boids));

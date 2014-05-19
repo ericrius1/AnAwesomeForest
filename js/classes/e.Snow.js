@@ -21,6 +21,7 @@ e.Snow = new Class({
     this.cloudEmitter = new SPE.Emitter({
       position: new THREE.Vector3(0, 1000, -this.world.islandRadius * 2),
       velocity: new THREE.Vector3(0, 0, 700),
+      colorStart: new THREE.Color(0x9c9c9c),
       positionSpread: new THREE.Vector3(this.world.islandRadius * 2, 100, this.world.islandRadius * 2),
       sizeStart: 5000,
       sizeStartSpread: 2000,
