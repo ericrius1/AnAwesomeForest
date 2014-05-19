@@ -31,7 +31,4 @@ e.Hut = new Class({
     this.game.scene.add(roof);
   },
 
-  update: function(){
-    this.wallTexture.offset.y -= 0.01;
-  }
 });

@@ -17,17 +17,9 @@ e.World = new Class({
     });
     this.game = options.game;
 
-    this.summerGroundColor = new THREE.Color(0x136e1e);
-    this.winterGroundColor = new THREE.Color(0xf0f0f0);
-    var groundMat = new THREE.MeshBasicMaterial({
-      color: 0x0a0a0a
-    });
     this.pathLength = 5000;
     this.pathWidth = 5000;
-    this.ground = new THREE.Mesh(new THREE.PlaneGeometry(this.pathWidth, this.pathLength, 1, 1), groundMat);
-    this.ground.rotation.x = -Math.PI / 2;
-    var heightMultiplier;
-    this.game.scene.add(this.ground);
+    this.landscape = new e.Landscape(this.pathWidth, this.pathLength, {game: this.game});
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xf2f2f2
     }));
@@ -64,14 +56,10 @@ e.World = new Class({
       world: this
     });
 
-    this.cliff = new e.Cliff({
-      game: this.game,
-      world: this
-    });
-    this.waterfall = new e.Waterfall({
-      game: this.game,
-      cliff: this.cliff
-    })
+    // this.waterfall = new e.Waterfall({
+    //   game: this.game,
+    //   cliff: this.cliff
+    // })
     this.forest = new e.Forest({
       game: this.game,
       world: this
@@ -93,9 +81,9 @@ e.World = new Class({
       pond: this.pond
     });
 
-    this.hut = new e.Hut({
-      game: this.game
-    });
+    // this.hut = new e.Hut({
+    //   game: this.game
+    // });
 
   },
 
@@ -104,13 +92,12 @@ e.World = new Class({
     this.water.material.uniforms.time.value += 1.0 / 60.0;
     this.water.render();
     this.ocean.update();
-    this.waterfall.update();
+    // this.waterfall.update();
     this.appalapas.update();
     this.forest.update();
     this.birds.update();
     this.moon.position.y += 1;
     this.snow.update();
-    this.hut.update();
   },
 
   beginFall: function(){
@@ -119,27 +106,15 @@ e.World = new Class({
   },
 
   beginWinter: function() {
-    var self = this;
-    console.log('Its wintertime!!');
-    var curColor = this.ground.material.color;
-    var grountTween = new TWEEN.Tween(curColor).
-    to(this.winterGroundColor, this.game.yearTime * .1).
-    delay(2000).
-    start();
     this.snow.beginSnowing();
-    this.forest.beginLeavesFall();
   },
   beginSpring: function(){
     this.birds.headNorth();
     this.snow.endSnowing();
+    this.landscape.snowMelt();
     this.forest.leavesGrowBack();
   },
   beginSummer: function() {
-    console.log('Its summertime!');
-    var self = this;
-    var curColor = this.ground.material.color;
-    var grountTween = new TWEEN.Tween(curColor).
-    to(this.summerGroundColor, this.game.yearTime * .1).start();
     this.snow.endSnowing();
   }
 

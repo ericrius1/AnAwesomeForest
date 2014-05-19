@@ -12,7 +12,8 @@ e.Game = new Class({
 
   //Come DOWN TO US REMIX
   construct: function() {
-    this.yearTime = 10000;
+    this.yearTime = 40000;
+    this.seasonTime = this.yearTime * 0.25;
     this.summerPoint = 0.0;
     this.fallPoint = 0.25;
     this.winterPoint = 0.5;
@@ -27,7 +28,7 @@ e.Game = new Class({
     var self = this;
 
     this.renderer = new THREE.WebGLRenderer({
-      antialias: false
+      antialias: true
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     // this.renderer.autoClear = false;
@@ -59,10 +60,6 @@ e.Game = new Class({
 
     document.body.appendChild(this.renderer.domElement);
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
-
-    var light = new THREE.PointLight(0xff00ff);
-    light.position.y = 1000;
-    // this.scene.add(light);
 
     this.clock = new THREE.Clock();
 
@@ -118,7 +115,6 @@ e.Game = new Class({
     this.cyclePoint = cycleTime / this.yearTime;
 
     if ( self.checkSummer && Math.abs(this.cyclePoint - this.summerPoint) < 0.1 ) {
-      console.log('summer!');
       self.checkSummer = false;
       this.trigger('summer');
       setTimeout(function() {
@@ -126,7 +122,6 @@ e.Game = new Class({
       }, this.seasonCheckTimeout)
     }
     if ( self.checkFall && Math.abs(this.cyclePoint - this.fallPoint) < 0.1 ) {
-      console.log('fall!');
       this.trigger('fall');
       self.checkFall = false;
       setTimeout(function() {
@@ -134,7 +129,6 @@ e.Game = new Class({
       }, this.seasonCheckTimeout)
     }
     if (self.checkWinter && Math.abs(this.cyclePoint - this.winterPoint) < 0.1  ) {
-      console.log('winter!');
       this.trigger('winter');
       self.checkWinter = false;
       setTimeout(function() {
@@ -142,7 +136,6 @@ e.Game = new Class({
       }, this.seasonCheckTimeout)
     }
     if (self.checkSpring && Math.abs(this.cyclePoint - this.springPoint) < 0.1  ) {
-      console.log('spring!');
       self.checkSpring = false;
       this.trigger('spring');
       setTimeout(function() {

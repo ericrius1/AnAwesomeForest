@@ -4,14 +4,14 @@ e.Ocean = new Class({
     this.world = options.world;
     this.water = this.world.water;
     this.mirrorMesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(5000, 5000, 5, 5),
+      new THREE.PlaneGeometry(100000, 100000, 1, 1),
       this.water.material
     );
 
 
     this.mirrorMesh.add(this.water);
     this.mirrorMesh.rotation.x = -Math.PI * 0.5;
-    this.mirrorMesh.position.y = 5;
+    this.mirrorMesh.position.y = -2000;
     this.mirrorMesh.position.z = -this.world.pathLength + 500;
     this.game.scene.add(this.mirrorMesh);
     this.createWaveFront();
@@ -32,7 +32,7 @@ e.Ocean = new Class({
       sizeStart: 200,
       sizeEnd: 400,
       sizeEndSpread: 400,
-      particleCount: 10000,
+      particleCount: 5000,
     });
     this.particleGroup.addEmitter(this.emitter);
     this.particleGroup.mesh.renderDepth = -1; 

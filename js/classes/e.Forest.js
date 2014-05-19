@@ -36,6 +36,10 @@ e.Forest = new Class({
           type: 'f',
           value: 1.0
         },
+        alpha: {
+          type: 'f',
+          value: 0.5
+        },
         fallTime: {
           type: 'f',
           value: 0
@@ -205,7 +209,7 @@ e.Forest = new Class({
     var leaves = new THREE.Mesh(leafGeo, this.leafMaterial);
     leaves.position.x = tree.position.x;
     leaves.position.z = tree.position.z;
-    leaves.matrixAutoUpdate = false;
+    // leaves.matrixAutoUpdate = false;
     leaves.updateMatrix();
     this.game.scene.add(leaves);
 
@@ -222,7 +226,19 @@ e.Forest = new Class({
   },
 
   leavesGrowBack: function(){
-    console.log("LEAVES GROW BACK BECAUSE ITS SPRING!");
+    var self = this;
+    this.leafMaterial.uniforms.fallTime.value = 0;
+    this.leafMaterial.uniforms.velocity.value.set(0,0,0);
+    this.leafMaterial.uniforms.green.value = 1.0;
+    this.leafMaterial.uniforms.alpha.value = 0.0
+    var curAlpha = {a: 0}
+    var finalAlpha = {a: 0.5}
+    var fadeTween = new TWEEN.Tween(curAlpha).
+      to(finalAlpha, this.game.seasonTime).
+      onUpdate(function(){
+        self.leafMaterial.uniforms.alpha.value = curAlpha.a
+      }).start()
+
   },
 
   changeLeafColors: function(){
@@ -230,15 +246,12 @@ e.Forest = new Class({
     var curCol = {g: 1.0}
     var finalCol = {g: 0.0}
     var colorChangeTween = new TWEEN.Tween(curCol).
-      to(finalCol,this.game.yearTime * .1).
+      to(finalCol, this.game.seasonTime).
       onUpdate(function(){
         self.leafMaterial.uniforms.green.value = curCol.g;
       }).start();
-  },
-
-  beginLeavesFall: function(){
-    this.leafMaterial.uniforms.fallTime.value = 0;
-    this.leafMaterial.uniforms.velocity.value.set(0, -200, 1000);
+    // this.leafMaterial.uniforms.fallTime.value = 0;
+    // this.leafMaterial.uniforms.velocity.value.set(0, -200, 1000);
   },
 
 

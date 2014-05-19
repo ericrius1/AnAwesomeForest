@@ -30,7 +30,7 @@ e.Snow = new Class({
       opacityStart: 0,
       opacityMiddle: 1,
       opacityEnd: 0,
-      particleCount: 3000,
+      particleCount: 700,
     })
 
     this.snowEmitter = new SPE.Emitter({
