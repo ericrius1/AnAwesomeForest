@@ -4,7 +4,7 @@ e.Ocean = new Class({
     this.world = options.world;
     this.water = this.world.water;
     this.mirrorMesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(50000, 50000, 1, 1),
+      new THREE.PlaneGeometry(40000, 40000, 1, 1),
       this.water.material
     );
 

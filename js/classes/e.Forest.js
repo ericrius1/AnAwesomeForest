@@ -88,8 +88,8 @@ e.Forest = new Class({
 
     var centerPos = new THREE.Vector2(0, 0)
     for (var i = 0; i < this.numTrees; i++) {
-      var xPos = THREE.Math.randInt(-this.world.islandRadius, this.world.islandRadius);
-      var zPos = THREE.Math.randInt(-this.world.islandRadius, this.world.islandRadius);
+      var xPos = THREE.Math.randInt(-this.world.islandRadius * 0.8, this.world.islandRadius * 0.8);
+      var zPos = THREE.Math.randInt(-this.world.islandRadius * 0.8, this.world.islandRadius * 0.8);
       var treePos = new THREE.Vector2(xPos, zPos)
       console.log(treePos);
       if (treePos.distanceTo(centerPos) > 1000){
@@ -208,9 +208,9 @@ e.Forest = new Class({
     tree.position.x = treePos.x;
     tree.position.z = treePos.y;
 
-    tree.geometry.computeBoundingBox();
-    var height = tree.geometry.boundingBox.max.y;
-    var width = tree.geometry.boundingBox.max.x - tree.geometry.boundingBox.min.x;
+    treeGeo.computeBoundingBox();
+    var height = treeGeo.boundingBox.max.y;
+    var width = treeGeo.boundingBox.max.x - treeGeo.boundingBox.min.x;
     treeMaterial.uniforms.height.value = height;
     this.leafMaterial.uniforms.width.value = width / 2;
     this.game.scene.add(tree);
@@ -219,8 +219,8 @@ e.Forest = new Class({
     this.trees.push(tree);
 
     var leaves = new THREE.Mesh(leafGeo, this.leafMaterial);
-    leaves.position.x = tree.position.x;
-    leaves.position.z = tree.position.z;
+    leaves.position.x = treePos.x;
+    leaves.position.z = treePos.y;
     // leaves.matrixAutoUpdate = false;
     leaves.updateMatrix();
     leaves.frustumCulled = false;

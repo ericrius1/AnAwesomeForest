@@ -61,11 +61,11 @@ e.World = new Class({
       world: this
     });
 
-    this.birds = new e.Birds({
-      game: this.game,
-      world: this,
-      forest: this.forest
-    });
+    // this.birds = new e.Birds({
+    //   game: this.game,
+    //   world: this,
+    //   forest: this.forest
+    // });
 
     this.appalapas = new e.Appalapas({
       game: this.game,
@@ -90,12 +90,12 @@ e.World = new Class({
 
   update: function() {
     var time = performance.now()
-    this.water.material.uniforms.time.value += 1.0 / 60.0;
+    this.water.material.uniforms.time.value += 1.0 / 90.0;
     this.water.render();
     // this.waterfall.update();
     this.appalapas.update();
     this.forest.update();
-    this.birds.update();
+    // this.birds.update();
     this.moon.position.y += 100;
     this.snow.update();
     this.skywriting.update();

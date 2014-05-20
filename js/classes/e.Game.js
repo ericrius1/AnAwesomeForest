@@ -48,7 +48,7 @@ e.Game = new Class({
       antialias: true
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.autoClear = false;
+    // this.renderer.autoClear = false;
 
     this.scene = new THREE.Scene();
 
@@ -153,9 +153,9 @@ e.Game = new Class({
     this.player.update();
     this.controls.update();
     TWEEN.update();
-    this.renderer.clear();
-    // this.renderer.render(this.scene, this.activeCamera);
-    this.composer.render(0.01);
+    // this.renderer.clear();
+    this.renderer.render(this.scene, this.activeCamera);
+    // this.composer.render(0.01);
     this.checkForNewSeason();
 
 
