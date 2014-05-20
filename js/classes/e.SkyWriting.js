@@ -2,11 +2,11 @@ e.SkyWriting = new Class({
   construct: function(options) {
     this.game = options.game;
     this.world = options.world;
-    var hearthPath = new THREE.Curves.HeartCurve(50);
+    var hearthPath = new THREE.Curves.HeartCurve(20);
     var geo = new THREE.TubeGeometry(hearthPath);
     this.heart = new THREE.Mesh(geo);
     this.points = geo.parameters.path.getSpacedPoints(100);
-    this.heart.position.set(0, 2000, -this.world.islandRadius * 1.5);
+    this.heart.position.set(0, 1000, -this.world.islandRadius * 1.5);
     this.game.scene.add(this.heart);
     this.game.scene.add(this.heart2);
     this.heart.visible = false;
@@ -27,7 +27,8 @@ e.SkyWriting = new Class({
       accelerationSpread: new THREE.Vector3(100, 100, 100),
       colorStart: new THREE.Color(0xff0000),
       colorEnd: new THREE.Color(0x0000ff),
-      sizeStart: 200,
+      sizeStart: 100,
+      sizeEndSpread: 50,
       particleCount: 50,
     }
     this.createEmitterPoints();

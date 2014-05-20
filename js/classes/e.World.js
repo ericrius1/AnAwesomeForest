@@ -109,11 +109,11 @@ e.World = new Class({
     this.landscape.snowMelt();
     this.forest.leavesGrowBack();
     this.snow.endSnowing();
-    this.birds.returnHome();
     var self = this;
     setTimeout(function(){
+      self.birds.returnHome();
       self.skywriting.reveal();
-    }, 10000)
+    }, 1000)
   },
   beginSummer: function() {
     console.log('summer');

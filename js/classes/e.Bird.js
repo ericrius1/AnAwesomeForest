@@ -11,8 +11,9 @@ e.Birds = new Class({
     this.numBirds = 50;
     this.boids = [];
     this.birds = [];
-    this.southZ = -10000;
+    this.southZ = -5000;
     this.targetingTrees = true;
+    this.targetingTrees = false;
     this.on('leavesfell', function() {
       setTimeout(function() {
         self.headSouth();
@@ -32,7 +33,7 @@ e.Birds = new Class({
       }));
       bird.position = boid.position;
       bird.phase = Math.floor(Math.random() * 62.83);
-      bird.scale.multiplyScalar(2.0);
+      bird.scale.multiplyScalar(4.0);
       bird.flapSpeedMultiplier = randFloat(0.0, 0.4);
       this.birds.push(bird);
       this.game.scene.add(bird);
@@ -42,7 +43,7 @@ e.Birds = new Class({
       this.birdCamera.rotation.x = Math.PI / 2;
       // this.game.activeCamera = this.birdCamera;
     }
-    //this.flockAroundTrees();
+    // self.flockAroundTrees();
 
   },
   headSouth: function() {
@@ -58,12 +59,12 @@ e.Birds = new Class({
     var self = this;
     this.sholdUpdate = true;
     this.targetingSouth = false;
-    var homeTarget = new THREE.Vector3(0, 1000, 0);
     _.each(this.boids, function(boid){
-      console.log('ay')
-      boid.position.set(new THREE.Vector3(0, 1000, self.southZ));
-      boid.setGoal(homeTarget);
+      boid.position.set(_.random(-100, 100), _.random(700, 900), self.southZ);
+      boid.setGoal(new THREE.Vector3(_.random(-10, 10), _.random(600, 650), _.random(-10, 10)));
+      boid.shouldFlock = true;
     });
+
   },
 
   //Have birds flock around trees
@@ -108,7 +109,7 @@ e.Birds = new Class({
       if (boid.goal && this.targetingSouth) {
         var distance = bird.position.distanceTo(boid.goal);
         if (distance < 100) {
-          this.sholdUpdate = false;
+          // this.sholdUpdate = false;
         }
       }
     }
@@ -152,17 +153,18 @@ e.Birds = new Class({
 });
 
 var Boid = function() {
-  var goalSpeed = 0.005;
 
   var vector = new THREE.Vector3(),
     _acceleration, _width = 500,
     _height = 500,
     _depth = 200,
     _neighborhoodRadius = 100,
-    _maxSpeed = 4,
-    _maxSteerForce = 0.1
+    _maxSpeed = 20,
+    _maxSteerForce = 0.01,
+    _goalSpeed = 0.005
 
-    this.goal = null;
+  this.goal = null;
+  this.shouldFlock = false;
 
   this.position = new THREE.Vector3();
   this.velocity = new THREE.Vector3();
@@ -181,10 +183,9 @@ var Boid = function() {
 
 
     if (Math.random() > 0.5) {
-
       this.flock(boids);
-
     }
+
     this.move();
 
 
@@ -192,12 +193,15 @@ var Boid = function() {
 
   this.flock = function(boids) {
     if (this.goal) {
-      _acceleration.add(this.reach(this.goal, goalSpeed));
+      _acceleration.add(this.reach(this.goal, _goalSpeed));
     }
 
-    // _acceleration.add(this.alignment(boids));
-    // _acceleration.add(this.cohesion(boids));
-    // _acceleration.add(this.separation(boids));
+    if(this.shouldFlock){
+      _acceleration.add(this.alignment(boids));
+      _acceleration.add(this.cohesion(boids));
+      _acceleration.add(this.separation(boids));
+      
+    }
 
   }
 
