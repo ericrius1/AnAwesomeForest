@@ -44,10 +44,10 @@ e.World = new Class({
       distortionScale: 50.0,
     });
 
-    // this.ocean = new e.Ocean({
-    //   game: this.game,
-    //   world: this
-    // });
+    this.ocean = new e.Ocean({
+      game: this.game,
+      world: this
+    });
 
     this.pond = new e.Pond({
       game: this.game,
@@ -77,7 +77,8 @@ e.World = new Class({
     });
 
     this.skywriting = new e.SkyWriting({
-      game: this.game
+      game: this.game,
+      world: this
     });
 
     // this.hut = new e.Hut({

@@ -1,55 +1,56 @@
 e.SkyWriting = new Class({
-  construct: function(options){
+  construct: function(options) {
     this.game = options.game;
+    this.world = options.world;
     var hearthPath = new THREE.Curves.HeartCurve(20);
     var geo = new THREE.TubeGeometry(hearthPath);
     this.word = new THREE.Mesh(geo);
-    this.points = geo.parameters.path.getSpacedPoints(100);
-    this.word.position.set(0, 1000, -1000);
-    this.word.lookAt(this.game.camera.localToWorld(new THREE.Vector3(0, 0, 0)));
+    this.points = geo.parameters.path.getSpacedPoints(50);
+    this.word.position.set(0, 700, -this.world.islandRadius * 3);
     this.game.scene.add(this.word);
     this.word.visible = false;
- 
+
 
 
     this.textParticleGroup = new SPE.Group({
       texture: THREE.ImageUtils.loadTexture('assets/star.png'),
-      maxAge: 50
+      maxAge: 10
     });
+
+    this.starParams = {
+      sizeStart: 200,
+      sizeMiddle: 300,
+      sizeEnd: 1000,
+      sizeEndSpread: 500,
+      opacityMiddle: 1,
+      acceleration: new THREE.Vector3(0, 0, 200),
+      accelerationSpread: new THREE.Vector3(5, 2, 5),
+      particles: 50,
+      colorStart: new THREE.Color().setRGB(1, 0, 0),
+      colorEnd: new THREE.Color(0xf6de12),
+    }
     this.createEmitterPoints();
 
   },
 
-  createEmitterPoints: function(){
+
+  createEmitterPoints: function() {
 
 
-    for(var i = 0; i < this.points.length; i++){
-      var point = this.points[i];
-      var emitter = new SPE.Emitter({
-        position: point,
-        sizeStart: 100,
-        sizeMiddle: 100,
-        sizeEnd: 2000,
-        opacityMiddle: 1,
-        opacityEnd: 0,
-        accelerationSpread: new THREE.Vector3(10, 10, 10),
-        particles: 100,
-        colorStart: new THREE.Color().setRGB(1, 0, 0),
-        colorMiddle: new THREE.Color().setRGB(1, 0, 1),
-
-
-      });
+    for (var i = 0; i < this.points.length; i++) {
+      var emitter = new SPE.Emitter(this.starParams);
+      emitter.position = this.points[i] ;
       this.textParticleGroup.addEmitter(emitter);
     }
 
     this.word.add(this.textParticleGroup.mesh);
   },
 
-  reveal: function(){
+  reveal: function() {
 
   },
 
-  update: function(){
+  update: function() {
     this.textParticleGroup.tick();
 
   }
