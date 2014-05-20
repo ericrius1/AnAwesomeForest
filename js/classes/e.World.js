@@ -81,6 +81,11 @@ e.World = new Class({
       world: this
     });
 
+    this.fountains = new e.Fountains({
+      game: this.game,
+      world: this
+    });
+
     // this.hut = new e.Hut({
     //   game: this.game
     // });
@@ -95,9 +100,10 @@ e.World = new Class({
     this.appalapas.update();
     this.forest.update();
     this.birds.update();
-    this.moon.position.y += 1;
+    this.moon.position.y += 100;
     this.snow.update();
     this.skywriting.update();
+    this.fountains.update();
   },
 
   beginFall: function(){
