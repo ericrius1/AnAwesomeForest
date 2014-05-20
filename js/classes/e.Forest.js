@@ -6,7 +6,7 @@ e.Forest = new Class({
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 100;
+    this.numTrees = 10;
     this.maxSteps = 5;
     this.timeMultiplier = 0.005;
 
@@ -91,9 +91,7 @@ e.Forest = new Class({
       var xPos = THREE.Math.randInt(-this.world.islandRadius * 0.8, this.world.islandRadius * 0.8);
       var zPos = THREE.Math.randInt(-this.world.islandRadius * 0.8, this.world.islandRadius * 0.8);
       var treePos = new THREE.Vector2(xPos, zPos)
-      console.log(treePos);
       if (treePos.distanceTo(centerPos) > 1000){
-        console.log("YES")
         this.createTree(treePos);
       }
     }
@@ -221,7 +219,7 @@ e.Forest = new Class({
     var leaves = new THREE.Mesh(leafGeo, this.leafMaterial);
     leaves.position.x = treePos.x;
     leaves.position.z = treePos.y;
-    // leaves.matrixAutoUpdate = false;
+    leaves.matrixAutoUpdate = false;
     leaves.updateMatrix();
     leaves.frustumCulled = false;
     this.game.scene.add(leaves);
@@ -267,7 +265,7 @@ e.Forest = new Class({
       g: 0.0
     }
     var colorChangeTween = new TWEEN.Tween(curCol).
-    to(finalCol, this.game.seasonTime * 0.5).
+    to(finalCol, this.game.seasonTime * 0.3).
     onUpdate(function() {
       self.leafMaterial.uniforms.green.value = curCol.g;
     }).start();
@@ -278,7 +276,7 @@ e.Forest = new Class({
 
   beginLeafFall: function() {
     this.leafMaterial.uniforms.fallTime.value = 0;
-    this.leafMaterial.uniforms.velocity.value.set(200, 20, 400);
+    this.leafMaterial.uniforms.velocity.value.set(200, 20, -400);
     this.trigger('leavesfell');
 
   },

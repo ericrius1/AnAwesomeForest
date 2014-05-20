@@ -22,8 +22,8 @@ e.World = new Class({
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xe3e3e3
     }));
-    this.moon.scale.multiplyScalar(130);
-    this.moon.position.set(-this.islandRadius * 2, 0, -this.islandRadius * 10)
+    this.moon.scale.multiplyScalar(80);
+    this.moon.position.set(-this.islandRadius * 3, 0, -this.islandRadius * 10)
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
     this.game.scene.add(this.moon);
@@ -61,15 +61,10 @@ e.World = new Class({
       world: this
     });
 
-    // this.birds = new e.Birds({
-    //   game: this.game,
-    //   world: this,
-    //   forest: this.forest
-    // });
-
-    this.appalapas = new e.Appalapas({
+    this.birds = new e.Birds({
       game: this.game,
-      pond: this.pond
+      world: this,
+      forest: this.forest
     });
 
     this.skywriting = new e.SkyWriting({
@@ -77,10 +72,10 @@ e.World = new Class({
       world: this
     });
 
-    this.fountains = new e.Fountains({
-      game: this.game,
-      world: this
-    });
+    // this.fountains = new e.Fountains({
+    //   game: this.game,
+    //   world: this
+    // });
 
     // this.hut = new e.Hut({
     //   game: this.game
@@ -92,14 +87,11 @@ e.World = new Class({
     var time = performance.now()
     this.water.material.uniforms.time.value += 1.0 / 90.0;
     this.water.render();
-    // this.waterfall.update();
-    this.appalapas.update();
     this.forest.update();
-    // this.birds.update();
-    this.moon.position.y += 100;
+    this.birds.update();
+    this.moon.position.y += 1;
     this.snow.update();
     this.skywriting.update();
-    this.fountains.update();
   },
 
   beginFall: function(){
@@ -110,20 +102,21 @@ e.World = new Class({
 
   beginWinter: function() {
     console.log('winter');
-    // this.snow.beginSnowing();
-    // this.landscape.snowCover();
+    this.snow.beginSnowing();
   },
   beginSpring: function(){
     console.log('spring')
-    // this.birds.headNorth();
-    // this.snow.endSnowing();
-    // this.landscape.snowMelt();
-    // this.forest.leavesGrowBack();
+    this.landscape.snowMelt();
+    this.forest.leavesGrowBack();
+    this.snow.endSnowing();
+    this.birds.returnHome();
+    var self = this;
+    setTimeout(function(){
+      self.skywriting.reveal();
+    }, 10000)
   },
   beginSummer: function() {
     console.log('summer');
-    // this.skywriting.reveal();
-    // this.snow.endSnowing();
   }
 
 

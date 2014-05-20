@@ -1,6 +1,12 @@
 e.Landscape = new Class({
+  extend: e.EventEmitter,
+
   construct: function(islandRadius, options) {
+    var self = this;
     this.game = options.game;
+    this.on('snowStarting', function(){
+      self.snowCover();
+    });
 
     this.summerGroundColor = new THREE.Color(0x3f3f17);
     this.winterGroundColor = new THREE.Color(0x9c9c9c);
@@ -20,11 +26,12 @@ e.Landscape = new Class({
   },
 
   snowCover: function() {
+    console.log('cover!!!!');
     var curColor = this.ground.material.color;
     var grountTween = new TWEEN.Tween(curColor).
     to(this.winterGroundColor, 10000).
     easing(TWEEN.Easing.Cubic.InOut).
-    delay(10000).
+    delay(2000).
     start();
   },
 

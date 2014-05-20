@@ -28,7 +28,7 @@ e.SkyWriting = new Class({
       colorStart: new THREE.Color(0xff0000),
       colorEnd: new THREE.Color(0x0000ff),
       sizeStart: 200,
-      particleCount: 200,
+      particleCount: 50,
     }
     this.createEmitterPoints();
 

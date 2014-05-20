@@ -47,7 +47,6 @@
         <script src="js/classes/e.Landscape.js"></script>
         <script src="js/classes/e.Bird.js"></script>
         <script src="js/classes/e.SkyWriting.js"></script>
-        <script src="js/classes/e.Appalapas.js"></script>
         <script src="js/classes/e.Snow.js"></script>
         <script src="js/classes/e.Forest.js"></script>
         <script src="js/classes/e.Controls.js"></script>
@@ -143,30 +142,6 @@
 
     </script>
 
-    <script id =  "appalapasVertexShader" type = "x-shader/x-vertex">
-      uniform float height;
-      uniform float ballHeight;
-      varying float distance;
-      void main(){
-        //Get distance of current yPos to where the ball is
-        distance = abs(ballHeight - position.y);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-      }
-    </script>
-
-
-    <script id =  "appalapasFragmentShader" type = "x-shader/x-fragment">
-      varying float distance;
-      uniform float height;
-      void main(){
-        float distance1 = pow(distance, 1.5)/height;
-        float distance2 = pow(distance, 2.5)/height;
-        float a = mix(1.0, 0.0, distance1);
-        float r = mix(1.0, 0.0, distance2);
-        vec3 color = vec3(r, 0.0, 0.0);
-        gl_FragColor = vec4(color, a);
-      }
-    </script>
        
 
         <script>

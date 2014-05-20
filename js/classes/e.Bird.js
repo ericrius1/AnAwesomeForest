@@ -4,15 +4,19 @@ e.Birds = new Class({
   construct: function(options) {
     var self = this;
     this.game = options.game;
+    this.sholdUpdate = true;
     this.world = options.world;
     this.birdCamera = this.game.birdCamera;
     this.trees = options.forest.trees;
     this.numBirds = 50;
     this.boids = [];
     this.birds = [];
-    this.on('leavesfell', function(){
-      setTimeout(function(){
+    this.southZ = -10000;
+    this.targetingTrees = true;
+    this.on('leavesfell', function() {
+      setTimeout(function() {
         self.headSouth();
+        self.targetingTrees = false;
       }, 1000)
     });
 
@@ -21,7 +25,6 @@ e.Birds = new Class({
     for (var i = 0; i < this.numBirds; i++) {
       boid = this.boids[i] = new Boid();
       boid.position.set(_.random(-this.world.islandRadius, this.world.islandRadius), _.random(300, 500), _.random(-this.world.islandRadius, this.world.islandRadius));
-      boid.setWorldSize(1000, 1000, 1000);
       var color = new THREE.Color().setRGB(0.078, randFloat(0.588, 0.82), randFloat(0.678, 0.87));
       var bird = new THREE.Mesh(this.createBirdGeo(), new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
@@ -39,19 +42,32 @@ e.Birds = new Class({
       this.birdCamera.rotation.x = Math.PI / 2;
       // this.game.activeCamera = this.birdCamera;
     }
-    this.headNorth();
+    //this.flockAroundTrees();
 
   },
   headSouth: function() {
     //send all birds south
-    var target = new THREE.Vector3(0, 500, 5000);
+    var target = new THREE.Vector3(_.random(-50, 50), 1000, this.southZ);
+    this.targetingSouth = true;
     _.each(this.boids, function(boid) {
       boid.setGoal(target);
     });
   },
 
-  //Send birds back to the trees
-  headNorth: function() {
+  returnHome: function(){
+    var self = this;
+    this.sholdUpdate = true;
+    this.targetingSouth = false;
+    var homeTarget = new THREE.Vector3(0, 1000, 0);
+    _.each(this.boids, function(boid){
+      console.log('ay')
+      boid.position.set(new THREE.Vector3(0, 1000, self.southZ));
+      boid.setGoal(homeTarget);
+    });
+  },
+
+  //Have birds flock around trees
+  flockAroundTrees: function() {
     var self = this;
     _.each(this.boids, function(boid) {
       boid.setGoal(self.pickTree());
@@ -66,6 +82,9 @@ e.Birds = new Class({
   },
 
   update: function() {
+    if(!this.sholdUpdate){
+      return;
+    }
     var time = performance.now();
     var boid;
     for (var i = 0; i < this.boids.length; i++) {
@@ -76,12 +95,21 @@ e.Birds = new Class({
       bird.rotation.y = Math.atan2(-boid.velocity.z, boid.velocity.x);
       bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
       bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
-
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
-      var distance = bird.position.distanceTo(boid.goal);
-      if (distance < 100) {
-        boid.setGoal(this.pickTree());
 
+      if (boid.goal && this.targetingTrees) {
+        var distance = bird.position.distanceTo(boid.goal);
+        if (distance < 100) {
+          boid.setGoal(this.pickTree());
+
+        }
+      }
+
+      if (boid.goal && this.targetingSouth) {
+        var distance = bird.position.distanceTo(boid.goal);
+        if (distance < 100) {
+          this.sholdUpdate = false;
+        }
       }
     }
 
@@ -124,7 +152,7 @@ e.Birds = new Class({
 });
 
 var Boid = function() {
-  var goalSpeed = THREE.Math.randFloat(0.000007, 0.00004);
+  var goalSpeed = 0.005;
 
   var vector = new THREE.Vector3(),
     _acceleration, _width = 500,
@@ -132,10 +160,9 @@ var Boid = function() {
     _depth = 200,
     _neighborhoodRadius = 100,
     _maxSpeed = 4,
-    _maxSteerForce = 0.1,
-    _avoidWalls = false;
+    _maxSteerForce = 0.1
 
-  this.goal = null;
+    this.goal = null;
 
   this.position = new THREE.Vector3();
   this.velocity = new THREE.Vector3();
@@ -147,55 +174,11 @@ var Boid = function() {
 
   }
 
-  this.setAvoidWalls = function(value) {
 
-    _avoidWalls = value;
-
-  }
-
-  this.setWorldSize = function(width, height, depth) {
-
-    _width = width;
-    _height = height;
-    _depth = depth;
-
-  }
 
   this.run = function(boids) {
 
-    if (_avoidWalls) {
 
-      vector.set(-_width, this.position.y, this.position.z);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(_width, this.position.y, this.position.z);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(this.position.x, -_height, this.position.z);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(this.position.x, _height, this.position.z);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(this.position.x, this.position.y, -_depth);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(this.position.x, this.position.y, _depth);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-    }
 
     if (Math.random() > 0.5) {
 
@@ -234,19 +217,6 @@ var Boid = function() {
     _acceleration.set(0, 0, 0);
 
   }
-
-  this.checkBounds = function() {
-
-    if (this.position.x > _width) this.position.x = -_width;
-    if (this.position.x < -_width) this.position.x = _width;
-    if (this.position.y > _height) this.position.y = -_height;
-    if (this.position.y < -_height) this.position.y = _height;
-    if (this.position.z > _depth) this.position.z = -_depth;
-    if (this.position.z < -_depth) this.position.z = _depth;
-
-  }
-
-  //
 
   this.avoid = function(target) {
 
