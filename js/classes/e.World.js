@@ -18,7 +18,6 @@ e.World = new Class({
     this.game = options.game;
 
     this.islandRadius = 3000;
-    this.landscape = new e.Landscape(this.islandRadius, {game: this.game});
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xe3e3e3
     }));
@@ -48,6 +47,9 @@ e.World = new Class({
       game: this.game,
       world: this
     });
+
+    this.landscape = new e.Landscape(this.islandRadius, {game: this.game});
+
 
     this.pond = new e.Pond({
       game: this.game,
@@ -110,9 +112,6 @@ e.World = new Class({
     var self = this;
     console.log('fall')
     this.forest.changeLeafColors();
-    setTimeout(function(){
-      self.birds.headSouth();
-    }, 20000)
   },
 
   beginWinter: function() {
@@ -125,7 +124,7 @@ e.World = new Class({
     // this.birds.headNorth();
     // this.snow.endSnowing();
     // this.landscape.snowMelt();
-    this.forest.leavesGrowBack();
+    // this.forest.leavesGrowBack();
   },
   beginSummer: function() {
     console.log('summer');

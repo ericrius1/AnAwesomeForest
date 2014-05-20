@@ -12,7 +12,7 @@ e.Game = new Class({
 
   //Come DOWN TO US REMIX
   construct: function() {
-    this.yearTime = 60000;
+    this.yearTime = 30000;
     this.seasonTime = this.yearTime * 0.25;
 
     //WINTER POINT

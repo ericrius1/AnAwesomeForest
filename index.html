@@ -99,11 +99,15 @@
 
         void main() {
           vec3 newPos = position;
+          float clampedWind = max(0.8, wind);
           if(pivotPoint > 0.5){
             newPos.z = position.z + sin(time * (5. * wind)) * (2. * wind);
           }
           if(length(velocity) > 0.0){
-            newPos = newPos + velocity * fallTime;
+            vec3 adjustedVelocity = velocity * clampedWind;
+              adjustedVelocity.x = mix(-50.0, 50.0, wind);
+            
+            newPos = newPos + adjustedVelocity * fallTime;
           }
           x = abs(position.x/width);
 
@@ -121,12 +125,19 @@
 
       uniform float green;
       uniform float alpha;
+      uniform float fallTime;
+      uniform vec3 velocity;
 
       varying float x;
 
       void main() {
+
+        float adjustedAlpa = alpha;
+        if(length(velocity) > 0.0){
+          adjustedAlpa = max(0.0, alpha - fallTime/30.0);
+        }
         float r = mix(0., 1., x);
-        vec4 color = vec4(r, green, 0., alpha );
+        vec4 color = vec4(r, green, 0., adjustedAlpa );
         gl_FragColor = color;
 
       }

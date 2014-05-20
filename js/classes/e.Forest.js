@@ -1,11 +1,12 @@
 e.Forest = new Class({
+  extend: e.EventEmitter,
   randFloat: THREE.Math.randFloat,
   construct: function(options) {
     this.game = options.game;
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 20;
+    this.numTrees = 50;
     this.maxSteps = 7;
     this.timeMultiplier = 0.005;
 
@@ -77,8 +78,11 @@ e.Forest = new Class({
 
     this.wind = new THREE.Float32Attribute(Math.pow(2, this.maxSteps - 1) * 3, 1);
     var numWinds = this.wind.array.length;
-    for (var i = 0; i < numWinds; i++) {
-      this.wind.setX(i, Math.random());
+    for (var i = 0; i < numWinds; i+=3) {
+      var windSpeed = Math.random()
+      this.wind.setX(i, windSpeed);
+      this.wind.setX(i+1, windSpeed);
+      this.wind.setX(i+2, windSpeed);
     }
 
 
@@ -211,6 +215,7 @@ e.Forest = new Class({
     leaves.position.z = tree.position.z;
     // leaves.matrixAutoUpdate = false;
     leaves.updateMatrix();
+    leaves.frustumCulled = false;
     this.game.scene.add(leaves);
 
 
@@ -257,7 +262,8 @@ e.Forest = new Class({
 
   beginLeafFall: function(){
     this.leafMaterial.uniforms.fallTime.value = 0;
-    this.leafMaterial.uniforms.velocity.value.set(0, -200, 1000);
+    this.leafMaterial.uniforms.velocity.value.set(200, 20, 400);
+    this.trigger('leavesfell');
 
   },
 
@@ -266,5 +272,9 @@ e.Forest = new Class({
     var time = performance.now() * this.timeMultiplier;
     this.leafMaterial.uniforms.time.value = time;
     this.leafMaterial.uniforms.fallTime.value += this.game.clock.getDelta();
+    if(Math.random() < 0.2){
+      console.log(this.leafMaterial.uniforms.fallTime.value)
+      Math.random() < 0.1 && console.clear();
+    }
   }
 });

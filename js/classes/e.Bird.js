@@ -1,4 +1,5 @@
 e.Birds = new Class({
+  extend: e.EventEmitter,
 
   construct: function(options) {
     var self = this;
@@ -9,9 +10,13 @@ e.Birds = new Class({
     this.numBirds = 100;
     this.boids = [];
     this.birds = [];
+    this.on('leavesfell', function(){
+      setTimeout(function(){
+        self.headSouth();
+      }, 1000)
+    });
 
-
-    var boid
+    var boid;
     var randFloat = THREE.Math.randFloat;
     for (var i = 0; i < this.numBirds; i++) {
       boid = this.boids[i] = new Boid();
@@ -24,6 +29,7 @@ e.Birds = new Class({
       }));
       bird.position = boid.position;
       bird.phase = Math.floor(Math.random() * 62.83);
+      bird.scale.multiplyScalar(2.0);
       bird.flapSpeedMultiplier = randFloat(0.0, 0.4);
       this.birds.push(bird);
       this.game.scene.add(bird);
@@ -38,7 +44,7 @@ e.Birds = new Class({
   },
   headSouth: function() {
     //send all birds south
-    var target = new THREE.Vector3(0, 3000, -10000);
+    var target = new THREE.Vector3(0, 500, 5000);
     _.each(this.boids, function(boid) {
       boid.setGoal(target);
     });
