@@ -2,6 +2,7 @@ e.World = new Class({
   extend: e.EventEmitter,
 
   construct: function(options) {
+    this.frameCount =0;
     var self = this;
     this.on('fall', function(){
       self.beginFall();
@@ -49,13 +50,6 @@ e.World = new Class({
     });
 
     this.landscape = new e.Landscape(this.islandRadius, {game: this.game});
-
-
-    this.pond = new e.Pond({
-      game: this.game,
-      water: this.water,
-      world: this
-    });
 
     this.forest = new e.Forest({
       game: this.game,

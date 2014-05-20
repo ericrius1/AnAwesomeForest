@@ -48,7 +48,7 @@ e.Game = new Class({
       antialias: true
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    // this.renderer.autoClear = false;
+    this.renderer.autoClear = false;
 
     this.scene = new THREE.Scene();
 
@@ -61,14 +61,12 @@ e.Game = new Class({
 
     //year PROCESSING
     var renderModel = new THREE.RenderPass(this.scene, this.camera);
-    var effectBloom = new THREE.BloomPass(0.1);
+    var effectBloom = new THREE.BloomPass(1.0);
     var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
-    this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
-    this.effectFXAA.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+    effectCopy.renderToScreen = true;
     effectCopy.renderToScreen = true;
     this.composer = new THREE.EffectComposer(this.renderer);
     this.composer.addPass(renderModel);
-    this.composer.addPass(this.effectFXAA);
     this.composer.addPass(effectBloom);
     this.composer.addPass(effectCopy);
     this.world = new e.World({
@@ -103,20 +101,6 @@ e.Game = new Class({
     requestAnimationFrame(this.render);
   },
 
-  //cyclePoint is a num from 0 to 1 which represents where in season we are currently
-  render: function() {
-    requestAnimationFrame(this.render);
-    this.world.update();
-    this.player.update();
-    this.controls.update();
-    TWEEN.update();
-    // this.renderer.clear();
-    this.renderer.render(this.scene, this.activeCamera);
-    // this.composer.render();
-    this.checkForNewSeason();
-
-
-  },
 
   onWindowResize: function() {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -161,7 +145,21 @@ e.Game = new Class({
       }, this.seasonCheckTimeout)
     }
 
-  }
+  },
+  //cyclePoint is a num from 0 to 1 which represents where in season we are currently
+  render: function() {
+    requestAnimationFrame(this.render);
+    this.world.update();
+    this.player.update();
+    this.controls.update();
+    TWEEN.update();
+    this.renderer.clear();
+    // this.renderer.render(this.scene, this.activeCamera);
+    this.composer.render(0.01);
+    this.checkForNewSeason();
+
+
+  },
 
 
 

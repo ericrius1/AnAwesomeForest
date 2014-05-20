@@ -1,7 +1,6 @@
 e.Appalapas = new Class({
   construct: function(options) {
     this.game = options.game;
-    this.pond = options.pond;
     this.currentPoint = 0;
     this.numPoints = 200;
     this.direction = 1;
@@ -52,7 +51,6 @@ e.Appalapas = new Class({
     this.points = geo.parameters.path.getSpacedPoints(500);
     this.appalapa = new THREE.Mesh(geo, appaMat);
     this.appalapa.renderDepth = -1;
-    this.appalapa.position.z = this.pond.pond.position.z;
     this.game.scene.add(this.appalapa)
 
     this.sphere = new THREE.Mesh(new THREE.SphereGeometry(5));

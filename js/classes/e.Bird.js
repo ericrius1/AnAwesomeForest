@@ -7,7 +7,7 @@ e.Birds = new Class({
     this.world = options.world;
     this.birdCamera = this.game.birdCamera;
     this.trees = options.forest.trees;
-    this.numBirds = 100;
+    this.numBirds = 50;
     this.boids = [];
     this.birds = [];
     this.on('leavesfell', function(){

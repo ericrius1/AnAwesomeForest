@@ -6,8 +6,8 @@ e.Forest = new Class({
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 50;
-    this.maxSteps = 7;
+    this.numTrees = 100;
+    this.maxSteps = 5;
     this.timeMultiplier = 0.005;
 
 
@@ -78,23 +78,30 @@ e.Forest = new Class({
 
     this.wind = new THREE.Float32Attribute(Math.pow(2, this.maxSteps - 1) * 3, 1);
     var numWinds = this.wind.array.length;
-    for (var i = 0; i < numWinds; i+=3) {
+    for (var i = 0; i < numWinds; i += 3) {
       var windSpeed = Math.random()
       this.wind.setX(i, windSpeed);
-      this.wind.setX(i+1, windSpeed);
-      this.wind.setX(i+2, windSpeed);
+      this.wind.setX(i + 1, windSpeed);
+      this.wind.setX(i + 2, windSpeed);
     }
 
 
-
+    var centerPos = new THREE.Vector2(0, 0)
     for (var i = 0; i < this.numTrees; i++) {
-      this.createTree();
+      var xPos = THREE.Math.randInt(-this.world.islandRadius, this.world.islandRadius);
+      var zPos = THREE.Math.randInt(-this.world.islandRadius, this.world.islandRadius);
+      var treePos = new THREE.Vector2(xPos, zPos)
+      console.log(treePos);
+      if (treePos.distanceTo(centerPos) > 1000){
+        console.log("YES")
+        this.createTree(treePos);
+      }
     }
 
 
   },
 
-  createTree: function() {
+  createTree: function(treePos) {
     var self = this;
     var randInt = THREE.Math.randInt;
     var maxSteps = this.maxSteps;
@@ -120,8 +127,8 @@ e.Forest = new Class({
     var numLeaves = Math.pow(2, maxSteps - 1);
     var leafVertices = new THREE.Float32Attribute(numLeaves * 3, 3);
 
-
-    createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, 10);
+    var size = randInt(5, 15);
+    createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, size);
 
 
 
@@ -149,8 +156,8 @@ e.Forest = new Class({
 
         var dir = Math.random() > 0.5 ? 1 : -1;
         var newZ = z + Math.cos(tempAngle) * length * dir;
-
-        var size = Math.max(1, size * 0.7);
+        var sizeMultiplier = THREE.Math.randFloat(0.5, 0.7);
+        var size = Math.max(1, size * sizeMultiplier);
 
         var path = new THREE.SplineCurve3([
           new THREE.Vector3(x, y, z),
@@ -164,7 +171,7 @@ e.Forest = new Class({
         treeGeo.merge(geo);
         createTreeHelper(tempAngle + angle1, newX, newY, newZ, newLength1, count + 1, size);
         createTreeHelper(tempAngle + angle2, newX, newY, newZ, newLength2, count + 1, size);
-     
+
 
         if (count === maxSteps - 1) {
           //add a leaf
@@ -195,10 +202,11 @@ e.Forest = new Class({
     leafGeo.addAttribute('wind', this.wind);
 
 
+
     var tree = new THREE.Mesh(treeGeo, treeMaterial);
     tree.side = THREE.DoubleSide;
-    tree.position.x = randInt(-this.world.islandRadius / 2, this.world.islandRadius / 2);
-    tree.position.z = randInt(-this.world.islandRadius / 2, this.world.islandRadius / 2);
+    tree.position.x = treePos.x;
+    tree.position.z = treePos.y;
 
     tree.geometry.computeBoundingBox();
     var height = tree.geometry.boundingBox.max.y;
@@ -230,37 +238,45 @@ e.Forest = new Class({
 
   },
 
-  leavesGrowBack: function(){
+  leavesGrowBack: function() {
     var self = this;
     this.leafMaterial.uniforms.fallTime.value = 0;
-    this.leafMaterial.uniforms.velocity.value.set(0,0,0);
+    this.leafMaterial.uniforms.velocity.value.set(0, 0, 0);
     this.leafMaterial.uniforms.green.value = 1.0;
     this.leafMaterial.uniforms.alpha.value = 0.0
-    var curAlpha = {a: 0}
-    var finalAlpha = {a: 0.5}
+    var curAlpha = {
+      a: 0
+    }
+    var finalAlpha = {
+      a: 0.5
+    }
     var fadeTween = new TWEEN.Tween(curAlpha).
-      to(finalAlpha, this.game.seasonTime).
-      onUpdate(function(){
-        self.leafMaterial.uniforms.alpha.value = curAlpha.a
-      }).start()
+    to(finalAlpha, this.game.seasonTime).
+    onUpdate(function() {
+      self.leafMaterial.uniforms.alpha.value = curAlpha.a
+    }).start()
 
   },
 
-  changeLeafColors: function(){
+  changeLeafColors: function() {
     var self = this;
-    var curCol = {g: 1.0}
-    var finalCol = {g: 0.0}
+    var curCol = {
+      g: 1.0
+    }
+    var finalCol = {
+      g: 0.0
+    }
     var colorChangeTween = new TWEEN.Tween(curCol).
-      to(finalCol, this.game.seasonTime * 0.5).
-      onUpdate(function(){
-        self.leafMaterial.uniforms.green.value = curCol.g;
-      }).start();
-      colorChangeTween.onComplete(function(){
-        self.beginLeafFall();
-      })
+    to(finalCol, this.game.seasonTime * 0.5).
+    onUpdate(function() {
+      self.leafMaterial.uniforms.green.value = curCol.g;
+    }).start();
+    colorChangeTween.onComplete(function() {
+      self.beginLeafFall();
+    })
   },
 
-  beginLeafFall: function(){
+  beginLeafFall: function() {
     this.leafMaterial.uniforms.fallTime.value = 0;
     this.leafMaterial.uniforms.velocity.value.set(200, 20, 400);
     this.trigger('leavesfell');
@@ -272,9 +288,6 @@ e.Forest = new Class({
     var time = performance.now() * this.timeMultiplier;
     this.leafMaterial.uniforms.time.value = time;
     this.leafMaterial.uniforms.fallTime.value += this.game.clock.getDelta();
-    if(Math.random() < 0.2){
-      console.log(this.leafMaterial.uniforms.fallTime.value)
-      Math.random() < 0.1 && console.clear();
-    }
+
   }
 });
