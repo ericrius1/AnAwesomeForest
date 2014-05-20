@@ -246,12 +246,19 @@ e.Forest = new Class({
     var curCol = {g: 1.0}
     var finalCol = {g: 0.0}
     var colorChangeTween = new TWEEN.Tween(curCol).
-      to(finalCol, this.game.seasonTime).
+      to(finalCol, this.game.seasonTime * 0.5).
       onUpdate(function(){
         self.leafMaterial.uniforms.green.value = curCol.g;
       }).start();
-    // this.leafMaterial.uniforms.fallTime.value = 0;
-    // this.leafMaterial.uniforms.velocity.value.set(0, -200, 1000);
+      colorChangeTween.onComplete(function(){
+        self.beginLeafFall();
+      })
+  },
+
+  beginLeafFall: function(){
+    this.leafMaterial.uniforms.fallTime.value = 0;
+    this.leafMaterial.uniforms.velocity.value.set(0, -200, 1000);
+
   },
 
 

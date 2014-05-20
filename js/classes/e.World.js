@@ -117,20 +117,20 @@ e.World = new Class({
 
   beginWinter: function() {
     console.log('winter');
-    this.snow.beginSnowing();
-    this.landscape.snowCover();
+    // this.snow.beginSnowing();
+    // this.landscape.snowCover();
   },
   beginSpring: function(){
     console.log('spring')
-    this.birds.headNorth();
-    this.snow.endSnowing();
-    this.landscape.snowMelt();
+    // this.birds.headNorth();
+    // this.snow.endSnowing();
+    // this.landscape.snowMelt();
     this.forest.leavesGrowBack();
   },
   beginSummer: function() {
     console.log('summer');
-    this.skywriting.reveal();
-    this.snow.endSnowing();
+    // this.skywriting.reveal();
+    // this.snow.endSnowing();
   }
 
 
