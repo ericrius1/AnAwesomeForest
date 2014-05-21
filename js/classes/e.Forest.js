@@ -6,7 +6,7 @@ e.Forest = new Class({
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 10;
+    this.numTrees = 100;
     this.maxSteps = 5;
     this.timeMultiplier = 0.005;
 
@@ -149,7 +149,7 @@ e.Forest = new Class({
 
         var dir = Math.random() > 0.5 ? 1 : -1;
         var newZ = z + Math.cos(tempAngle) * length * dir;
-        var sizeMultiplier = THREE.Math.randFloat(0.5, 0.7);
+        var sizeMultiplier = THREE.Math.randFloat(0.7, 0.9);
         var size = Math.max(1, size * sizeMultiplier);
 
         var path = new THREE.SplineCurve3([

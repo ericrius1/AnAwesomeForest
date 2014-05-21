@@ -8,45 +8,49 @@ e.SkyWriting = new Class({
     this.points = geo.parameters.path.getSpacedPoints(100);
     this.heart.position.set(0, 1000, -this.world.islandRadius * 1.5);
     this.game.scene.add(this.heart);
-    this.game.scene.add(this.heart2);
     this.heart.visible = false;
     this.velocity = new THREE.Vector3(0, 20, 20);
     this.acceleration = new THREE.Vector3(0, -.1, 0);
     this.emitters = [];
 
+    var textGeo = new THREE.TextGeometry('hello');
+    var text = new THREE.Mesh(textGeo);
+    text.position.y = 100;
+    var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 100);
+    this.game.scene.add(text);
+    text.visible = false;
+
+
 
 
     this.textParticleGroup = new SPE.Group({
       texture: THREE.ImageUtils.loadTexture('assets/star.png'),
-      maxAge: 10
+      maxAge: 5
     });
 
     this.starParams = {
       opacityMiddle: 1,
-      positionSpread: new THREE.Vector3(10, 10, 10),
-      accelerationSpread: new THREE.Vector3(10, 10, 10),
+      accelerationSpread: new THREE.Vector3(1, 1, 1),
       colorStart: new THREE.Color(0xff0000),
       colorEnd: new THREE.Color(0x0000ff),
-      sizeStart: 100,
-      sizeEndSpread: 50,
-      particleCount: 50,
+      sizeStart: 20,
+      particleCount: 10,
     }
-    this.createEmitterPoints();
+    this.createEmitterPoints(textPoints);
+    text.add(this.textParticleGroup.mesh);
 
   },
 
 
-  createEmitterPoints: function() {
+  createEmitterPoints: function(points) {
 
 
-    for (var i = 0; i < this.points.length; i++) {
+    for (var i = 0; i < points.length; i++) {
       var emitter = new SPE.Emitter(this.starParams);
-      emitter.position = this.points[i] ;
+      emitter.position = points[i] ;
       this.textParticleGroup.addEmitter(emitter);
       this.emitters.push(emitter);
     }
-    this.textParticleGroup.mesh.renderDepth = -1;
-    this.heart.add(this.textParticleGroup.mesh);
   },
 
   reveal: function() {

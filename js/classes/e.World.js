@@ -78,6 +78,10 @@ e.World = new Class({
       world: this
     });
 
+    this.statue = new e.Statue({
+      game: this.game
+    });
+
     // this.fountains = new e.Fountains({
     //   game: this.game,
     //   world: this
