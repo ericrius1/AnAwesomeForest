@@ -10,9 +10,14 @@ e.Landscape = new Class({
 
     this.summerGroundColor = new THREE.Color(0x3f3f17);
     this.winterGroundColor = new THREE.Color(0x9c9c9c);
+    var groundTexture = THREE.ImageUtils.loadTexture('assets/dirt.jpg');
+    groundTexture.repeat.set( 40, 40);
+    groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+    // groundTexture.anistropy = 16;
     var groundMat = new THREE.MeshBasicMaterial({
-      color: this.summerGroundColor,
-      side: THREE.DoubleSide
+      color: new THREE.Color(0x5f5f5f),
+      map: groundTexture,
+      side: THREE.DoubleSide,
     });
 
     var islandGeo = new THREE.CircleGeometry(islandRadius, 100);
@@ -20,7 +25,7 @@ e.Landscape = new Class({
     //pick a point in the distance to create a hill
     var point = new THREE.Vector2(3000, 0);
 
-    this.ground.rotation.x = -Math.PI / 2;
+    this.ground.rotation.x = Math.PI / 2;
     this.game.scene.add(this.ground);
 
   },

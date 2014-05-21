@@ -19,6 +19,7 @@ e.World = new Class({
     this.game = options.game;
 
     this.islandRadius = 3000;
+    this.size = 40000;
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xe3e3e3
     }));
@@ -72,14 +73,16 @@ e.World = new Class({
       world: this
     });
 
+    this.distantlands = new e.DistantLands({
+      game: this.game,
+      world: this
+    });
+
     // this.fountains = new e.Fountains({
     //   game: this.game,
     //   world: this
     // });
 
-    // this.hut = new e.Hut({
-    //   game: this.game
-    // });
 
   },
 
@@ -90,6 +93,7 @@ e.World = new Class({
     this.forest.update();
     this.birds.update();
     this.moon.position.y += 1;
+    this.distantlands.update();
     this.snow.update();
     this.skywriting.update();
   },

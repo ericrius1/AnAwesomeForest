@@ -2,7 +2,7 @@ e.SkyWriting = new Class({
   construct: function(options) {
     this.game = options.game;
     this.world = options.world;
-    var hearthPath = new THREE.Curves.HeartCurve(20);
+    var hearthPath = new THREE.Curves.HeartCurve(30);
     var geo = new THREE.TubeGeometry(hearthPath);
     this.heart = new THREE.Mesh(geo);
     this.points = geo.parameters.path.getSpacedPoints(100);
@@ -24,7 +24,7 @@ e.SkyWriting = new Class({
     this.starParams = {
       opacityMiddle: 1,
       positionSpread: new THREE.Vector3(10, 10, 10),
-      accelerationSpread: new THREE.Vector3(100, 100, 100),
+      accelerationSpread: new THREE.Vector3(10, 10, 10),
       colorStart: new THREE.Color(0xff0000),
       colorEnd: new THREE.Color(0x0000ff),
       sizeStart: 100,

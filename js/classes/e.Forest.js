@@ -12,11 +12,6 @@ e.Forest = new Class({
 
 
     this.lightGeo = new THREE.CircleGeometry(50, 50);
-    this.lightMaterial = new THREE.MeshBasicMaterial({
-      color: 0xb8b5b9,
-      map: THREE.ImageUtils.loadTexture("assets/light.png"),
-      transparent: true
-    });
 
 
     this.leafMaterial = new THREE.ShaderMaterial({
@@ -223,16 +218,6 @@ e.Forest = new Class({
     leaves.updateMatrix();
     leaves.frustumCulled = false;
     this.game.scene.add(leaves);
-
-
-    var light = new THREE.Mesh(this.lightGeo, this.lightMaterial);
-    light.position.y = 1;
-    light.rotation.x = -Math.PI / 2;
-    light.position.x = tree.position.x;
-    light.position.z = tree.position.z;
-    light.scale.y = this.randFloat(1.3, 2.0);
-    light.position.y = this.randFloat(1.0, 3.0);
-    this.game.scene.add(light);
 
   },
 
