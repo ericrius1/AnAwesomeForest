@@ -58,8 +58,8 @@ body {
   left: 50%;
   top: 50%;
   border-radius: 50%;
-  width: 15px;
-  height: 15px;
+  width: 5px;
+  height: 5px;
   border:solid 2px;
   border-color: #00f;
   z-index: 1000;

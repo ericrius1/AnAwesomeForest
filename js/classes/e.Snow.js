@@ -74,7 +74,6 @@ e.Snow = new Class({
   endSnowing: function(){
     this.snowEmitter.disable() 
     this.cloudEmitter.disable();
-    console.log('end! SNOW')
     var delay = this.maxAge + 1000;
     setTimeout(function(){
       self.shouldUpdate = false;

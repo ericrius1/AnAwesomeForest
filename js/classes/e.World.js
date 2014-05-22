@@ -13,13 +13,10 @@ e.World = new Class({
     this.on('spring', function(){
       self.beginSpring();
     });
-    this.on('summer', function() {
-      self.beginSummer();
-    });
     this.game = options.game;
 
     this.islandRadius = 1000;
-    this.size = 40000;
+    this.size = options.size;
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xe3e3e3
     }));
@@ -123,14 +120,13 @@ e.World = new Class({
     this.forest.leavesGrowBack();
     this.snow.endSnowing();
     var self = this;
+    this.game.yearCompleted = true;
     setTimeout(function(){
       self.birds.returnHome();
       self.skywriting.reveal();
     }, 1000)
   },
-  beginSummer: function() {
-    console.log('summer');
-  }
+
 
 
 

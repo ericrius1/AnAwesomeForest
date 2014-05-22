@@ -1,4 +1,4 @@
-var gMaxSpeed = 200;
+var gMaxSpeed = 15;
 e.Birds = new Class({
   extend: e.EventEmitter,
 
@@ -16,7 +16,7 @@ e.Birds = new Class({
 
     var boid;
     var randFloat = THREE.Math.randFloat;
-    var startingX = 0, startingZ = 20000, startingY = this.birdHeight;
+    var startingX = 0, startingZ = this.game.size/2, startingY = this.birdHeight + 10;
     var xSpacing = 15;
     var zSpacing = 20;
     for (var i = 0; i < this.numBirds; i++) {
@@ -46,15 +46,21 @@ e.Birds = new Class({
 
   hibernate: function(){
     this.shouldUpdate = false;
+    _.each(this.birds, function(bird){
+      bird.visible = false;
+    });
   },
 
 
   returnHome: function() {
     this.shouldUpdate = true;
-    _.each(this.boids, function(boid){
-      boid.maxSpeed = 40;
-      boid.setGoal(new THREE.Vector3(boid.position.x, boid.position.y, -boid.position.z))
-    });
+    for(var i = 0; i < this.birds.length; i++){
+      var boid = this.boids[i];
+      boid.maxSpeed = 30;
+      boid.setGoal(new THREE.Vector3(boid.position.x, boid.position.y, -boid.position.z));
+      this.birds[i].visible = true;
+    }
+
   },
 
   update: function() {
@@ -73,8 +79,6 @@ e.Birds = new Class({
       bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
     }
-
-
   },
 
   createBirdGeo: function() {
@@ -133,55 +137,10 @@ var Boid = function() {
 
   }
 
-  this.setAvoidWalls = function(value) {
-
-    _avoidWalls = value;
-
-  }
-
-  this.setWorldSize = function(width, height, depth) {
-
-    _width = width;
-    _height = height;
-    _depth = depth;
-
-  }
 
   this.run = function(boids) {
 
-    if (_avoidWalls) {
 
-      vector.set(-_width, this.position.y, this.position.z);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(_width, this.position.y, this.position.z);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(this.position.x, -_height, this.position.z);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(this.position.x, _height, this.position.z);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(this.position.x, this.position.y, -_depth);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-      vector.set(this.position.x, this.position.y, _depth);
-      vector = this.avoid(vector);
-      vector.multiplyScalar(5);
-      _acceleration.add(vector);
-
-    }
     /* else {
 
             this.checkBounds();
@@ -230,16 +189,6 @@ var Boid = function() {
 
   }
 
-  this.checkBounds = function() {
-
-    if (this.position.x > _width) this.position.x = -_width;
-    if (this.position.x < -_width) this.position.x = _width;
-    if (this.position.y > _height) this.position.y = -_height;
-    if (this.position.y < -_height) this.position.y = _height;
-    if (this.position.z > _depth) this.position.z = -_depth;
-    if (this.position.z < -_depth) this.position.z = _depth;
-
-  }
 
   //
 

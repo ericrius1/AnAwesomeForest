@@ -66,7 +66,22 @@ e.Landscape = new Class({
   },
 
   snowMelt: function() {
-
+    var self = this;
+    var curSnowPos = {
+      y: this.snow.position.y,
+      a: 1
+    }
+    var finalSnowPos = {
+      y: 0,
+      a: 0 
+    };
+    var snowMeltTween = new TWEEN.Tween(curSnowPos).
+      to(finalSnowPos, 5000).
+      easing(TWEEN.Easing.Cubic.InOut).
+      onUpdate(function(){
+        self.snow.position.y = curSnowPos.y;
+        self.snow.material.opacity = curSnowPos.a
+      }).start();
 
   }
 

@@ -7,7 +7,7 @@ e.SkyWriting = new Class({
     this.currentEmitterIndex = 0;
     this.emitterBatch = 10;
 
-    var textGeo = new THREE.TextGeometry('Happy Birthday Anitra!!', {
+    var textGeo = new THREE.TextGeometry('SHNUUURP', {
       font: 'josefin slab'
 
     });
@@ -28,7 +28,7 @@ e.SkyWriting = new Class({
       colorStart: new THREE.Color(0xff0000),
       colorEnd: new THREE.Color(0x0000ff),
       velocitySpread: new THREE.Vector3(10, 10, 10),
-      sizeStart: 100,
+      sizeStart: 50,
       opacityEnd: 1,
       particleCount: 2,
     }

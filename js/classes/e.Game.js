@@ -13,41 +13,31 @@ e.Game = new Class({
   //Come DOWN TO US REMIX
   construct: function() {
     this.playerHeight = 50;
-    this.yearTime = 10000;
-    this.seasonTime = this.yearTime * 0.25;
-
-    //WINTER POINT
+    this.yearTime = 215000;
+    // this.yearTime = 80000;
+    this.size = 40000;
+    // WINTER POINT
     // this.winterPoint = 0.0;
-    // this.springPoint = 0.25;
-    // this.summerPoint = 0.5;
-    // this.fallPoint = 0.75;
+    // this.springPoint = 0.33;
+    // this.fallPoint = 0.66;
 
     //FALL START
     this.fallPoint = 0.0;
-    this.winterPoint = 0.25;
-    this.springPoint = 0.5;
-    this.summerPoint = 0.75;
+    this.winterPoint = 0.33;
+    this.springPoint = 0.66;
 
-
-    //SUMMER START
-    // this.summerPoint = 0.0;
-    // this.fallPoint = 0.25;
-    // this.winterPoint = 0.75;
-    // this.springPoint = 1.0;
 
     //SPRING START
     // this.springPoint = 0.0;
-    // this.summerPoint = 0.25;
-    // this.fallPoint = 0.5;
-    // this.winterPoint = 0.75;
+    // this.fallPoint = 0.33;
+    // this.winterPoint = 0.66;
 
 
-    this.checkSummer = true;
     this.checkFall = true;
     this.checkWinter = true;
     this.checkSpring = true;
     this.yearCompleted = false;
-    this.seasonCheckTimeout = this.yearTime / 4 - 100;
+    this.seasonCheckTimeout = this.yearTime / 3 - 100;
     // Bind render function permenantly
     this.render = this.render.bind(this);
     var self = this;
@@ -60,7 +50,7 @@ e.Game = new Class({
 
     this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(50, 1, 1, 10000000);
+    this.camera = new THREE.PerspectiveCamera(50, 1, 1, this.size);
     this.activeCamera = this.camera;
 
 
@@ -78,7 +68,8 @@ e.Game = new Class({
     this.composer.addPass(effectBloom);
     this.composer.addPass(effectCopy);
     this.world = new e.World({
-      game: this
+      game: this,
+      size: this.size
     });
 
     document.body.appendChild(this.renderer.domElement);
@@ -122,14 +113,6 @@ e.Game = new Class({
     var cycleTime = time % this.yearTime;
     this.cyclePoint = cycleTime / this.yearTime;
 
-    if (self.checkSummer && Math.abs(this.cyclePoint - this.summerPoint) < 0.1) {
-      self.checkSummer = false;
-      this.trigger('summer');
-      this.yearCompleted = true;
-      setTimeout(function() {
-        self.checkSummer = true
-      }, this.seasonCheckTimeout)
-    }
     if (self.checkFall && Math.abs(this.cyclePoint - this.fallPoint) < 0.1) {
       this.trigger('fall');
       self.checkFall = false;
