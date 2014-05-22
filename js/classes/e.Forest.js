@@ -6,9 +6,10 @@ e.Forest = new Class({
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 5;
+    this.numTrees = 20;
     this.maxSteps = 5;
     this.timeMultiplier = 0.005;
+    this.noTreeRadius = 100;
 
 
     this.lightGeo = new THREE.CircleGeometry(50, 50);
@@ -86,7 +87,7 @@ e.Forest = new Class({
       var xPos = THREE.Math.randInt(-this.world.islandRadius * 0.8, this.world.islandRadius * 0.8);
       var zPos = THREE.Math.randInt(-this.world.islandRadius * 0.8, this.world.islandRadius * 0.8);
       var treePos = new THREE.Vector2(xPos, zPos)
-      if (treePos.distanceTo(centerPos) > 1000){
+      if (treePos.distanceTo(centerPos) > this.noTreeRadius){
         this.createTree(treePos);
       }
     }
@@ -120,7 +121,7 @@ e.Forest = new Class({
     var numLeaves = Math.pow(2, maxSteps - 1);
     var leafVertices = new THREE.Float32Attribute(numLeaves * 3, 3);
 
-    var size = randInt(5, 15);
+    var size = randInt(5, 10);
     createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, size);
 
 
@@ -149,7 +150,7 @@ e.Forest = new Class({
 
         var dir = Math.random() > 0.5 ? 1 : -1;
         var newZ = z + Math.cos(tempAngle) * length * dir;
-        var sizeMultiplier = THREE.Math.randFloat(0.7, 0.9);
+        var sizeMultiplier = THREE.Math.randFloat(0.5, 0.7);
         var size = Math.max(1, size * sizeMultiplier);
 
         var path = new THREE.SplineCurve3([

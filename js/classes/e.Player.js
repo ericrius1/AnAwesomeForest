@@ -6,7 +6,6 @@ e.Player = new Class({
     this.controls = options.controls.controls;
     var geometry = new THREE.TorusGeometry(1, 0.1, 16, 50);
     this.game = options.game;
-    this.camera.position = options.position.clone();
     // this.controls.teleport(new THREE.Vector3(0, this.camera.position.y, 1000))
   },
 

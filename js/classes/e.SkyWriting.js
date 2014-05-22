@@ -6,29 +6,34 @@ e.SkyWriting = new Class({
     this.currentEmitterIndex = 0;
     this.emitterBatch = 10;
 
-    var textGeo = new THREE.TextGeometry('Happy Birthday Anitra!!');
+    var textGeo = new THREE.TextGeometry('Happy Birthday Anitra!!', {
+      font: 'josefin slab'
+
+    });
     var text = new THREE.Mesh(textGeo);
-    text.position.y = 100;
+    text.position.set(-this.world.islandRadius * 2, 3000, -this.world.size/2)
+    text.scale.multiplyScalar(10);
     text.scale.z = 0.01;
-    var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 5000);
+    var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 4000);
     this.game.scene.add(text);
     text.visible = false;
 
     this.textParticleGroup = new SPE.Group({
       texture: THREE.ImageUtils.loadTexture('assets/star.png'),
-      maxAge: 5
+      maxAge: 1
     });
 
     this.starParams = {
-      accelerationSpread: new THREE.Vector3(3, 3, 3),
       colorStart: new THREE.Color(0xff0000),
       colorEnd: new THREE.Color(0x0000ff),
-      sizeStart: 20,
-      sizeEnd: 5,
+      velocitySpread: new THREE.Vector3(10, 10, 10),
+      sizeStart: 400,
+      sizeEnd: 310,
       opacityEnd: 1,
-      particleCount: 3,
+      particleCount: 2,
     }
     this.createEmitterPoints(textPoints);
+    this.textParticleGroup.mesh.renderDepth = -1;
     text.add(this.textParticleGroup.mesh);
 
   },
@@ -46,7 +51,6 @@ e.SkyWriting = new Class({
   reveal: function() {
     this.doUpdate = true;
     this.writeMessage();
-
   },
   writeMessage: function(){
     var self = this;

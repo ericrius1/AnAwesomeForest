@@ -18,13 +18,13 @@ e.World = new Class({
     });
     this.game = options.game;
 
-    this.islandRadius = 3000;
+    this.islandRadius = 1000;
     this.size = 40000;
     this.moon = new THREE.Mesh(new THREE.CircleGeometry(20, 200), new THREE.MeshBasicMaterial({
       color: 0xe3e3e3
     }));
     this.moon.scale.multiplyScalar(80);
-    this.moon.position.set(-this.islandRadius * 3, 0, -this.islandRadius * 10)
+    this.moon.position.set(-this.size/4, 0, -this.size/2)
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
     this.game.scene.add(this.moon);

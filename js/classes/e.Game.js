@@ -12,14 +12,15 @@ e.Game = new Class({
 
   //Come DOWN TO US REMIX
   construct: function() {
-    this.yearTime = 80000;
+    this.playerHeight = 50;
+    this.yearTime = 500000;
     this.seasonTime = this.yearTime * 0.25;
 
     //WINTER POINT
-    // this.winterPoint = 0.0;
-    // this.springPoint = 0.25;
-    // this.summerPoint = 0.5;
-    // this.fallPoint = 0.75;
+    this.winterPoint = 0.0;
+    this.springPoint = 0.25;
+    this.summerPoint = 0.5;
+    this.fallPoint = 0.75;
 
     //FALL START
     // this.fallPoint = 0.0;
@@ -35,10 +36,10 @@ e.Game = new Class({
     // this.springPoint = 1.0;
 
     //SPRING START
-    this.springPoint = 0.0;
-    this.summerPoint = 0.25;
-    this.fallPoint = 0.5;
-    this.winterPoint = 0.75;
+    // this.springPoint = 0.0;
+    // this.summerPoint = 0.25;
+    // this.fallPoint = 0.5;
+    // this.winterPoint = 0.75;
 
 
     this.checkSummer = true;
@@ -95,7 +96,6 @@ e.Game = new Class({
       game: this,
       controls: this.controls,
       camera: this.camera,
-      position: new THREE.Vector3(0, 70, 0),
       world: this.world
     });
 
