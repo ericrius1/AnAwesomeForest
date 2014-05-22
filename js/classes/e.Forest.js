@@ -13,6 +13,7 @@ e.Forest = new Class({
     this.timeMultiplier = 0.005;
     this.noTreeRadius = 400;
     this.leafVelocity = 1000;
+    this.numLeaves = Math.pow(2, this.maxSteps-1);
 
     this.on('birdsPassedIsland', function(){
       self.beginLeafFall();
@@ -60,6 +61,10 @@ e.Forest = new Class({
         wind: {
           type: 'f',
           value: null
+        },
+        colors: {
+          type: 'vec3',
+          value: null
         }
       },
       vertexShader: document.getElementById('leafVertexShader').textContent,
@@ -68,7 +73,7 @@ e.Forest = new Class({
       transparent: true,
     });
 
-    this.pivotPoint = new THREE.Float32Attribute(Math.pow(2, this.maxSteps - 1) * 3, 1);
+    this.pivotPoint = new THREE.Float32Attribute(this.numLeaves * 3, 1);
     var numPoints = this.pivotPoint.array.length;
     for (var i = 0; i < numPoints; i++) {
       if (i % 3 === 0) {
@@ -78,13 +83,22 @@ e.Forest = new Class({
       }
     }
 
-    this.wind = new THREE.Float32Attribute(Math.pow(2, this.maxSteps - 1) * 3, 1);
+    this.wind = new THREE.Float32Attribute(this.numLeaves * 3, 1);
     var numWinds = this.wind.array.length;
     for (var i = 0; i < numWinds; i += 3) {
       var windSpeed = Math.random()
       this.wind.setX(i, windSpeed);
       this.wind.setX(i + 1, windSpeed);
       this.wind.setX(i + 2, windSpeed);
+    }
+
+    this.colors = new THREE.Float32Attribute(this.numLeaves*3, 3);
+    var numColors = this.colors.array.length;
+    for(var i = 0; i < numColors; i+=3){
+      var color = new THREE.Color().setRGB(Math.random(), Math.random(), Math.random());
+      this.colors.setXYZ(i, color.r, color.g, color.b);
+      this.colors.setXYZ(i+1, color.r, color.g, color.b);
+      this.colors.setXYZ(i+2, color.r, color.g, color.b);
     }
 
 
