@@ -7,12 +7,12 @@ e.SkyWriting = new Class({
     this.currentEmitterIndex = 0;
     this.emitterBatch = 10;
 
-    var textGeo = new THREE.TextGeometry('SHNUUURP', {
+    var textGeo = new THREE.TextGeometry('HAPPY BIRTHDAY ANITRA!', {
       font: 'josefin slab'
 
     });
     var text = new THREE.Mesh(textGeo);
-    text.position.set(-500, this.messageHeight, -this.world.islandRadius - 1000)
+    text.position.set(-1000, this.messageHeight, -this.world.islandRadius - 1000)
     // text.scale.multiplyScalar(10);
     text.scale.z = 0.01;
     var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 4000);

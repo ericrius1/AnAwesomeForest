@@ -11,6 +11,7 @@ e.DistantLands = new Class({
     this.spread = 4000;
 
 
+
     this.createCityLights()
 
   },
@@ -41,6 +42,7 @@ e.DistantLands = new Class({
       houseEmitter.colorStart.setRGB(Math.random(), Math.random(), Math.random())
       this.cityGroup.addEmitter(houseEmitter);
       this.emitters.push(houseEmitter);
+      houseEmitter.disable();
     }
 
     var posX = this.size/2;
@@ -52,24 +54,26 @@ e.DistantLands = new Class({
       houseEmitter.colorStart.setRGB(Math.random(), Math.random(), Math.random())
       this.cityGroup.addEmitter(houseEmitter);
       this.emitters.push(houseEmitter);
+      houseEmitter.disable();
 
 
     }
-
+    this.lightActivationWaitTime = this.game.yearTime / this.emitters.length;
     this.cityGroup.mesh.renderDepth = -1;
     this.game.scene.add(this.cityGroup.mesh)
+    this.shuffledLightOrders = _.shuffle(_.range(0, this.emitters.length));
+    this.currentLightIndex =0;
     this.turnOnLights();
   },
 
 
   turnOnLights: function(){
     var self = this;
-    var index = _.random(0, this.emitters.length-1);
-    this.emitters[index].enable();
-    // if(this.lightIndex === this.emitters.length)return;
+    this.emitters[this.shuffledLightOrders[this.currentLightIndex++]].enable();
+    if(this.currentLightIndex === this.emitters.length)return;
     setTimeout(function(){
       self.turnOnLights();
-    }, 20)
+    }, this.lightActivationWaitTime)
 
   },
 

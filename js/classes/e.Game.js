@@ -92,6 +92,8 @@ e.Game = new Class({
       world: this.world
     });
 
+    //Everyting is loaded, now lets play music
+    music.play();
     this.start();
   },
 

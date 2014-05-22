@@ -12,6 +12,7 @@ THREE.PointerLockControls = function(camera) {
 
   var pitchObject = new THREE.Object3D();
   pitchObject.add(camera);
+  pitchObject.rotation.x += .2
 
   var yawObject = new THREE.Object3D();
   var playerHeight = 70

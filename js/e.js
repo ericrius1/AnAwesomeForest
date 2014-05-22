@@ -13,16 +13,11 @@ window.map = function(value, min1, max1, min2, max2) {
 
 
 
-var sound = loadAudio('assets/m83.mp3');
-var play = true;
+var music = loadAudio('assets/m83.mp3');
+var playMusic = true;
 
 function loadAudio(uri) {
   var audio = new Audio();
-  audio.addEventListener('canplaythrough', function() {
-    if (play) {
-      this.play();
-    }
-  }, false); // It works!!
   audio.src = uri;
   return audio;
 }

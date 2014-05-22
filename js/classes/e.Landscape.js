@@ -8,7 +8,7 @@ e.Landscape = new Class({
       self.snowCover();
     });
 
-    this.snowFillTime = 30000;
+    this.snowFillTime = 40000;
     this.summerGroundColor = new THREE.Color(0x3f3f17);
     this.winterGroundColor = new THREE.Color(0xffffff);
     var groundTexture = THREE.ImageUtils.loadTexture('assets/dirt.jpg');

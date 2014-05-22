@@ -21,11 +21,11 @@ e.World = new Class({
       color: 0xe3e3e3
     }));
     this.moon.scale.multiplyScalar(80);
-    this.moon.position.set(-this.size/2, 0, -this.size/2)
+    this.moon.position.set(-5000, 0, -this.size/2)
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
     this.game.scene.add(this.moon);
-    this.funHeight = 500;
+    this.funHeight = 1000;
 
 
     //WATER
@@ -111,8 +111,11 @@ e.World = new Class({
 
   beginWinter: function() {
     console.log('winter');
+    var self = this;
     this.snow.beginSnowing();
-    this.birds.hibernate();
+    setTimeout(function(){
+      self.birds.hibernate();
+    }, 1500);
   },
   beginSpring: function(){
     console.log('spring')
@@ -124,7 +127,7 @@ e.World = new Class({
     setTimeout(function(){
       self.birds.returnHome();
       self.skywriting.reveal();
-    }, 1000)
+    }, 10000)
   },
 
 

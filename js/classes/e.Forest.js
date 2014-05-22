@@ -8,7 +8,7 @@ e.Forest = new Class({
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 20;
+    this.numTrees = 100;
     this.maxSteps = 5;
     this.timeMultiplier = 0.005;
     this.noTreeRadius = 400;
@@ -127,7 +127,7 @@ e.Forest = new Class({
     var leafVertices = new THREE.Float32Attribute(numLeaves * 3, 3);
 
     var length = randInt(30, 150);
-    size = map(length, 30, 150, 5, 20);
+    size = map(length, 30, 150, 5, 15);
     size *= (THREE.Math.randFloat(0.9, 1.1));
     createTreeHelper(angle, 0, 0, 0, length, 0, size);
 
@@ -258,6 +258,7 @@ e.Forest = new Class({
     }
     var colorChangeTween = new TWEEN.Tween(curCol).
     to(finalCol, this.game.seasonTime * 0.9).
+    easing(TWEEN.Easing.Cubic.InOut).
     onUpdate(function() {
       self.leafMaterial.uniforms.green.value = curCol.g;
     }).start();

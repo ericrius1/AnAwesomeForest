@@ -18,11 +18,11 @@ e.Birds = new Class({
     var boid;
     var randFloat = THREE.Math.randFloat;
     var startingX = 0, startingZ = this.game.size, startingY = this.birdHeight + 10;
-    var xSpacing = 15;
+    var xSpacing = 10;
     var zSpacing = 20;
     for (var i = 0; i < this.numBirds; i++) {
       boid = this.boids[i] = new Boid();
-      boid.position.set(0, startingY, startingZ + (i * zSpacing))
+      boid.position.set(0, _.random(startingY-100, startingY + 100), startingZ + (i * zSpacing))
       if(i % 2 === 0){
         boid.position.x = startingX + (i * xSpacing);
       }else{
@@ -57,7 +57,7 @@ e.Birds = new Class({
     this.shouldUpdate = true;
     for(var i = 0; i < this.birds.length; i++){
       var boid = this.boids[i];
-      boid.maxSpeed = 30;
+      boid.maxSpeed = 20;
       boid.setGoal(new THREE.Vector3(boid.position.x, boid.position.y, -boid.position.z));
       this.birds[i].visible = true;
     }

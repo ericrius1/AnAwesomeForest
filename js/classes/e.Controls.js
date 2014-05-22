@@ -7,13 +7,9 @@ e.Controls = new Class({
     this.game = options.game;
     // this.keyboard = new e.Keyboard();
     
-    var blocker = document.getElementById('blocker');
-    blocker.style.display = 'block'
     if(fpsControls){
       this.controls = new THREE.PointerLockControls(this.camera);
       this.game.scene.add( this.controls.getObject() );
-      var instructions = document.getElementById('instructions');
-      var pointer = document.getElementById('pointer');
 
       // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
@@ -29,19 +25,10 @@ e.Controls = new Class({
 
             self.controls.enabled = true;
 
-            blocker.style.display = 'none';
-            pointer.style.display = 'block'
 
           } else {
 
             self.controls.enabled = false;
-
-            blocker.style.display = '-webkit-box';
-            blocker.style.display = '-moz-box';
-            blocker.style.display = 'box';
-            pointer.style.display = 'none';
-
-            instructions.style.display = '';
 
           }
 
@@ -49,7 +36,6 @@ e.Controls = new Class({
 
         var pointerlockerror = function(event) {
 
-          instructions.style.display = '';
 
         }
 
@@ -62,9 +48,8 @@ e.Controls = new Class({
         document.addEventListener('mozpointerlockerror', pointerlockerror, false);
         document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 
-        instructions.addEventListener('click', function(event) {
+        document.addEventListener('click', function(event) {
 
-          instructions.style.display = 'none';
 
           // Ask the browser to lock the pointer
           element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
@@ -97,11 +82,7 @@ e.Controls = new Class({
 
         }, false);
 
-      } else {
-
-        instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
-
-      }
+      } 
     }
   },
   update: function() {
