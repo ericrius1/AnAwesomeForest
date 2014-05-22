@@ -2,6 +2,7 @@ e.Forest = new Class({
   extend: e.EventEmitter,
   randFloat: THREE.Math.randFloat,
   construct: function(options) {
+    var self = this;
     this.game = options.game;
     this.island = options.island;
     this.world = options.world;
@@ -13,6 +14,9 @@ e.Forest = new Class({
     this.noTreeRadius = 400;
     this.leafVelocity = 1000;
 
+    this.on('birdsPassedIsland', function(){
+      self.beginLeafFall();
+    })
 
     this.lightGeo = new THREE.CircleGeometry(50, 50);
 
@@ -253,13 +257,10 @@ e.Forest = new Class({
       g: 0.0
     }
     var colorChangeTween = new TWEEN.Tween(curCol).
-    to(finalCol, this.game.seasonTime * 0.3).
+    to(finalCol, this.game.seasonTime * 0.9).
     onUpdate(function() {
       self.leafMaterial.uniforms.green.value = curCol.g;
     }).start();
-    colorChangeTween.onComplete(function() {
-      self.beginLeafFall();
-    })
   },
 
   beginLeafFall: function() {

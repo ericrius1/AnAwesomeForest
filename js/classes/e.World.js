@@ -116,9 +116,9 @@ e.World = new Class({
   },
   beginSpring: function(){
     console.log('spring')
+    this.snow.endSnowing();
     this.landscape.snowMelt();
     this.forest.leavesGrowBack();
-    this.snow.endSnowing();
     var self = this;
     this.game.yearCompleted = true;
     setTimeout(function(){

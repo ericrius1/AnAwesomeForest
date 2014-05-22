@@ -14,6 +14,7 @@ e.Game = new Class({
   construct: function() {
     this.playerHeight = 50;
     this.yearTime = 215000;
+    this.seasonTime = this.yearTime * 0.33;
     // this.yearTime = 80000;
     this.size = 40000;
     // WINTER POINT
@@ -23,8 +24,8 @@ e.Game = new Class({
 
     //FALL START
     this.fallPoint = 0.0;
-    this.winterPoint = 0.33;
-    this.springPoint = 0.66;
+    this.winterPoint = 0.5;
+    this.springPoint = 0.8;
 
 
     //SPRING START

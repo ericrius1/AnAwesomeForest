@@ -1,4 +1,4 @@
-var gMaxSpeed = 15;
+var gMaxSpeed = 10;
 e.Birds = new Class({
   extend: e.EventEmitter,
 
@@ -13,10 +13,11 @@ e.Birds = new Class({
     this.birds = [];
     this.shouldUpdate = true;
     this.maxSpeed = 200;
+    this.hasPassedIsland = false;
 
     var boid;
     var randFloat = THREE.Math.randFloat;
-    var startingX = 0, startingZ = this.game.size/2, startingY = this.birdHeight + 10;
+    var startingX = 0, startingZ = this.game.size, startingY = this.birdHeight + 10;
     var xSpacing = 15;
     var zSpacing = 20;
     for (var i = 0; i < this.numBirds; i++) {
@@ -67,6 +68,7 @@ e.Birds = new Class({
     if (!this.shouldUpdate) {
       return;
     }
+
     var time = performance.now();
     var boid;
     for (var i = 0; i < this.boids.length; i++) {
@@ -78,6 +80,11 @@ e.Birds = new Class({
       bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
       bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
+      if(!this.hasPassedIsland && i === 0 && boid.position.z < -this.world.islandRadius - 2000){
+        this.hasPassedIsland = true;
+        this.trigger('birdsPassedIsland');
+
+      }
     }
   },
 

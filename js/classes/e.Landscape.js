@@ -8,6 +8,7 @@ e.Landscape = new Class({
       self.snowCover();
     });
 
+    this.snowFillTime = 30000;
     this.summerGroundColor = new THREE.Color(0x3f3f17);
     this.winterGroundColor = new THREE.Color(0xffffff);
     var groundTexture = THREE.ImageUtils.loadTexture('assets/dirt.jpg');
@@ -50,14 +51,14 @@ e.Landscape = new Class({
       a: 1
     }
     var snowFillTween = new TWEEN.Tween(curSnowOpacity).
-      to(finalSnowOpacity, 10000).
+      to(finalSnowOpacity, this.snowFillTime/2).
       easing(TWEEN.Easing.Cubic.InOut).
       delay(delay).
       onUpdate(function(){
         self.snow.material.opacity = curSnowOpacity.a;
       }).start()
     var snowRiseTween = new TWEEN.Tween(curSnowPos).
-      to(finalSnowPos, 30000).
+      to(finalSnowPos, this.snowFillTime).
       delay(delay).
       easing(TWEEN.Easing.Cubic.InOut).
       onUpdate(function(){
@@ -76,7 +77,7 @@ e.Landscape = new Class({
       a: 0 
     };
     var snowMeltTween = new TWEEN.Tween(curSnowPos).
-      to(finalSnowPos, 5000).
+      to(finalSnowPos, this.snowFillTime/2).
       easing(TWEEN.Easing.Cubic.InOut).
       onUpdate(function(){
         self.snow.position.y = curSnowPos.y;
