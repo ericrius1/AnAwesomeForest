@@ -3,13 +3,15 @@ e.Forest = new Class({
   randFloat: THREE.Math.randFloat,
   construct: function(options) {
     this.game = options.game;
+    this.island = options.island;
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
     this.numTrees = 20;
     this.maxSteps = 5;
     this.timeMultiplier = 0.005;
-    this.noTreeRadius = 100;
+    this.noTreeRadius = 400;
+    this.leafVelocity = 1000;
 
 
     this.lightGeo = new THREE.CircleGeometry(50, 50);
@@ -35,7 +37,7 @@ e.Forest = new Class({
         },
         alpha: {
           type: 'f',
-          value: 0.5
+          value: 0.8
         },
         fallTime: {
           type: 'f',
@@ -83,10 +85,9 @@ e.Forest = new Class({
 
 
     var centerPos = new THREE.Vector2(0, 0)
+    var points = THREE.GeometryUtils.randomPointsInGeometry(this.island.geometry, this.numTrees);
     for (var i = 0; i < this.numTrees; i++) {
-      var xPos = THREE.Math.randInt(-this.world.islandRadius * 0.8, this.world.islandRadius * 0.8);
-      var zPos = THREE.Math.randInt(-this.world.islandRadius * 0.8, this.world.islandRadius * 0.8);
-      var treePos = new THREE.Vector2(xPos, zPos)
+      var treePos = new THREE.Vector2(points[i].x, points[i].y)
       if (treePos.distanceTo(centerPos) > this.noTreeRadius){
         this.createTree(treePos);
       }
@@ -121,8 +122,10 @@ e.Forest = new Class({
     var numLeaves = Math.pow(2, maxSteps - 1);
     var leafVertices = new THREE.Float32Attribute(numLeaves * 3, 3);
 
-    var size = randInt(5, 10);
-    createTreeHelper(angle, 0, 0, 0, randInt(80, 120), 0, size);
+    var length = randInt(30, 150);
+    size = map(length, 30, 150, 5, 20);
+    size *= (THREE.Math.randFloat(0.9, 1.1));
+    createTreeHelper(angle, 0, 0, 0, length, 0, size);
 
 
 
@@ -138,8 +141,7 @@ e.Forest = new Class({
         var newLength2 = Math.max(1, length * tempLengthMult2);
         var newLength3 = Math.max(1, length * tempLengthMult2);
         var angle1 = self.randFloat(0.52, 0.78);
-        var angle2 = -self.randFloat(0.52, 0.78);
-        var angle3 = -self.randFloat(0.52, 0.78);
+        var angle2 = -self.randFloat(0.52, 0.78);     
 
         //We want greater angle randomness the deeper we get into the tree structure
         var angleOffset = map(count, 0, maxSteps - 1, .1, 1);
@@ -261,8 +263,18 @@ e.Forest = new Class({
   },
 
   beginLeafFall: function() {
+    var self = this;
     this.leafMaterial.uniforms.fallTime.value = 0;
-    this.leafMaterial.uniforms.velocity.value.set(200, 20, -400);
+    this.leafMaterial.uniforms.velocity.value.set(200, 20, -this.leafVelocity);
+    var curOpacity = {a : this.leafMaterial.uniforms.alpha.value};
+    var finalOpacity = {a : 0.0};
+    var fadeTween = new TWEEN.Tween(curOpacity).
+      to(finalOpacity, 10000).
+      delay(1000).
+      easing(TWEEN.Easing.Cubic.InOut).
+      onUpdate(function(){
+        self.leafMaterial.uniforms.alpha.value=curOpacity.a
+      }).start();
     this.trigger('leavesfell');
 
   },

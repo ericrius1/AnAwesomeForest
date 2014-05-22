@@ -1,31 +1,33 @@
+var gMaxSpeed = 200;
 e.Birds = new Class({
   extend: e.EventEmitter,
 
   construct: function(options) {
     var self = this;
     this.game = options.game;
-    this.sholdUpdate = true;
     this.world = options.world;
-    this.birdCamera = this.game.birdCamera;
+    this.birdHeight = options.birdHeight;
     this.trees = options.forest.trees;
     this.numBirds = 50;
     this.boids = [];
     this.birds = [];
-    this.southZ = -5000;
-    this.targetingTrees = true;
-    this.targetingTrees = false;
-    this.on('leavesfell', function() {
-      setTimeout(function() {
-        self.headSouth();
-        self.targetingTrees = false;
-      }, 1000)
-    });
+    this.shouldUpdate = true;
+    this.maxSpeed = 200;
 
     var boid;
     var randFloat = THREE.Math.randFloat;
+    var startingX = 0, startingZ = 20000, startingY = this.birdHeight;
+    var xSpacing = 15;
+    var zSpacing = 20;
     for (var i = 0; i < this.numBirds; i++) {
       boid = this.boids[i] = new Boid();
-      boid.position.set(_.random(-this.world.islandRadius, this.world.islandRadius), _.random(300, 500), _.random(-this.world.islandRadius, this.world.islandRadius));
+      boid.position.set(0, startingY, startingZ + (i * zSpacing))
+      if(i % 2 === 0){
+        boid.position.x = startingX + (i * xSpacing);
+      }else{
+        boid.position.x = startingX - (i * xSpacing)
+      }
+      boid.setGoal(new THREE.Vector3(boid.position.x, boid.position.y, -boid.position.z));
       var color = new THREE.Color().setRGB(0.078, randFloat(0.588, 0.82), randFloat(0.678, 0.87));
       var bird = new THREE.Mesh(this.createBirdGeo(), new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
@@ -37,53 +39,26 @@ e.Birds = new Class({
       bird.flapSpeedMultiplier = randFloat(0.0, 0.4);
       this.birds.push(bird);
       this.game.scene.add(bird);
-      this.birdCamera = new THREE.PerspectiveCamera(50, 1, 1, 1000000);
-      this.birds[0].add(this.birdCamera)
-      this.birdCamera.position.x = 100;
-      this.birdCamera.rotation.x = Math.PI / 2;
-      // this.game.activeCamera = this.birdCamera;
+
     }
-    // self.flockAroundTrees();
 
   },
-  headSouth: function() {
-    //send all birds south
-    var target = new THREE.Vector3(_.random(-50, 50), 1000, this.southZ);
-    this.targetingSouth = true;
-    _.each(this.boids, function(boid) {
-      boid.setGoal(target);
-    });
+
+  hibernate: function(){
+    this.shouldUpdate = false;
   },
 
-  returnHome: function(){
-    var self = this;
-    this.sholdUpdate = true;
-    this.targetingSouth = false;
+
+  returnHome: function() {
+    this.shouldUpdate = true;
     _.each(this.boids, function(boid){
-      boid.position.set(_.random(-100, 100), _.random(700, 900), self.southZ);
-      boid.setGoal(new THREE.Vector3(_.random(-10, 10), _.random(600, 650), _.random(-10, 10)));
-      boid.shouldFlock = true;
+      boid.maxSpeed = 40;
+      boid.setGoal(new THREE.Vector3(boid.position.x, boid.position.y, -boid.position.z))
     });
-
-  },
-
-  //Have birds flock around trees
-  flockAroundTrees: function() {
-    var self = this;
-    _.each(this.boids, function(boid) {
-      boid.setGoal(self.pickTree());
-    });
-  },
-
-  pickTree: function() {
-    var tree = this.trees[_.random(0, this.trees.length - 1)];
-    var target = tree.position.clone();
-    target.y = tree.geometry.boundingBox.max.y + _.random(0, 100);
-    return target;
   },
 
   update: function() {
-    if(!this.sholdUpdate){
+    if (!this.shouldUpdate) {
       return;
     }
     var time = performance.now();
@@ -97,21 +72,6 @@ e.Birds = new Class({
       bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
       bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
-
-      if (boid.goal && this.targetingTrees) {
-        var distance = bird.position.distanceTo(boid.goal);
-        if (distance < 100) {
-          boid.setGoal(this.pickTree());
-
-        }
-      }
-
-      if (boid.goal && this.targetingSouth) {
-        var distance = bird.position.distanceTo(boid.goal);
-        if (distance < 100) {
-          // this.sholdUpdate = false;
-        }
-      }
     }
 
 
@@ -158,50 +118,98 @@ var Boid = function() {
     _acceleration, _width = 500,
     _height = 500,
     _depth = 200,
-    _neighborhoodRadius = 100,
-    _maxSpeed = 20,
-    _maxSteerForce = 0.01,
-    _goalSpeed = 0.005
-
-  this.goal = null;
-  this.shouldFlock = false;
+    _goal, _neighborhoodRadius = 100,
+    _maxSteerForce = 0.1,
+    _avoidWalls = false;
 
   this.position = new THREE.Vector3();
+  this.maxSpeed = gMaxSpeed;
   this.velocity = new THREE.Vector3();
   _acceleration = new THREE.Vector3();
 
   this.setGoal = function(target) {
 
-    this.goal = target;
+    _goal = target;
 
   }
 
+  this.setAvoidWalls = function(value) {
 
+    _avoidWalls = value;
+
+  }
+
+  this.setWorldSize = function(width, height, depth) {
+
+    _width = width;
+    _height = height;
+    _depth = depth;
+
+  }
 
   this.run = function(boids) {
 
+    if (_avoidWalls) {
 
+      vector.set(-_width, this.position.y, this.position.z);
+      vector = this.avoid(vector);
+      vector.multiplyScalar(5);
+      _acceleration.add(vector);
+
+      vector.set(_width, this.position.y, this.position.z);
+      vector = this.avoid(vector);
+      vector.multiplyScalar(5);
+      _acceleration.add(vector);
+
+      vector.set(this.position.x, -_height, this.position.z);
+      vector = this.avoid(vector);
+      vector.multiplyScalar(5);
+      _acceleration.add(vector);
+
+      vector.set(this.position.x, _height, this.position.z);
+      vector = this.avoid(vector);
+      vector.multiplyScalar(5);
+      _acceleration.add(vector);
+
+      vector.set(this.position.x, this.position.y, -_depth);
+      vector = this.avoid(vector);
+      vector.multiplyScalar(5);
+      _acceleration.add(vector);
+
+      vector.set(this.position.x, this.position.y, _depth);
+      vector = this.avoid(vector);
+      vector.multiplyScalar(5);
+      _acceleration.add(vector);
+
+    }
+    /* else {
+
+            this.checkBounds();
+
+          }
+          */
 
     if (Math.random() > 0.5) {
+
       this.flock(boids);
+
     }
 
     this.move();
 
-
   }
 
   this.flock = function(boids) {
-    if (this.goal) {
-      _acceleration.add(this.reach(this.goal, _goalSpeed));
+
+    if (_goal) {
+
+      _acceleration.add(this.reach(_goal, 0.005));
+
     }
 
-    if(this.shouldFlock){
-      _acceleration.add(this.alignment(boids));
-      _acceleration.add(this.cohesion(boids));
-      _acceleration.add(this.separation(boids));
-      
-    }
+    // _acceleration.add(this.alignment(boids));
+    // _acceleration.add(this.cohesion(boids));
+    // _acceleration.add(this.separation(boids));
 
   }
 
@@ -211,9 +219,9 @@ var Boid = function() {
 
     var l = this.velocity.length();
 
-    if (l > _maxSpeed) {
+    if (l > this.maxSpeed) {
 
-      this.velocity.divideScalar(l / _maxSpeed);
+      this.velocity.divideScalar(l / this.maxSpeed);
 
     }
 
@@ -221,6 +229,19 @@ var Boid = function() {
     _acceleration.set(0, 0, 0);
 
   }
+
+  this.checkBounds = function() {
+
+    if (this.position.x > _width) this.position.x = -_width;
+    if (this.position.x < -_width) this.position.x = _width;
+    if (this.position.y > _height) this.position.y = -_height;
+    if (this.position.y < -_height) this.position.y = _height;
+    if (this.position.z > _depth) this.position.z = -_depth;
+    if (this.position.z < -_depth) this.position.z = _depth;
+
+  }
+
+  //
 
   this.avoid = function(target) {
 

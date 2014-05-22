@@ -2,6 +2,7 @@ e.SkyWriting = new Class({
   construct: function(options) {
     this.game = options.game;
     this.world = options.world;
+    this.messageHeight = options.messageHeight;
     this.emitters = [];
     this.currentEmitterIndex = 0;
     this.emitterBatch = 10;
@@ -11,8 +12,8 @@ e.SkyWriting = new Class({
 
     });
     var text = new THREE.Mesh(textGeo);
-    text.position.set(-this.world.islandRadius * 2, 3000, -this.world.size/2)
-    text.scale.multiplyScalar(10);
+    text.position.set(-500, this.messageHeight, -this.world.islandRadius - 1000)
+    // text.scale.multiplyScalar(10);
     text.scale.z = 0.01;
     var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 4000);
     this.game.scene.add(text);
@@ -27,8 +28,7 @@ e.SkyWriting = new Class({
       colorStart: new THREE.Color(0xff0000),
       colorEnd: new THREE.Color(0x0000ff),
       velocitySpread: new THREE.Vector3(10, 10, 10),
-      sizeStart: 400,
-      sizeEnd: 310,
+      sizeStart: 100,
       opacityEnd: 1,
       particleCount: 2,
     }

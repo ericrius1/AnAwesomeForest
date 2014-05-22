@@ -12,8 +12,8 @@ e.Controls = new Class({
     if(fpsControls){
       this.controls = new THREE.PointerLockControls(this.camera);
       this.game.scene.add( this.controls.getObject() );
-      var pointer = document.getElementById('pointer');
       var instructions = document.getElementById('instructions');
+      var pointer = document.getElementById('pointer');
 
       // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
@@ -30,7 +30,7 @@ e.Controls = new Class({
             self.controls.enabled = true;
 
             blocker.style.display = 'none';
-            pointer.style.display = 'block';
+            pointer.style.display = 'block'
 
           } else {
 
@@ -39,9 +39,9 @@ e.Controls = new Class({
             blocker.style.display = '-webkit-box';
             blocker.style.display = '-moz-box';
             blocker.style.display = 'box';
+            pointer.style.display = 'none';
 
             instructions.style.display = '';
-            pointer.style.display = '';
 
           }
 

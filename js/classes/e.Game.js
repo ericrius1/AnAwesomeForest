@@ -13,20 +13,20 @@ e.Game = new Class({
   //Come DOWN TO US REMIX
   construct: function() {
     this.playerHeight = 50;
-    this.yearTime = 500000;
+    this.yearTime = 10000;
     this.seasonTime = this.yearTime * 0.25;
 
     //WINTER POINT
-    this.winterPoint = 0.0;
-    this.springPoint = 0.25;
-    this.summerPoint = 0.5;
-    this.fallPoint = 0.75;
+    // this.winterPoint = 0.0;
+    // this.springPoint = 0.25;
+    // this.summerPoint = 0.5;
+    // this.fallPoint = 0.75;
 
     //FALL START
-    // this.fallPoint = 0.0;
-    // this.winterPoint = 0.25;
-    // this.springPoint = 0.5;
-    // this.summerPoint = 0.75;
+    this.fallPoint = 0.0;
+    this.winterPoint = 0.25;
+    this.springPoint = 0.5;
+    this.summerPoint = 0.75;
 
 
     //SUMMER START
@@ -46,6 +46,7 @@ e.Game = new Class({
     this.checkFall = true;
     this.checkWinter = true;
     this.checkSpring = true;
+    this.yearCompleted = false;
     this.seasonCheckTimeout = this.yearTime / 4 - 100;
     // Bind render function permenantly
     this.render = this.render.bind(this);
@@ -124,6 +125,7 @@ e.Game = new Class({
     if (self.checkSummer && Math.abs(this.cyclePoint - this.summerPoint) < 0.1) {
       self.checkSummer = false;
       this.trigger('summer');
+      this.yearCompleted = true;
       setTimeout(function() {
         self.checkSummer = true
       }, this.seasonCheckTimeout)
@@ -161,7 +163,9 @@ e.Game = new Class({
     // this.renderer.clear();
     this.renderer.render(this.scene, this.activeCamera);
     // this.composer.render(0.01);
-    this.checkForNewSeason();
+    if(!this.yearCompleted){
+      this.checkForNewSeason();
+    }
 
 
   },

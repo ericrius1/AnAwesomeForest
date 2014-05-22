@@ -62,6 +62,7 @@ body {
   height: 15px;
   border:solid 2px;
   border-color: #00f;
+  z-index: 1000;
   display: none;
 
 }
