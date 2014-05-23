@@ -17,16 +17,16 @@ e.Game = new Class({
     // this.fallPoint = 0.66;
 
     //FALL START
-    this.fallPoint = 0.0;
-    this.winterPoint = 0.4;
-    this.springPoint = 0.6;
-    this.fallTime= this.yearTime * this.winterPoint;
+    // this.fallPoint = 0.0;
+    // this.winterPoint = 0.4;
+    // this.springPoint = 0.6;
+    // this.fallTime= this.yearTime * this.winterPoint;
 
 
     //SPRING START
-    // this.springPoint = 0.0;
-    // this.fallPoint = 0.33;
-    // this.winterPoint = 0.66;
+    this.springPoint = 0.0;
+    this.fallPoint = 0.33;
+    this.winterPoint = 0.66;
 
 
     this.checkFall = true;
@@ -38,7 +38,9 @@ e.Game = new Class({
     this.render = this.render.bind(this);
     var self = this;
 
-    this.renderer = new THREE.WebGLRenderer({antialias: false});
+    this.renderer = new THREE.WebGLRenderer({
+      antialias: false
+    });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.autoClear = false;
 
@@ -50,23 +52,39 @@ e.Game = new Class({
     this.renderer.setClearColor(0x000000);
 
     initPostProcessing();
+    this.gui = new dat.GUI();
+    this.gui.add(this.effectController, 'focus', 0.0, 3.0, 0.025).onChange(function(){
+      self.matChange();
+    }); 
+    this.gui.add(this.effectController, 'aperture', 0.001, 0.2, 0.001).onChange(function(){
+      self.matChange();
+    });
+    this.gui.add(this.effectController, 'maxblur', 0.0, 3.0, 0.025).onChange(function(){
+      self.matChange();
+    }); 
+    // this.gui.close();
 
-    function initPostProcessing(){
-      var renderPass = new THREE.RenderPass(self.scene, self.camera);
-      var bokehPass = new THREE.BokehPass(self.scene, self.camera, {
+    function initPostProcessing() {
+      self.effectController = {
         focus: 1.0,
-        aperture: 0.0035,
+        aperture: 0.025,
+        maxblur: 1.0
+      }
+      var renderPass = new THREE.RenderPass(self.scene, self.camera);
+      self.bokehPass = new THREE.BokehPass(self.scene, self.camera, {
+        focus: 1.0,
+        aperture: 0.025,
         maxblur: 1.0,
         width: window.innerWidth,
         height: window.innerHeight
       });
-      var bloomPass = new THREE.BloomPass(0.75);
-      bokehPass.renderToScreen = true; 
+      bloomPass = new THREE.BloomPass(0.75);
+      self.bokehPass.renderToScreen = true;
 
       self.composer = new THREE.EffectComposer(self.renderer);
       self.composer.addPass(renderPass);
       self.composer.addPass(bloomPass);
-      self.composer.addPass(bokehPass) 
+      self.composer.addPass(self.bokehPass)
 
     }
 
@@ -102,6 +120,12 @@ e.Game = new Class({
   start: function() {
     this.clock.start()
     requestAnimationFrame(this.render);
+  },
+
+  matChange: function() {
+    this.bokehPass.uniforms["focus"].value = this.effectController.focus;
+    this.bokehPass.uniforms["aperture"].value = this.effectController.aperture;
+    this.bokehPass.uniforms["maxblur"].value = this.effectController.maxblur;
   },
 
 
@@ -149,7 +173,8 @@ e.Game = new Class({
     this.controls.update();
     TWEEN.update();
     this.composer.render(0.01);
-    if(!this.yearCompleted){
+    // this.renderer.render(this.scene, this.camera);
+    if (!this.yearCompleted) {
       this.checkForNewSeason();
     }
 

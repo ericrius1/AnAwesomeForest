@@ -49,7 +49,8 @@ e.DistantLands = new Class({
       var tempX = Math.random() > 0.5 ? posX : -posX;
       houseEmitter = new SPE.Emitter(houseParams);
       houseEmitter.position.set(_.random(tempX -this.spread, tempX + this.spread), _.random(0, 2000), posZ);
-      houseEmitter.sizeStart = _.random(400, 1400);
+      // houseEmitter.sizeStart = _.random(400, 1400);
+      houseEmitter.sizeStart = _.random(5000, 7000);
       houseEmitter.colorStart.setRGB(Math.random(), Math.random(), Math.random())
       this.cityGroup.addEmitter(houseEmitter);
       this.emitters.push(houseEmitter);

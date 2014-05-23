@@ -8,11 +8,13 @@ e.SkyWriting = new Class({
     this.emitterBatch = 10;
 
     var textGeo = new THREE.TextGeometry('HAPPY BIRTHDAY ANITRA!!', {
-      font: 'josefin slab'
+      font: 'josefin slab',
+      size: 40
 
     });
     var text = new THREE.Mesh(textGeo);
-    text.position.set(-900, this.messageHeight, -this.world.islandRadius - 1000)
+    text.position.set(-300, this.messageHeight, -this.world.islandRadius - 100)
+    // text.position.set(-300, 70, -this.world.islandRadius - 100)
     // text.scale.multiplyScalar(10);
     text.scale.z = 0.01;
     var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 4000);
@@ -28,7 +30,7 @@ e.SkyWriting = new Class({
       colorStart: new THREE.Color(0xff0000),
       colorEnd: new THREE.Color(0x0000ff),
       velocitySpread: new THREE.Vector3(10, 10, 10),
-      sizeStart: 50,
+      sizeStart: 40,
       opacityEnd: 1,
       particleCount: 2,
     }

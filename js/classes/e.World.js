@@ -25,7 +25,7 @@ e.World = new Class({
     this.moon.scale.x += 2;
     this.moon.lookAt(this.game.scene.position);
     this.game.scene.add(this.moon);
-    this.funHeight = 1000;
+    this.funHeight = 500;
 
 
     //WATER
@@ -119,10 +119,10 @@ e.World = new Class({
     this.landscape.snowMelt();
     this.forest.leavesGrowBack();
     this.game.yearCompleted = true;
-    setTimeout(function(){
+    // setTimeout(function(){
       self.birds.returnHome();
       self.skywriting.reveal();
-    }, 10000)
+    // }, 10000)
   },
 
 
