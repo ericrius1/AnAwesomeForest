@@ -85,18 +85,19 @@
 
         uniform float width;
         uniform float time;
-        uniform float startingTime;
 
         attribute float pivotPoint;
         attribute float wind;
+        attribute vec3 color;
 
         uniform vec3 velocity;
         uniform float fallTime;
 
 
-        varying float x;
+        varying vec3 vColor;
 
         void main() {
+          vColor = color;
           vec3 newPos = position;
           float clampedWind = max(0.8, wind);
           if(pivotPoint > 0.5){
@@ -108,7 +109,6 @@
             
             newPos = newPos + adjustedVelocity * fallTime;
           }
-          x = abs(position.x/width);
 
           gl_Position = projectionMatrix * modelViewMatrix * vec4( newPos, 1.0 );
 
@@ -121,22 +121,23 @@
       precision mediump float;
       precision mediump int;
 
+      uniform float changePoint;
 
-      uniform float green;
       uniform float alpha;
+      uniform vec3 originalColor;
       uniform float fallTime;
       uniform vec3 velocity;
 
       varying float x;
+      varying vec3 vColor;
 
       void main() {
-
         float adjustedAlpa = alpha;
         if(length(velocity) > 0.0){
           adjustedAlpa = max(0.0, alpha - fallTime/30.0);
         }
-        float r = mix(0., 1., x);
-        vec4 color = vec4(r, green, 0., adjustedAlpa );
+        vec3 curColor = mix(originalColor, vColor, changePoint);
+        vec4 color = vec4(curColor, adjustedAlpa );
         gl_FragColor = color;
 
       }

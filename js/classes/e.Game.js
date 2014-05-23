@@ -1,16 +1,9 @@
-//CAVERN WITH WATER FALL
-//STEPS UP TO TOP. YOU JUMP OUT AND THERE IS MESSAGE
-//Control time from here
 
-//Underground cavern with heart statue \/
-//Extend helix doen into it. Under pond
-//Sky writing particles
 
 e.Game = new Class({
   extend: e.EventEmitter,
 
 
-  //Come DOWN TO US REMIX
   construct: function() {
     this.playerHeight = 50;
     this.yearTime = 215000;
@@ -58,7 +51,7 @@ e.Game = new Class({
     this.renderer.setClearColor(0x000000);
 
 
-    //year PROCESSING
+    //POST PROCESSING
     var renderModel = new THREE.RenderPass(this.scene, this.camera);
     var effectBloom = new THREE.BloomPass(1.0);
     var effectCopy = new THREE.ShaderPass(THREE.CopyShader);

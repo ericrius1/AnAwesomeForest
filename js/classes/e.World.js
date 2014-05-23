@@ -83,11 +83,6 @@ e.World = new Class({
       game: this.game
     });
 
-    // this.fountains = new e.Fountains({
-    //   game: this.game,
-    //   world: this
-    // });
-
 
   },
 
@@ -97,7 +92,7 @@ e.World = new Class({
     this.water.render();
     this.forest.update();
     this.birds.update();
-    this.moon.position.y += 1;
+    this.moon.position.y += 2;
     this.distantlands.update();
     this.snow.update();
     this.skywriting.update();
@@ -119,10 +114,10 @@ e.World = new Class({
   },
   beginSpring: function(){
     console.log('spring')
+    var self = this; 
     this.snow.endSnowing();
     this.landscape.snowMelt();
     this.forest.leavesGrowBack();
-    var self = this;
     this.game.yearCompleted = true;
     setTimeout(function(){
       self.birds.returnHome();

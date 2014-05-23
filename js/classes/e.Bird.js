@@ -1,4 +1,4 @@
-var gMaxSpeed = 10;
+var gMaxSpeed = 11.5;
 e.Birds = new Class({
   extend: e.EventEmitter,
 

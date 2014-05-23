@@ -8,12 +8,21 @@ e.Forest = new Class({
     this.world = options.world;
     this.lengthMult = 0.5;
     this.trees = [];
-    this.numTrees = 100;
-    this.maxSteps = 5;
+    this.numTrees = 50;
+    this.maxSteps = 6;
     this.timeMultiplier = 0.005;
     this.noTreeRadius = 400;
     this.leafVelocity = 1000;
     this.numLeaves = Math.pow(2, this.maxSteps-1);
+    this.potentialLeafColors = [
+      new THREE.Color(0xd58b17),
+      new THREE.Color(0xd55e17),
+      new THREE.Color(0xd53a17),
+      new THREE.Color(0xdfcc28),
+      new THREE.Color(0xd71069),
+      new THREE.Color(0xba1bb1),
+
+    ]
 
     this.on('birdsPassedIsland', function(){
       self.beginLeafFall();
@@ -28,17 +37,13 @@ e.Forest = new Class({
           type: "f",
           value: 0.0
         },
-        startingTime: {
-          type: 'f',
-          value: performance.now() * this.timeMultiplier
+        changePoint: {
+          type: "f",
+          value: 0.0
         },
         width: {
           type: 'f',
           value: 100
-        },
-        green: {
-          type: 'f',
-          value: 1.0
         },
         alpha: {
           type: 'f',
@@ -47,6 +52,10 @@ e.Forest = new Class({
         fallTime: {
           type: 'f',
           value: 0
+        },
+        originalColor: {
+          type: 'c',
+          value: new THREE.Color(0x0c761e)
         },
         velocity: {
           type: 'v3',
@@ -62,7 +71,7 @@ e.Forest = new Class({
           type: 'f',
           value: null
         },
-        colors: {
+        color: {
           type: 'vec3',
           value: null
         }
@@ -92,15 +101,14 @@ e.Forest = new Class({
       this.wind.setX(i + 2, windSpeed);
     }
 
-    this.colors = new THREE.Float32Attribute(this.numLeaves*3, 3);
-    var numColors = this.colors.array.length;
+    this.color = new THREE.Float32Attribute(this.numLeaves*3, 3);
+    var numColors = this.color.array.length;
     for(var i = 0; i < numColors; i+=3){
-      var color = new THREE.Color().setRGB(Math.random(), Math.random(), Math.random());
-      this.colors.setXYZ(i, color.r, color.g, color.b);
-      this.colors.setXYZ(i+1, color.r, color.g, color.b);
-      this.colors.setXYZ(i+2, color.r, color.g, color.b);
+      var color = _.sample(this.potentialLeafColors);
+      this.color.setXYZ(i, color.r, color.g, color.b);
+      this.color.setXYZ(i+1, color.r, color.g, color.b);
+      this.color.setXYZ(i+2, color.r, color.g, color.b);
     }
-
 
     var centerPos = new THREE.Vector2(0, 0)
     var points = THREE.GeometryUtils.randomPointsInGeometry(this.island.geometry, this.numTrees);
@@ -110,8 +118,6 @@ e.Forest = new Class({
         this.createTree(treePos);
       }
     }
-
-
   },
 
   createTree: function(treePos) {
@@ -214,6 +220,7 @@ e.Forest = new Class({
     leafGeo.addAttribute('position', leafVertices);
     leafGeo.addAttribute('pivotPoint', this.pivotPoint);
     leafGeo.addAttribute('wind', this.wind);
+    leafGeo.addAttribute('color', this.color);
 
 
 
@@ -246,8 +253,8 @@ e.Forest = new Class({
     var self = this;
     this.leafMaterial.uniforms.fallTime.value = 0;
     this.leafMaterial.uniforms.velocity.value.set(0, 0, 0);
-    this.leafMaterial.uniforms.green.value = 1.0;
     this.leafMaterial.uniforms.alpha.value = 0.0
+    this.leafMaterial.uniforms.changePoint.value = 0.0;
     var curAlpha = {
       a: 0
     }
@@ -264,28 +271,28 @@ e.Forest = new Class({
 
   changeLeafColors: function() {
     var self = this;
-    var curCol = {
-      g: 1.0
+    var curPoint = {
+      p: 0.0
     }
-    var finalCol = {
-      g: 0.0
+    var finalPoint = {
+      p: 1.0
     }
-    var colorChangeTween = new TWEEN.Tween(curCol).
-    to(finalCol, this.game.seasonTime * 0.9).
+    var colorChangeTween = new TWEEN.Tween(curPoint).
+    to(finalPoint, this.game.seasonTime * 0.9).
     easing(TWEEN.Easing.Cubic.InOut).
     onUpdate(function() {
-      self.leafMaterial.uniforms.green.value = curCol.g;
+      self.leafMaterial.uniforms.changePoint.value = curPoint.p;
     }).start();
   },
 
   beginLeafFall: function() {
     var self = this;
     this.leafMaterial.uniforms.fallTime.value = 0;
-    this.leafMaterial.uniforms.velocity.value.set(200, 20, -this.leafVelocity);
+    this.leafMaterial.uniforms.velocity.value.set(200, 100, -this.leafVelocity);
     var curOpacity = {a : this.leafMaterial.uniforms.alpha.value};
     var finalOpacity = {a : 0.0};
     var fadeTween = new TWEEN.Tween(curOpacity).
-      to(finalOpacity, 10000).
+      to(finalOpacity, 20000).
       delay(1000).
       easing(TWEEN.Easing.Cubic.InOut).
       onUpdate(function(){
