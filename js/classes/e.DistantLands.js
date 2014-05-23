@@ -37,7 +37,7 @@ e.DistantLands = new Class({
     for(var posX = -this.size/2; posX < this.size/2; posX+=this.spacing){
       houseEmitter = new SPE.Emitter(houseParams);
       houseEmitter.position.set(posX, _.random(0, 2000), _.random(posZ - this.spread, posZ + this.spread));
-      houseEmitter.sizeStart = _.random(800, 1800);
+      houseEmitter.sizeStart = _.random(2000, 10000);
       houseEmitter.colorStart.setRGB(Math.random(), Math.random(), Math.random())
       this.cityGroup.addEmitter(houseEmitter);
       this.emitters.push(houseEmitter);
@@ -50,7 +50,7 @@ e.DistantLands = new Class({
       houseEmitter = new SPE.Emitter(houseParams);
       houseEmitter.position.set(_.random(tempX -this.spread, tempX + this.spread), _.random(0, 2000), posZ);
       // houseEmitter.sizeStart = _.random(400, 1400);
-      houseEmitter.sizeStart = _.random(5000, 7000);
+      houseEmitter.sizeStart = _.random(2000, 10000);
       houseEmitter.colorStart.setRGB(Math.random(), Math.random(), Math.random())
       this.cityGroup.addEmitter(houseEmitter);
       this.emitters.push(houseEmitter);

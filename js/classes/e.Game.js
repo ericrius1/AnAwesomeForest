@@ -17,16 +17,16 @@ e.Game = new Class({
     // this.fallPoint = 0.66;
 
     //FALL START
-    // this.fallPoint = 0.0;
-    // this.winterPoint = 0.4;
-    // this.springPoint = 0.6;
-    // this.fallTime= this.yearTime * this.winterPoint;
+    this.fallPoint = 0.0;
+    this.winterPoint = 0.4;
+    this.springPoint = 0.6;
+    this.fallTime= this.yearTime * this.winterPoint;
 
 
     //SPRING START
-    this.springPoint = 0.0;
-    this.fallPoint = 0.33;
-    this.winterPoint = 0.66;
+    // this.springPoint = 0.0;
+    // this.fallPoint = 0.33;
+    // this.winterPoint = 0.66;
 
 
     this.checkFall = true;
@@ -52,29 +52,29 @@ e.Game = new Class({
     this.renderer.setClearColor(0x000000);
 
     initPostProcessing();
-    this.gui = new dat.GUI();
-    this.gui.add(this.effectController, 'focus', 0.0, 3.0, 0.025).onChange(function(){
-      self.matChange();
-    }); 
-    this.gui.add(this.effectController, 'aperture', 0.001, 0.2, 0.001).onChange(function(){
-      self.matChange();
-    });
-    this.gui.add(this.effectController, 'maxblur', 0.0, 3.0, 0.025).onChange(function(){
-      self.matChange();
-    }); 
+    // this.gui = new dat.GUI();
+    // this.gui.add(this.effectController, 'focus', 0.0, 3.0, 0.025).onChange(function(){
+    //   self.matChange();
+    // }); 
+    // this.gui.add(this.effectController, 'aperture', 0.001, 0.2, 0.001).onChange(function(){
+    //   self.matChange();
+    // });
+    // this.gui.add(this.effectController, 'maxblur', 0.0, 3.0, 0.025).onChange(function(){
+    //   self.matChange();
+    // }); 
     // this.gui.close();
 
     function initPostProcessing() {
-      self.effectController = {
-        focus: 1.0,
-        aperture: 0.025,
-        maxblur: 1.0
-      }
+      // self.effectController = {
+      //   focus: 1.0,
+      //   aperture: 0.025,
+      //   maxblur: 1.0
+      // }
       var renderPass = new THREE.RenderPass(self.scene, self.camera);
       self.bokehPass = new THREE.BokehPass(self.scene, self.camera, {
         focus: 1.0,
-        aperture: 0.025,
-        maxblur: 1.0,
+        aperture: 0.01,
+        maxblur: 0.1,
         width: window.innerWidth,
         height: window.innerHeight
       });
@@ -122,11 +122,11 @@ e.Game = new Class({
     requestAnimationFrame(this.render);
   },
 
-  matChange: function() {
-    this.bokehPass.uniforms["focus"].value = this.effectController.focus;
-    this.bokehPass.uniforms["aperture"].value = this.effectController.aperture;
-    this.bokehPass.uniforms["maxblur"].value = this.effectController.maxblur;
-  },
+  // matChange: function() {
+  //   this.bokehPass.uniforms["focus"].value = this.effectController.focus;
+  //   this.bokehPass.uniforms["aperture"].value = this.effectController.aperture;
+  //   this.bokehPass.uniforms["maxblur"].value = this.effectController.maxblur;
+  // },
 
 
   onWindowResize: function() {
@@ -159,11 +159,26 @@ e.Game = new Class({
     if (self.checkSpring && Math.abs(this.cyclePoint - this.springPoint) < 0.1) {
       self.checkSpring = false;
       this.trigger('spring');
+      //We want to set focus to 0 to bring message into focus
+      this.focusText();
       setTimeout(function() {
         self.checkSpring = true
       }, this.seasonCheckTimeout)
     }
 
+  },
+
+  focusText: function(){
+    var self = this;
+    var currentFocus = {f: this.bokehPass.uniforms.focus.value, blur: this.bokehPass.uniforms.maxblur.value};
+    var endingFocus = {f: 0, blur: 0.002};
+    var focusTween = new TWEEN.Tween(currentFocus).
+      to(endingFocus, 10000).
+      easing(TWEEN.Easing.Cubic.InOut).
+      onUpdate(function(){
+        self.bokehPass.uniforms.focus.value = currentFocus.f;
+        self.bokehPass.uniforms.maxblur.value = currentFocus.blur;
+      }).start();
   },
   //cyclePoint is a num from 0 to 1 which represents where in season we are currently
   render: function() {
