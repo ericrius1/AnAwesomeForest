@@ -23,7 +23,7 @@ e.DistantLands = new Class({
 
     var houseParams = {
       colorStart: new THREE.Color().setRGB(1, 0, 0),
-      particleCount: 50,
+      particleCount: 10,
       opacityStart: 0.0,
       opacityMiddle: 1,
       opacityEnd: 0,
@@ -33,12 +33,11 @@ e.DistantLands = new Class({
 
 
     //put lights all around
-    var posZ = this.size/2;
+    var posZ = -this.size/2;
     for(var posX = -this.size/2; posX < this.size/2; posX+=this.spacing){
-      var tempZ = Math.random() > 0.5 ? posZ : -posZ;
       houseEmitter = new SPE.Emitter(houseParams);
-      houseEmitter.position.set(posX, _.random(0, 2000), _.random(tempZ - this.spread, tempZ + this.spread));
-      houseEmitter.sizeStart = _.random(400, 1400);
+      houseEmitter.position.set(posX, _.random(0, 2000), _.random(posZ - this.spread, posZ + this.spread));
+      houseEmitter.sizeStart = _.random(800, 1800);
       houseEmitter.colorStart.setRGB(Math.random(), Math.random(), Math.random())
       this.cityGroup.addEmitter(houseEmitter);
       this.emitters.push(houseEmitter);
@@ -58,7 +57,7 @@ e.DistantLands = new Class({
 
 
     }
-    this.lightActivationWaitTime = this.game.yearTime / this.emitters.length;
+    this.lightActivationWaitTime = (this.game.yearTime * 0.5) / this.emitters.length;
     this.cityGroup.mesh.renderDepth = -1;
     this.game.scene.add(this.cityGroup.mesh)
     this.shuffledLightOrders = _.shuffle(_.range(0, this.emitters.length));
@@ -70,10 +69,13 @@ e.DistantLands = new Class({
   turnOnLights: function(){
     var self = this;
     this.emitters[this.shuffledLightOrders[this.currentLightIndex++]].enable();
-    if(this.currentLightIndex === this.emitters.length)return;
+    if(this.currentLightIndex === this.emitters.length){
+      this.tickTime *= 0.1;
+      return;
+    }
     setTimeout(function(){
       self.turnOnLights();
-    }, this.lightActivationWaitTime)
+    }, 100)
 
   },
 

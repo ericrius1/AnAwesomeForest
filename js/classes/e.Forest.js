@@ -12,7 +12,7 @@ e.Forest = new Class({
     this.maxSteps = 6;
     this.timeMultiplier = 0.005;
     this.noTreeRadius = 400;
-    this.leafVelocity = 1000;
+    this.leafVelocity = 1100;
     this.numLeaves = Math.pow(2, this.maxSteps-1);
     this.potentialLeafColors = [
       new THREE.Color(0xd58b17),
@@ -21,6 +21,9 @@ e.Forest = new Class({
       new THREE.Color(0xdfcc28),
       new THREE.Color(0xd71069),
       new THREE.Color(0xba1bb1),
+      new THREE.Color(0xC7851C),
+      new THREE.Color(0xBF1717),
+      new THREE.Color(0xD6AD31),
 
     ]
 
@@ -262,7 +265,8 @@ e.Forest = new Class({
       a: 0.5
     }
     var fadeTween = new TWEEN.Tween(curAlpha).
-    to(finalAlpha, this.game.seasonTime).
+    to(finalAlpha, 10000).
+    easing(TWEEN.Easing.Cubic.InOut).
     onUpdate(function() {
       self.leafMaterial.uniforms.alpha.value = curAlpha.a
     }).start()
@@ -278,7 +282,7 @@ e.Forest = new Class({
       p: 1.0
     }
     var colorChangeTween = new TWEEN.Tween(curPoint).
-    to(finalPoint, this.game.seasonTime * 0.9).
+    to(finalPoint, this.game.fallTime * 0.9).
     easing(TWEEN.Easing.Cubic.InOut).
     onUpdate(function() {
       self.leafMaterial.uniforms.changePoint.value = curPoint.p;
@@ -288,7 +292,7 @@ e.Forest = new Class({
   beginLeafFall: function() {
     var self = this;
     this.leafMaterial.uniforms.fallTime.value = 0;
-    this.leafMaterial.uniforms.velocity.value.set(200, 100, -this.leafVelocity);
+    this.leafMaterial.uniforms.velocity.value.set(200, 200, -this.leafVelocity);
     var curOpacity = {a : this.leafMaterial.uniforms.alpha.value};
     var finalOpacity = {a : 0.0};
     var fadeTween = new TWEEN.Tween(curOpacity).

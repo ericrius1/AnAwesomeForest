@@ -81,7 +81,14 @@ e.Landscape = new Class({
       easing(TWEEN.Easing.Cubic.InOut).
       onUpdate(function(){
         self.snow.position.y = curSnowPos.y;
-        self.snow.material.opacity = curSnowPos.a
+      }).start();
+
+    var snowFadeTween = new TWEEN.Tween(curSnowPos).
+      to(finalSnowPos, this.snowFillTime/4).
+      delay(this.snowFillTime/4).
+      easing(TWEEN.Easing.Cubic.InOut).
+      onUpdate(function(){
+        self.snow.material.opacity = curSnowPos.a;
       }).start();
 
   }

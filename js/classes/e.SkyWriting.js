@@ -12,7 +12,7 @@ e.SkyWriting = new Class({
 
     });
     var text = new THREE.Mesh(textGeo);
-    text.position.set(-800, this.messageHeight, -this.world.islandRadius - 1000)
+    text.position.set(-900, this.messageHeight, -this.world.islandRadius - 1000)
     // text.scale.multiplyScalar(10);
     text.scale.z = 0.01;
     var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 4000);

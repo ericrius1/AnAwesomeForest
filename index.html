@@ -30,6 +30,8 @@
         <script src = "js/postprocessing/ConvolutionShader.js"></script>
         <script src = "js/postprocessing/EffectComposer.js"></script>
         <script src = "js/postprocessing/ShaderPass.js"></script>
+        <script src = "js/postprocessing/BokehShader.js"></script>
+        <script src = "js/postprocessing/BokehPass.js"></script>
         <script src = "js/postprocessing/FXAAShader.js"></script>
         <script src = "js/postprocessing/MaskPass.js"></script>
         <script src = "js/postprocessing/RenderPass.js"></script>
@@ -106,6 +108,7 @@
           if(length(velocity) > 0.0){
             vec3 adjustedVelocity = velocity * clampedWind;
               adjustedVelocity.x = mix(-50.0, 50.0, wind);
+              adjustedVelocity.y += adjustedVelocity.y * wind;
             
             newPos = newPos + adjustedVelocity * fallTime;
           }

@@ -24,7 +24,7 @@ e.Snow = new Class({
 
     this.cloudEmitter = new SPE.Emitter({
       position: new THREE.Vector3(0, 1000, 0),
-      positionSpread: new THREE.Vector3(this.world.islandRadius * 8, 100, this.world.islandRadius * 8),
+      positionSpread: new THREE.Vector3(this.world.islandRadius * 6, 100, this.world.islandRadius * 6),
       velocity: new THREE.Vector3(0, 0, 200),
       velocitySpread: new THREE.Vector3(0, 10, 100),
       colorStart: new THREE.Color(0x9c9c9c),
@@ -35,12 +35,12 @@ e.Snow = new Class({
       opacityStart: 0,
       opacityMiddle: 1,
       opacityEnd: 0,
-      particleCount: 400,
+      particleCount: 300,
     })
 
     this.snowEmitter = new SPE.Emitter({
       position: this.cloudEmitter.position,
-      positionSpread: new THREE.Vector3(this.world.islandRadius * 4, 100, this.world.islandRadius * 4),
+      positionSpread: new THREE.Vector3(this.world.islandRadius * 2, 100, this.world.islandRadius * 2),
       velocity: new THREE.Vector3(0, -200, 50),
       velocitySpread: new THREE.Vector3(100, 10, 30),
       acceleration: new THREE.Vector3(0, -20, 0),
@@ -49,7 +49,7 @@ e.Snow = new Class({
       sizeStartSpread: 20,
       opacityStart: 0,
       opacityMiddle: 0.9,
-      particleCount: 10000
+      particleCount: 5000
     });
     this.cloudGroup.addEmitter(this.cloudEmitter);
     this.snowGroup.addEmitter(this.snowEmitter);

@@ -1,4 +1,6 @@
-
+//Postprocessing
+//Grow shit in spring time
+//leaves rise up at different speeds
 
 e.Game = new Class({
   extend: e.EventEmitter,
@@ -7,7 +9,6 @@ e.Game = new Class({
   construct: function() {
     this.playerHeight = 50;
     this.yearTime = 215000;
-    this.seasonTime = this.yearTime * 0.33;
     // this.yearTime = 80000;
     this.size = 40000;
     // WINTER POINT
@@ -17,8 +18,9 @@ e.Game = new Class({
 
     //FALL START
     this.fallPoint = 0.0;
-    this.winterPoint = 0.5;
-    this.springPoint = 0.8;
+    this.winterPoint = 0.4;
+    this.springPoint = 0.6;
+    this.fallTime= this.yearTime * this.winterPoint;
 
 
     //SPRING START
@@ -36,31 +38,38 @@ e.Game = new Class({
     this.render = this.render.bind(this);
     var self = this;
 
-    this.renderer = new THREE.WebGLRenderer({
-      antialias: true
-    });
+    this.renderer = new THREE.WebGLRenderer({antialias: false});
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    // this.renderer.autoClear = false;
+    this.renderer.autoClear = false;
 
     this.scene = new THREE.Scene();
 
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, this.size);
-    this.activeCamera = this.camera;
 
 
     this.renderer.setClearColor(0x000000);
 
+    initPostProcessing();
 
-    //POST PROCESSING
-    var renderModel = new THREE.RenderPass(this.scene, this.camera);
-    var effectBloom = new THREE.BloomPass(1.0);
-    var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
-    effectCopy.renderToScreen = true;
-    effectCopy.renderToScreen = true;
-    this.composer = new THREE.EffectComposer(this.renderer);
-    this.composer.addPass(renderModel);
-    this.composer.addPass(effectBloom);
-    this.composer.addPass(effectCopy);
+    function initPostProcessing(){
+      var renderPass = new THREE.RenderPass(self.scene, self.camera);
+      var bokehPass = new THREE.BokehPass(self.scene, self.camera, {
+        focus: 1.0,
+        aperture: 0.0035,
+        maxblur: 1.0,
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+      var bloomPass = new THREE.BloomPass(0.75);
+      bokehPass.renderToScreen = true; 
+
+      self.composer = new THREE.EffectComposer(self.renderer);
+      self.composer.addPass(renderPass);
+      self.composer.addPass(bloomPass);
+      self.composer.addPass(bokehPass) 
+
+    }
+
     this.world = new e.World({
       game: this,
       size: this.size
@@ -100,7 +109,7 @@ e.Game = new Class({
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
-    this.composer.reset();
+    this.composer.setSize(window.innerWidth, window.innerHeight);
   },
 
   checkForNewSeason: function() {
@@ -139,9 +148,7 @@ e.Game = new Class({
     this.player.update();
     this.controls.update();
     TWEEN.update();
-    // this.renderer.clear();
-    this.renderer.render(this.scene, this.activeCamera);
-    // this.composer.render(0.01);
+    this.composer.render(0.01);
     if(!this.yearCompleted){
       this.checkForNewSeason();
     }

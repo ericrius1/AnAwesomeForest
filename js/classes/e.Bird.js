@@ -1,4 +1,4 @@
-var gMaxSpeed = 11.5;
+var gMaxSpeed = 13.5;
 e.Birds = new Class({
   extend: e.EventEmitter,
 
@@ -80,7 +80,7 @@ e.Birds = new Class({
       bird.rotation.z = Math.asin(boid.velocity.y / boid.velocity.length());
       bird.phase = (bird.phase + .1 + bird.flapSpeedMultiplier) % 62.83;
       bird.geometry.vertices[5].y = bird.geometry.vertices[4].y = Math.sin(bird.phase) * 5;
-      if(!this.hasPassedIsland && i === 0 && boid.position.z < -this.world.islandRadius - 2000){
+      if(!this.hasPassedIsland && i === 0 && boid.position.z < -this.world.islandRadius - 4000){
         this.hasPassedIsland = true;
         this.trigger('birdsPassedIsland');
 
