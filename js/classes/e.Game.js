@@ -18,8 +18,8 @@ e.Game = new Class({
 
     //FALL START
     this.fallPoint = 0.0;
-    this.winterPoint = 0.4;
-    this.springPoint = 0.6;
+    this.winterPoint = 0.35;
+    this.springPoint = 0.5;
     this.fallTime= this.yearTime * this.winterPoint;
 
 

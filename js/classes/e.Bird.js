@@ -1,4 +1,4 @@
-var gMaxSpeed = 13.5;
+var gMaxSpeed = 9.0;
 e.Birds = new Class({
   extend: e.EventEmitter,
 
@@ -14,10 +14,12 @@ e.Birds = new Class({
     this.shouldUpdate = true;
     this.maxSpeed = 200;
     this.hasPassedIsland = false;
+    this.returnHomeSpeed = 10
+    this.startingZ = this.game.size/2
 
     var boid;
     var randFloat = THREE.Math.randFloat;
-    var startingX = 0, startingZ = this.game.size, startingY = this.birdHeight + 10;
+    var startingX = 0, startingZ = this.startingZ, startingY = this.birdHeight + 10;
     var xSpacing = 10;
     var zSpacing = 20;
     for (var i = 0; i < this.numBirds; i++) {
@@ -57,7 +59,7 @@ e.Birds = new Class({
     this.shouldUpdate = true;
     for(var i = 0; i < this.birds.length; i++){
       var boid = this.boids[i];
-      boid.maxSpeed = 20;
+      boid.maxSpeed = this.returnHomeSpeed;
       boid.setGoal(new THREE.Vector3(boid.position.x, boid.position.y, -boid.position.z));
       this.birds[i].visible = true;
     }

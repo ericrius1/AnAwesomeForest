@@ -67,7 +67,7 @@ e.SkyWriting = new Class({
 
     setTimeout(function(){
       self.writeMessage();
-    }, 10);
+    }, 100);
 
   },
 
