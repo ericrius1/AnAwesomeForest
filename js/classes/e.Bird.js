@@ -88,8 +88,8 @@ e.Birds = new Class({
         this.hasPassedIsland = true;
         this.trigger('birdsPassedIsland');
       }
-      if(this.returningHome && !this.secondPassed){
-        if(boid.position.z > this.textPosition){
+      else if(this.returningHome && i === 0 && !this.secondPassed){
+        if(boid.position.z > this.textPosition.z){
           this.secondPassed = true;
           this.trigger('birdFliesThroughMessage');
         }
