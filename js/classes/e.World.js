@@ -71,6 +71,12 @@ e.World = new Class({
       textPosition: this.textPosition
     });
 
+    this.flowers = new e.Flowers({
+      game: this.game,
+      world: this,
+      island: this.landscape.ground
+    });
+
     this.skywriting = new e.SkyWriting({
       game: this.game,
       world: this,

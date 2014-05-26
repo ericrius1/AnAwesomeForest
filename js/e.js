@@ -14,7 +14,7 @@ window.map = function(value, min1, max1, min2, max2) {
 
 
 var music = loadAudio('assets/m83.mp3');
-var playMusic = true;
+var playMusic = false;
 
 function loadAudio(uri) {
   var audio = new Audio();

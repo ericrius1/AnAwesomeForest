@@ -99,9 +99,13 @@ e.SkyWriting = new Class({
   },
 
   letItRain: function(){
+    var self = this;
     for(var i = 0; i < this.rainEmitters.length; i++){
       this.rainEmitters[i].enable();
     }
+    setTimeout(function(){
+      self.trigger('growFlowers');
+    }, 2000)
   },
 
 
