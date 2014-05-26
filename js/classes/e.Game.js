@@ -171,7 +171,7 @@ e.Game = new Class({
   focusText: function(){
     var self = this;
     var currentFocus = {f: this.bokehPass.uniforms.focus.value, blur: this.bokehPass.uniforms.maxblur.value};
-    var endingFocus = {f: 0, blur: 0.002};
+    var endingFocus = {f: 0, blur: 0.01};
     var focusTween = new TWEEN.Tween(currentFocus).
       to(endingFocus, 10000).
       easing(TWEEN.Easing.Cubic.InOut).

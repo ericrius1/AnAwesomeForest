@@ -26,6 +26,8 @@ e.World = new Class({
     this.moon.lookAt(this.game.scene.position);
     this.game.scene.add(this.moon);
     this.funHeight = 500;
+    this.frameCount = 0;
+    this.textPosition = new THREE.Vector3(-300, this.funHeight, -this.islandRadius - 100);
 
 
     //WATER
@@ -65,13 +67,15 @@ e.World = new Class({
       game: this.game,
       world: this,
       forest: this.forest,
-      birdHeight: this.funHeight
+      birdHeight: this.funHeight,
+      textPosition: this.textPosition
     });
 
     this.skywriting = new e.SkyWriting({
       game: this.game,
       world: this,
-      messageHeight: this.funHeight
+      funHeight: this.funHeight,
+      position: this.textPosition
     });
 
     this.distantlands = new e.DistantLands({
@@ -79,9 +83,6 @@ e.World = new Class({
       world: this
     });
 
-    this.statue = new e.Statue({
-      game: this.game
-    });
 
 
   },
@@ -89,7 +90,10 @@ e.World = new Class({
   update: function() {
     var time = performance.now()
     this.water.material.uniforms.time.value += 1.0 / 90.0;
-    this.water.render();
+    if(this.frameCount % 3 === 0){
+      this.water.render();
+    }
+    this.frameCount++;
     this.forest.update();
     this.birds.update();
     this.moon.position.y += 2;
