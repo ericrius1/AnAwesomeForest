@@ -21,8 +21,9 @@ e.SkyWriting = new Class({
     });
     var text = new THREE.Mesh(textGeo);
     text.position = this.position;
-    text.scale.z = 0.01;
-    var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 1000);
+    this.zScaleFactor = 100;
+    text.scale.z = 1/this.zScaleFactor;
+    var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 500);
     this.game.scene.add(text);
     text.visible = false;
 
@@ -32,10 +33,12 @@ e.SkyWriting = new Class({
     });
 
     this.starParams = {
-      colorStart: new THREE.Color(0xff0000),
-      colorEnd: new THREE.Color(0x0000ff),
-      velocitySpread: new THREE.Vector3(2, 2, 2),
+      colorStart: new THREE.Color(0x00ff00),
+      colorMiddle: new THREE.Color(0xff00ff),
+      colorEnd: new THREE.Color(0xff00ff),
+      accelerationSpread: new THREE.Vector3(2, 2, 2 * this.zScaleFactor),
       sizeStart: 20,
+      sizeEnd: 20,
       opacityEnd: 1,
       particleCount: 10,
     }
@@ -62,8 +65,8 @@ e.SkyWriting = new Class({
       colorStart: new THREE.Color().setRGB(.11, .0, .83),
       colorStartSpread: new THREE.Vector3(0, .90, .83),
       colorEndSpread: new THREE.Vector3(0, .90, .83),
-      velocity: new THREE.Vector3(0, -150, 30000),
-      velocitySpread: new THREE.Vector3(10, 20, 10000),
+      velocity: new THREE.Vector3(0, -150, 300 * this.zScaleFactor),
+      velocitySpread: new THREE.Vector3(10, 20, 100 * this.zScaleFactor),
       sizeStart: 70,
       sizeStartSpread: 50,
       opacityEnd: 1,
