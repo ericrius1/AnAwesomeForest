@@ -4,7 +4,7 @@ e.Flowers = new Class({
     var self = this;
     this.game = options.game;
     this.island = options.island;
-    this.numFlowers = 1000;
+    this.numFlowers = 100;
     this.zGarden = -400;
     var gardenGeo = new THREE.CircleGeometry(200);
     this.points = THREE.GeometryUtils.randomPointsInGeometry(gardenGeo, this.numFlowers);
@@ -27,7 +27,7 @@ e.Flowers = new Class({
     var self = this;
     var point = this.points[this.currentPointIndex++];
     // radiusTop, radiusBottom, height, radialSegments(8), heightSegments(1), openEnded
-    var height = _.random(5, 15);
+    var height = _.random(5, 20);
     var radiusTop = THREE.Math.randFloat(3, 8);
     var radiusBottom = THREE.Math.randFloat(.1, 1);
     var flowerGeo = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 6, 1, true);
@@ -48,15 +48,11 @@ e.Flowers = new Class({
         flower.scale.set(curScale.s, curScale.s, curScale.s);
       }).start();
     growTween.onComplete(function(){
-      // flower.matrixAutoUpdate = false;
+      flower.matrixAutoUpdate = false;
       self.growFlower();
     })
 
 
-
-  },
-
-  update: function(){
 
   }
 });

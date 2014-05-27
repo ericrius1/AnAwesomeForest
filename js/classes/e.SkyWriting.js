@@ -104,7 +104,7 @@ e.SkyWriting = new Class({
     }
     setTimeout(function(){
       self.rainEmitters[0].disable();
-    }, 20000)
+    }, 50000)
     setTimeout(function() {
       self.trigger('growFlowers');
     }, 3000)

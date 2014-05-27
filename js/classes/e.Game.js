@@ -17,16 +17,16 @@ e.Game = new Class({
     // this.fallPoint = 0.66;
 
     //FALL START
-    // this.fallPoint = 0.0;
-    // this.winterPoint = 0.35;
-    // this.springPoint = 0.5;
-    // this.fallTime= this.yearTime * this.winterPoint;
+    this.fallPoint = 0.0;
+    this.winterPoint = 0.35;
+    this.springPoint = 0.5;
+    this.fallTime= this.yearTime * this.winterPoint;
 
 
-    //SPRING START
-    this.springPoint = 0.0;
-    this.fallPoint = 0.33;
-    this.winterPoint = 0.66;
+    // //SPRING START
+    // this.springPoint = 0.0;
+    // this.fallPoint = 0.33;
+    // this.winterPoint = 0.66;
 
 
     this.checkFall = true;
