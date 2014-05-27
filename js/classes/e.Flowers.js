@@ -5,7 +5,8 @@ e.Flowers = new Class({
     this.game = options.game;
     this.island = options.island;
     this.numFlowers = 1000;
-    var gardenGeo = new THREE.CircleGeometry(600);
+    this.zGarden = -400;
+    var gardenGeo = new THREE.CircleGeometry(200);
     this.points = THREE.GeometryUtils.randomPointsInGeometry(gardenGeo, this.numFlowers);
     this.flowerGrowTime = 500;
     this.currentPointIndex = 0;
@@ -35,7 +36,7 @@ e.Flowers = new Class({
     var flower = new THREE.Mesh(flowerGeo, flowerMat);
     flower.position.y = height/2;
     flower.position.x = point.x
-    flower.position.z = point.y;
+    flower.position.z = point.y + this.zGarden;
     this.game.scene.add(flower);
 
     var curScale = {s: 0.01}
