@@ -16,29 +16,27 @@ e.SkyWriting = new Class({
 
     var textGeo = new THREE.TextGeometry('AA', {
       font: 'josefin slab',
-      size: 80
+      size: 160
 
     });
     var text = new THREE.Mesh(textGeo);
     text.position = this.position;
     this.zScaleFactor = 100;
     text.scale.z = 1/this.zScaleFactor;
-    var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 500);
+    var textPoints = THREE.GeometryUtils.randomPointsInGeometry(textGeo, 600);
     this.game.scene.add(text);
     text.visible = false;
 
     this.textParticleGroup = new SPE.Group({
       texture: THREE.ImageUtils.loadTexture('assets/star.png'),
-      maxAge: 7
+      maxAge: 4
     });
 
     this.starParams = {
-      colorStart: new THREE.Color(0x00ff00),
-      colorMiddle: new THREE.Color(0xff00ff),
-      colorEnd: new THREE.Color(0xff00ff),
-      accelerationSpread: new THREE.Vector3(2, 2, 2 * this.zScaleFactor),
+      colorStart: new THREE.Color(0xc325ba),
+      accelerationSpread: new THREE.Vector3(1., 1., 1. * this.zScaleFactor),
       sizeStart: 20,
-      sizeEnd: 20,
+      sizeEnd: 40,
       opacityEnd: 1,
       particleCount: 10,
     }
@@ -58,19 +56,20 @@ e.SkyWriting = new Class({
     }
 
     //RAIN PARAMS
-    //Y is Z and Z is Y!!!!
     var emitter = new SPE.Emitter({
-      position: points[0],
-      positionSpread: new THREE.Vector3(300, 300, 10),
-      colorStart: new THREE.Color().setRGB(.11, .0, .83),
-      colorStartSpread: new THREE.Vector3(0, .90, .83),
-      colorEndSpread: new THREE.Vector3(0, .90, .83),
-      velocity: new THREE.Vector3(0, -150, 300 * this.zScaleFactor),
-      velocitySpread: new THREE.Vector3(10, 20, 100 * this.zScaleFactor),
-      sizeStart: 70,
-      sizeStartSpread: 50,
+      position: new THREE.Vector3(180, 70, 0),
+      positionSpread: new THREE.Vector3(300, 300, 300),
+      colorStart: new THREE.Color(0xc325ba),
+      colorMiddle: new THREE.Color(0x645cff),
+      colorEnd: new THREE.Color(0x645cff),
+      velocity: new THREE.Vector3(0, -150, 200 * this.zScaleFactor),
+      velocitySpread: new THREE.Vector3(10, 50, 100 * this.zScaleFactor),
+      accelerationSpread: new THREE.Vector3(2, 2, 2 * this.zScaleFactor),
+      sizeStart: 40,
+      sizeEnd: 20,
+      sizeEndSpread: 10,
       opacityEnd: 1,
-      particleCount: 500
+      particleCount: 2000
     });
     emitter.disable();
     this.textParticleGroup.addEmitter(emitter);
@@ -89,13 +88,12 @@ e.SkyWriting = new Class({
     }
     this.currentEmitterIndex += this.emitterBatch;
     if (this.currentEmitterIndex >= this.emitters.length) {
-      console.log('DONE!!')
       return;
     }
 
     setTimeout(function() {
       self.writeMessage();
-    }, 100);
+    }, 500);
 
   },
 
@@ -104,9 +102,12 @@ e.SkyWriting = new Class({
     for (var i = 0; i < this.rainEmitters.length; i++) {
       this.rainEmitters[i].enable();
     }
+    setTimeout(function(){
+      self.rainEmitters[0].disable();
+    }, 20000)
     setTimeout(function() {
       self.trigger('growFlowers');
-    }, 2000)
+    }, 3000)
   },
 
 

@@ -27,7 +27,7 @@ e.World = new Class({
     this.game.scene.add(this.moon);
     this.funHeight = 500;
     this.frameCount = 0;
-    this.textPosition = new THREE.Vector3(-300, this.funHeight, -this.islandRadius - 100);
+    this.textPosition = new THREE.Vector3(-150, this.funHeight, -this.islandRadius - 100);
 
 
     //WATER
@@ -96,10 +96,7 @@ e.World = new Class({
   update: function() {
     var time = performance.now()
     this.water.material.uniforms.time.value += 1.0 / 90.0;
-    if(this.frameCount % 3 === 0){
-      this.water.render();
-    }
-    this.frameCount++;
+    this.water.render();
     this.forest.update();
     this.birds.update();
     this.moon.position.y += 2;
@@ -120,6 +117,7 @@ e.World = new Class({
     this.snow.beginSnowing();
     setTimeout(function(){
       self.birds.hibernate();
+      self.forest.doUpdate = false;
     }, 1500);
   },
   beginSpring: function(){
@@ -129,10 +127,12 @@ e.World = new Class({
     this.landscape.snowMelt();
     this.forest.leavesGrowBack();
     this.game.yearCompleted = true;
-    // setTimeout(function(){
-      self.birds.returnHome();
+    setTimeout(function(){
       self.skywriting.reveal();
-    // }, 10000)
+      setTimeout(function(){
+        self.birds.returnHome();
+      }, 5000)
+    }, 5000)
   },
 
 

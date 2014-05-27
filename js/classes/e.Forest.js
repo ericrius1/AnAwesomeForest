@@ -9,6 +9,7 @@ e.Forest = new Class({
     this.lengthMult = 0.5;
     this.trees = [];
     this.numTrees =50;
+    this.doUpdate = true;
     this.maxSteps = 6;
     this.timeMultiplier = 0.005;
     this.noTreeRadius = 400;
@@ -24,6 +25,7 @@ e.Forest = new Class({
       new THREE.Color(0xC7851C),
       new THREE.Color(0xBF1717),
       new THREE.Color(0xD6AD31),
+      new THREE.Color(0xd52d17),
 
     ]
 
@@ -254,6 +256,7 @@ e.Forest = new Class({
 
   leavesGrowBack: function() {
     var self = this;
+    this.doUpdate = true;
     this.leafMaterial.uniforms.fallTime.value = 0;
     this.leafMaterial.uniforms.velocity.value.set(0, 0, 0);
     this.leafMaterial.uniforms.alpha.value = 0.0
@@ -262,11 +265,11 @@ e.Forest = new Class({
       a: 0
     }
     var finalAlpha = {
-      a: 0.5
+      a: 0.8
     }
     var fadeTween = new TWEEN.Tween(curAlpha).
-    to(finalAlpha, 10000).
-    easing(TWEEN.Easing.Cubic.InOut).
+    to(finalAlpha, 16000).
+    easing(TWEEN.Easing.Quartic.InOut).
     onUpdate(function() {
       self.leafMaterial.uniforms.alpha.value = curAlpha.a
     }).start()
@@ -308,6 +311,9 @@ e.Forest = new Class({
 
 
   update: function() {
+    if(!this.doUpdate){
+      return;
+    }
     var time = performance.now() * this.timeMultiplier;
     this.leafMaterial.uniforms.time.value = time;
     this.leafMaterial.uniforms.fallTime.value += this.game.clock.getDelta();

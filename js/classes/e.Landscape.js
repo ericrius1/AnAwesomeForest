@@ -77,14 +77,14 @@ e.Landscape = new Class({
       a: 0 
     };
     var snowMeltTween = new TWEEN.Tween(curSnowPos).
-      to(finalSnowPos, this.snowFillTime/2).
+      to(finalSnowPos, this.snowFillTime * 0.4).
       easing(TWEEN.Easing.Cubic.InOut).
       onUpdate(function(){
         self.snow.position.y = curSnowPos.y;
       }).start();
 
     var snowFadeTween = new TWEEN.Tween(curSnowPos).
-      to(finalSnowPos, this.snowFillTime/4).
+      to(finalSnowPos, this.snowFillTime * 0.2).
       delay(this.snowFillTime/4).
       easing(TWEEN.Easing.Cubic.InOut).
       onUpdate(function(){

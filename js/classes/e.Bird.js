@@ -1,4 +1,4 @@
-var gMaxSpeed = 9.5;
+var gMaxSpeed = 8.72;
 e.Birds = new Class({
   extend: e.EventEmitter,
 
@@ -12,7 +12,6 @@ e.Birds = new Class({
     this.boids = [];
     this.birds = [];
     this.shouldUpdate = true;
-    this.maxSpeed = 200;
     this.hasPassedIsland = false;
     this.returnHomeSpeed = 10
     this.startingZ = this.game.size/2
@@ -92,6 +91,9 @@ e.Birds = new Class({
         if(boid.position.z > this.textPosition.z){
           this.secondPassed = true;
           this.trigger('birdFliesThroughMessage');
+          setTimeout(function(){
+            self.shouldUpdate = false;
+          }, 4000)
         }
 
       }
